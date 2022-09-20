@@ -1,18 +1,18 @@
-// ignore_for_file: file_names, prefer_const_literals_to_create_immutables
-
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
-import 'package:sabinpris/components/ui_component.dart';
-import 'package:sabinpris/constants.dart';
+import 'package:sabinpris/presentation/components/ui_component.dart';
+import 'package:sabinpris/presentation/constants.dart';
 
-class UpdateStudentSearch extends StatelessWidget {
-  UpdateStudentSearch({Key? key}) : super(key: key);
+class Report extends StatelessWidget {
+  Report({Key? key}) : super(key: key);
 
   final TextEditingController _fullNameController = TextEditingController();
 
   List<DropdownMenuItem<Object?>> _dropdownLanguages = [];
+  List<DropdownMenuItem<Object?>> _dropdownReports = [];
   final List<DropdownMenuItem<Object?>> _dropdownClasses = [];
   List<String> languages = ['English Sector', 'French Sector'];
+  List<String> reports = ['Summary Report', 'Detailed Report'];
   List<String> classes = [
     'Pre-Nursery',
     'Nursery I',
@@ -42,8 +42,9 @@ class UpdateStudentSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    ValueNotifier<String> cutterntItemType = ValueNotifier(languages[0]);
-    ValueNotifier<String> cutterntItemType2 = ValueNotifier(classes[0]);
+    ValueNotifier<String> currentItemType = ValueNotifier(languages[0]);
+    ValueNotifier<String> currentItemType2 = ValueNotifier(classes[0]);
+    ValueNotifier<String> currentItemType3 = ValueNotifier(reports[0]);
 
     return Scaffold(
       backgroundColor: kBackgroundColorLight,
@@ -51,13 +52,13 @@ class UpdateStudentSearch extends StatelessWidget {
         child: Stack(
           alignment: AlignmentDirectional.center,
           children: [
-            Image.asset(
-              'assets/ylwbkgnd.png',
-              fit: BoxFit.cover,
-            ),
+            // Image.asset(
+            //   'assets/grnbkgrnd.png',
+            //   fit: BoxFit.cover,
+            // ),
             Container(
               height: size.height * .9,
-              width: size.height * .85,
+              width: size.height * 1.1,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -74,36 +75,62 @@ class UpdateStudentSearch extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Back(),
-                        SizedBox(width: size.width * .12),
                         const Text(
-                          'Update Student Information',
+                          'Financial Report',
                           style: TextStyle(
-                            color: Color(0xffFADC5A),
+                            color: kGreenColor,
                             fontSize: 12,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
                           ),
-                        )
+                        ),
+                        Container(
+                          height: 40,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: const Offset(0, 0),
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.download_rounded,
+                                size: 16,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                'Download',
+                                style: TextStyle(
+                                  color: Color(0xff4D4D4D),
+                                  fontSize: 10,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        'Search for student using their full name',
-                        style: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 10,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Full Name',
+                        'Report Type',
                         style: TextStyle(
                           color: kTextMainColorLight,
                           fontSize: 12,
@@ -113,30 +140,53 @@ class UpdateStudentSearch extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    LongTextField(
-                        hint: 'Enter Full Name Here',
-                        controller: _fullNameController,
-                        mainColor: kYellowColor),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        'OR',
-                        style: TextStyle(
-                          color: kTextMainColorLight,
-                          fontSize: 10,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'Search for student by class information',
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 10,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.w500,
-                      ),
+                    ValueListenableBuilder<String>(
+                      valueListenable: currentItemType3,
+                      builder:
+                          (BuildContext context, String value3, Widget? child) {
+                        return DropdownBelow(
+                          value: value3,
+                          itemWidth: size.width * .2,
+                          itemTextstyle: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          hint: Text(
+                            'select a type of report',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color: Colors.grey[300],
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          boxTextstyle: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          boxDecoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: kGreenColor)),
+                          boxPadding: const EdgeInsets.symmetric(
+                              horizontal: 14.0, vertical: 4),
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: Colors.black,
+                            size: 25,
+                          ),
+                          boxHeight: 40,
+                          dropdownColor: Colors.white,
+                          items: _dropdownReports = buildDropdownItems(reports),
+                          onChanged: (value3) {
+                            currentItemType.value = value3.toString();
+                          },
+                        );
+                      },
                     ),
                     const SizedBox(height: 10),
                     Row(
@@ -159,7 +209,7 @@ class UpdateStudentSearch extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               ValueListenableBuilder<String>(
-                                valueListenable: cutterntItemType,
+                                valueListenable: currentItemType,
                                 builder: (BuildContext context, String value,
                                     Widget? child) {
                                   return DropdownBelow(
@@ -189,8 +239,7 @@ class UpdateStudentSearch extends StatelessWidget {
                                     boxDecoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(6),
-                                        border:
-                                            Border.all(color: kYellowColor)),
+                                        border: Border.all(color: kGreenColor)),
                                     boxPadding: const EdgeInsets.symmetric(
                                         horizontal: 14.0, vertical: 4),
                                     icon: const Icon(
@@ -203,7 +252,7 @@ class UpdateStudentSearch extends StatelessWidget {
                                     items: _dropdownLanguages =
                                         buildDropdownItems(languages),
                                     onChanged: (value) {
-                                      cutterntItemType.value = value.toString();
+                                      currentItemType.value = value.toString();
                                     },
                                   );
                                 },
@@ -230,7 +279,7 @@ class UpdateStudentSearch extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               ValueListenableBuilder<String>(
-                                valueListenable: cutterntItemType2,
+                                valueListenable: currentItemType2,
                                 builder: (BuildContext context, String value2,
                                     Widget? child) {
                                   return DropdownBelow(
@@ -260,8 +309,7 @@ class UpdateStudentSearch extends StatelessWidget {
                                     boxDecoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(6),
-                                        border:
-                                            Border.all(color: kYellowColor)),
+                                        border: Border.all(color: kGreenColor)),
                                     boxPadding: const EdgeInsets.symmetric(
                                         horizontal: 14.0, vertical: 4),
                                     icon: const Icon(
@@ -274,7 +322,7 @@ class UpdateStudentSearch extends StatelessWidget {
                                     items: _dropdownLanguages =
                                         buildDropdownItems(classes),
                                     onChanged: (value2) {
-                                      cutterntItemType2.value =
+                                      currentItemType2.value =
                                           value2.toString();
                                     },
                                   );
@@ -287,7 +335,7 @@ class UpdateStudentSearch extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     LongButton(
-                        size: size, color: kYellowColor, title: 'Search'),
+                        size: size, color: kGreenColor, title: 'Generate'),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10.0),
@@ -356,7 +404,7 @@ class UpdateStudentSearch extends StatelessWidget {
                                           ),
                                           const SizedBox(width: 16),
                                           Text(
-                                            'Class',
+                                            'Reg Fee',
                                             style: TextStyle(
                                                 color: Colors.grey[400],
                                                 fontSize: 10),
@@ -376,7 +424,47 @@ class UpdateStudentSearch extends StatelessWidget {
                                           ),
                                           const SizedBox(width: 16),
                                           Text(
-                                            'Gender',
+                                            'Fee Amt.',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '|',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 16),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Text(
+                                            'Fees Paid',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '|',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 16),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Text(
+                                            'Balance',
                                             style: TextStyle(
                                                 color: Colors.grey[400],
                                                 fontSize: 10),
@@ -391,17 +479,123 @@ class UpdateStudentSearch extends StatelessWidget {
                                 child: ListView(
                                   physics: const BouncingScrollPhysics(),
                                   children: [
-                                    StudentTile(
+                                    ReportStudentTile(
                                       studentNumber: '1',
                                       studentName: 'Richard Nkolosombe Fimbo',
-                                      studentClass: 'Class 3',
-                                      studentGender: 'Male',
+                                      studentRegFee: '5,000',
+                                      studentFeeAmt: '70,000',
+                                      studentFeePaid: '56,500',
+                                      studentFeeBalance: '13,000',
                                     ),
-                                    StudentTile(
+                                    ReportStudentTile(
                                       studentNumber: '2',
                                       studentName: 'Desmond Piku Abanseka',
-                                      studentClass: 'Class 3',
-                                      studentGender: 'Female',
+                                      studentRegFee: '5,000',
+                                      studentFeeAmt: '70,000',
+                                      studentFeePaid: '56,500',
+                                      studentFeeBalance: '13,000',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      flex: 11,
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(width: 20),
+                                          Text(
+                                            'Total',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '|',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 16),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Text(
+                                            '10,000',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '|',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 16),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Text(
+                                            '140,000',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '|',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 16),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Text(
+                                            '108,000',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '|',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 16),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Text(
+                                            '31,500',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

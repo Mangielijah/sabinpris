@@ -2,17 +2,17 @@
 
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
-import 'package:sabinpris/components/ui_component.dart';
-import 'package:sabinpris/constants.dart';
+import 'package:sabinpris/presentation/components/ui_component.dart';
+import 'package:sabinpris/presentation/constants.dart';
 
-class NewStudent extends StatefulWidget {
-  NewStudent({Key? key}) : super(key: key);
+class UpdateStudent extends StatefulWidget {
+  UpdateStudent({Key? key}) : super(key: key);
 
   @override
-  State<NewStudent> createState() => _NewStudentState();
+  State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
-class _NewStudentState extends State<NewStudent> {
+class _UpdateStudentState extends State<UpdateStudent> {
   bool _value = false;
 
   final TextEditingController _fullNameController = TextEditingController();
@@ -65,7 +65,7 @@ class _NewStudentState extends State<NewStudent> {
           alignment: AlignmentDirectional.center,
           children: [
             Image.asset(
-              'assets/bluebkgrnd.png',
+              'assets/ylwbkgnd.png',
               fit: BoxFit.cover,
             ),
             Container(
@@ -92,9 +92,9 @@ class _NewStudentState extends State<NewStudent> {
                           const Back(),
                           SizedBox(width: size.width * .12),
                           const Text(
-                            'Register a New Student',
+                            'Update Student Information',
                             style: TextStyle(
-                              color: kBlueColor,
+                              color: kYellowColor,
                               fontSize: 12,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w600,
@@ -122,7 +122,7 @@ class _NewStudentState extends State<NewStudent> {
                             child: Text(
                               '*',
                               style: TextStyle(
-                                color: kBlueColor,
+                                color: kYellowColor,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -135,7 +135,7 @@ class _NewStudentState extends State<NewStudent> {
                       LongTextField(
                           hint: 'Enter Full Name Here',
                           controller: _fullNameController,
-                          mainColor: kBlueColor),
+                          mainColor: kYellowColor),
                       const SizedBox(height: 10),
                       Row(
                         children: [
@@ -162,7 +162,7 @@ class _NewStudentState extends State<NewStudent> {
                                       child: Text(
                                         '*',
                                         style: TextStyle(
-                                          color: kBlueColor,
+                                          color: kYellowColor,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -205,7 +205,7 @@ class _NewStudentState extends State<NewStudent> {
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           border:
-                                              Border.all(color: kBlueColor)),
+                                              Border.all(color: kYellowColor)),
                                       boxPadding: const EdgeInsets.symmetric(
                                           horizontal: 14.0, vertical: 4),
                                       icon: const Icon(
@@ -259,7 +259,7 @@ class _NewStudentState extends State<NewStudent> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: (_value)
-                                      ? Border.all(color: kBlueColor)
+                                      ? Border.all(color: kYellowColor)
                                       : null,
                                   borderRadius: BorderRadius.circular(6),
                                   boxShadow: [
@@ -274,7 +274,7 @@ class _NewStudentState extends State<NewStudent> {
                                   ? const Icon(
                                       Icons.check,
                                       size: 20.0,
-                                      color: kBlueColor,
+                                      color: kYellowColor,
                                     )
                                   : null),
                         ),
@@ -305,7 +305,7 @@ class _NewStudentState extends State<NewStudent> {
                                       child: Text(
                                         '*',
                                         style: TextStyle(
-                                          color: kBlueColor,
+                                          color: kYellowColor,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -348,7 +348,7 @@ class _NewStudentState extends State<NewStudent> {
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           border:
-                                              Border.all(color: kBlueColor)),
+                                              Border.all(color: kYellowColor)),
                                       boxPadding: const EdgeInsets.symmetric(
                                           horizontal: 14.0, vertical: 4),
                                       icon: const Icon(
@@ -394,7 +394,7 @@ class _NewStudentState extends State<NewStudent> {
                                       child: Text(
                                         '*',
                                         style: TextStyle(
-                                          color: kBlueColor,
+                                          color: kYellowColor,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -437,7 +437,7 @@ class _NewStudentState extends State<NewStudent> {
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           border:
-                                              Border.all(color: kBlueColor)),
+                                              Border.all(color: kYellowColor)),
                                       boxPadding: const EdgeInsets.symmetric(
                                           horizontal: 14.0, vertical: 4),
                                       icon: const Icon(
@@ -481,7 +481,7 @@ class _NewStudentState extends State<NewStudent> {
                             child: Text(
                               '*',
                               style: TextStyle(
-                                color: kBlueColor,
+                                color: kYellowColor,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -494,7 +494,7 @@ class _NewStudentState extends State<NewStudent> {
                       LongTextField(
                           hint: 'Enter Full Name Here',
                           controller: _parentNameController,
-                          mainColor: kBlueColor),
+                          mainColor: kYellowColor),
                       const SizedBox(height: 10),
                       Row(
                         children: const [
@@ -515,7 +515,7 @@ class _NewStudentState extends State<NewStudent> {
                             child: Text(
                               '*',
                               style: TextStyle(
-                                color: kBlueColor,
+                                color: kYellowColor,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -559,7 +559,7 @@ class _NewStudentState extends State<NewStudent> {
                           ShortTextField(
                               hint: 'Phone number',
                               controller: _phoneNumberController,
-                              mainColor: kBlueColor),
+                              mainColor: kYellowColor),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -603,7 +603,7 @@ class _NewStudentState extends State<NewStudent> {
                             child: ShortTextField(
                                 hint: '',
                                 controller: _phoneNumberController,
-                                mainColor: kBlueColor),
+                                mainColor: kYellowColor),
                           ),
                           const SizedBox(
                             width: 10,
@@ -625,7 +625,7 @@ class _NewStudentState extends State<NewStudent> {
                       const SizedBox(height: 20),
                       LongButton(
                         size: size,
-                        color: kBlueColor,
+                        color: kYellowColor,
                         title: 'Done',
                       ),
                     ],

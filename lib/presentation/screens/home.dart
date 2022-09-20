@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sabinpris/providers.dart';
+import 'package:sabinpris/presentation/providers.dart';
 // import 'package:sabinpris/components/user_shared_preference.dart';
-import 'package:sabinpris/screens/new_student.dart';
-import 'package:sabinpris/screens/report.dart';
-import 'package:sabinpris/screens/update_student_search.dart';
-import 'package:sabinpris/constants.dart';
+import 'package:sabinpris/presentation/screens/new_student.dart';
+import 'package:sabinpris/presentation/screens/report.dart';
+import 'package:sabinpris/presentation/screens/update_student_search.dart';
+import 'package:sabinpris/presentation/constants.dart';
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);

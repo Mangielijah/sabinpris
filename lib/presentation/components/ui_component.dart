@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sabinpris/screens/update_student.dart';
-import 'package:sabinpris/constants.dart';
+import 'package:sabinpris/presentation/screens/update_student.dart';
+import 'package:sabinpris/presentation/constants.dart';
 
 class Back extends StatelessWidget {
   const Back({Key? key}) : super(key: key);

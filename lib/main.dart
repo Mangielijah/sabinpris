@@ -1,7 +1,7 @@
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:sabinpris/screens/login.dart';
+import 'package:sabinpris/presentation/screens/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

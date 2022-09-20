@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:sabinpris/components/ui_component.dart';
+import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/credentials.dart';
-import 'package:sabinpris/screens/home.dart';
+import 'package:sabinpris/presentation/screens/home.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
