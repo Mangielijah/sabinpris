@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sabinpris/components/ui_component.dart';
+import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/screens/home.dart';
 
 class LogIn extends StatefulWidget {
@@ -49,7 +50,7 @@ class _LogInState extends State<LogIn> {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         Padding(
@@ -115,20 +116,44 @@ class _LogInState extends State<LogIn> {
                             )),
                         const SizedBox(height: 4),
                         LoginTextField(
-                            hint: 'enter password',
-                            controller: _pswdController),
+                          hint: 'enter password',
+                          controller: _pswdController,
+                          obscureText: true,
+                        ),
                         const SizedBox(height: 30),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: InkWell(
                             splashColor: Colors.greenAccent[800],
                             onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                  return const Home();
-                                }),
-                              );
+                              final email = _emailController.text;
+                              final pwd = _pswdController.text;
+
+                              if (email.isNotEmpty && pwd.isNotEmpty) {
+                                //Check typed credentials
+                                int emailIndex = allowedEmails.indexOf(email);
+                                if (emailIndex != -1) {
+                                  final allowedPassword =
+                                      allowedPasswords[emailIndex];
+                                  if (allowedPassword == pwd) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                        return const Home();
+                                      }),
+                                    );
+                                  } else {
+                                    //Show wrong password
+                                    debugPrint("Incorrect Password");
+                                  }
+                                } else {
+                                  //Show email not found error
+                                  debugPrint("Incorrect Email");
+                                }
+                              } else {
+                                //Show an error here
+                                debugPrint("No Email and Password Entered");
+                              }
                             },
                             child: Container(
                               height: 50,

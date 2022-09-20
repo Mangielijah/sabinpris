@@ -56,8 +56,13 @@ class Back extends StatelessWidget {
 class LoginTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
+  final bool obscureText;
 
-  const LoginTextField({Key? key, required this.hint, required this.controller})
+  const LoginTextField(
+      {Key? key,
+      required this.hint,
+      required this.controller,
+      this.obscureText = false})
       : super(key: key);
 
   @override
@@ -86,7 +91,7 @@ class LoginTextField extends StatelessWidget {
           cursorColor: Colors.green,
           // controller: _emailController,
 
-          obscureText: false,
+          obscureText: obscureText,
           keyboardType: TextInputType.name,
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
