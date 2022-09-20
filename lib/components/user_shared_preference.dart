@@ -41,7 +41,6 @@ class LightMode extends ChangeNotifier {
   }
 
   void toggleMode() async {
-    _prefrences ??= await SharedPreferences.getInstance();
     final mode =
         await _prefrences?.setBool(_THEME_MODE, !currentMode) ?? !currentMode;
     _isLightMode = mode;
