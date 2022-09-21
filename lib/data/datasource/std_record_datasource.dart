@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
 
-@LazySingleton()
+@Singleton()
 class StudentRecordDataSource {
   StudentRecordDataSource() {
     _initIsar();

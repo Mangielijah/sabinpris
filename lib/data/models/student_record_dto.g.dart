@@ -227,7 +227,7 @@ P _studentRecordDtoDeserializeProp<P>(
 }
 
 Id _studentRecordDtoGetId(StudentRecordDto object) {
-  return object.recordId;
+  return object.recordId ?? Isar.autoIncrement;
 }
 
 List<IsarLinkBase<dynamic>> _studentRecordDtoGetLinks(StudentRecordDto object) {
@@ -1573,7 +1573,25 @@ extension StudentRecordDtoQueryFilter
   }
 
   QueryBuilder<StudentRecordDto, StudentRecordDto, QAfterFilterCondition>
-      recordIdEqualTo(Id value) {
+      recordIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'recordId',
+      ));
+    });
+  }
+
+  QueryBuilder<StudentRecordDto, StudentRecordDto, QAfterFilterCondition>
+      recordIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'recordId',
+      ));
+    });
+  }
+
+  QueryBuilder<StudentRecordDto, StudentRecordDto, QAfterFilterCondition>
+      recordIdEqualTo(Id? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'recordId',
@@ -1584,7 +1602,7 @@ extension StudentRecordDtoQueryFilter
 
   QueryBuilder<StudentRecordDto, StudentRecordDto, QAfterFilterCondition>
       recordIdGreaterThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1598,7 +1616,7 @@ extension StudentRecordDtoQueryFilter
 
   QueryBuilder<StudentRecordDto, StudentRecordDto, QAfterFilterCondition>
       recordIdLessThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1612,8 +1630,8 @@ extension StudentRecordDtoQueryFilter
 
   QueryBuilder<StudentRecordDto, StudentRecordDto, QAfterFilterCondition>
       recordIdBetween(
-    Id lower,
-    Id upper, {
+    Id? lower,
+    Id? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {

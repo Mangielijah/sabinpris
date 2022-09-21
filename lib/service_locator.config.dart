@@ -25,8 +25,7 @@ _i1.GetIt $initGetIt(
     environment,
     environmentFilter,
   );
-  gh.lazySingleton<_i3.StudentRecordDataSource>(
-      () => _i3.StudentRecordDataSource());
+  gh.singleton<_i3.StudentRecordDataSource>(_i3.StudentRecordDataSource());
   gh.lazySingleton<_i4.StudentRecordRepository>(() =>
       _i5.StudentRecordRepositoryImpl(get<_i3.StudentRecordDataSource>()));
   return get;

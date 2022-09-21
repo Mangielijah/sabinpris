@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$StudentRecord {
-  int get recordId => throw _privateConstructorUsedError;
+  int? get recordId => throw _privateConstructorUsedError;
   String get academicYear => throw _privateConstructorUsedError;
   String get fullName => throw _privateConstructorUsedError;
   Gender get gender => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $StudentRecordCopyWith<$Res> {
           StudentRecord value, $Res Function(StudentRecord) then) =
       _$StudentRecordCopyWithImpl<$Res>;
   $Res call(
-      {int recordId,
+      {int? recordId,
       String academicYear,
       String fullName,
       Gender gender,
@@ -76,7 +76,7 @@ class _$StudentRecordCopyWithImpl<$Res>
       recordId: recordId == freezed
           ? _value.recordId
           : recordId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       academicYear: academicYear == freezed
           ? _value.academicYear
           : academicYear // ignore: cast_nullable_to_non_nullable
@@ -125,7 +125,7 @@ abstract class _$$_StudentRecordCopyWith<$Res>
       __$$_StudentRecordCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int recordId,
+      {int? recordId,
       String academicYear,
       String fullName,
       Gender gender,
@@ -165,7 +165,7 @@ class __$$_StudentRecordCopyWithImpl<$Res>
       recordId: recordId == freezed
           ? _value.recordId
           : recordId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       academicYear: academicYear == freezed
           ? _value.academicYear
           : academicYear // ignore: cast_nullable_to_non_nullable
@@ -210,7 +210,7 @@ class __$$_StudentRecordCopyWithImpl<$Res>
 
 class _$_StudentRecord extends _StudentRecord {
   _$_StudentRecord(
-      {required this.recordId,
+      {this.recordId,
       required this.academicYear,
       required this.fullName,
       required this.gender,
@@ -224,7 +224,7 @@ class _$_StudentRecord extends _StudentRecord {
         super._();
 
   @override
-  final int recordId;
+  final int? recordId;
   @override
   final String academicYear;
   @override
@@ -297,7 +297,7 @@ class _$_StudentRecord extends _StudentRecord {
 
 abstract class _StudentRecord extends StudentRecord {
   factory _StudentRecord(
-      {required final int recordId,
+      {final int? recordId,
       required final String academicYear,
       required final String fullName,
       required final Gender gender,
@@ -310,7 +310,7 @@ abstract class _StudentRecord extends StudentRecord {
   _StudentRecord._() : super._();
 
   @override
-  int get recordId;
+  int? get recordId;
   @override
   String get academicYear;
   @override

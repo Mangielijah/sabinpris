@@ -5,7 +5,7 @@ part 'student_record_dto.g.dart';
 
 @collection
 class StudentRecordDto {
-  Id recordId = Isar.autoIncrement;
+  Id? recordId = Isar.autoIncrement;
   @Index(type: IndexType.value)
   late String academicYear;
   @Index(caseSensitive: false)

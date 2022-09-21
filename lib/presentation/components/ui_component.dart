@@ -347,31 +347,39 @@ class StudentTile extends StatelessWidget {
 }
 
 class LongButton extends StatelessWidget {
-  const LongButton(
-      {Key? key, required this.size, required this.color, required this.title})
-      : super(key: key);
+  const LongButton({
+    Key? key,
+    required this.size,
+    required this.color,
+    required this.title,
+    this.onTap,
+  }) : super(key: key);
 
   final Size size;
   final String title;
   final Color color;
+  final Function? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      width: size.width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            fontFamily: 'Montserrat',
-            fontWeight: FontWeight.w500,
+    return InkWell(
+      onTap: () => (onTap != null) ? onTap!() : () {},
+      child: Container(
+        height: 40,
+        width: size.width,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),

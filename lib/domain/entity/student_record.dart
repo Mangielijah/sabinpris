@@ -22,7 +22,7 @@ enum StudentClass {
 class StudentRecord with _$StudentRecord {
   const StudentRecord._();
   factory StudentRecord({
-    required int recordId,
+    int? recordId,
     required String academicYear,
     required String fullName,
     required Gender gender,

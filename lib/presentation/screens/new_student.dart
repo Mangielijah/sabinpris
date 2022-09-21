@@ -2,9 +2,12 @@
 
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
+import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
+import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
+import 'package:sabinpris/service_locator.dart';
 
 class NewStudent extends StatefulWidget {
   const NewStudent({Key? key}) : super(key: key);
@@ -14,7 +17,7 @@ class NewStudent extends StatefulWidget {
 }
 
 class _NewStudentState extends State<NewStudent> {
-  bool _value = false;
+  bool _paidReg = false;
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _parentNameController = TextEditingController();
@@ -306,7 +309,7 @@ class _NewStudentState extends State<NewStudent> {
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              _value = !_value;
+                              _paidReg = !_paidReg;
                             });
                           },
                           child: Container(
@@ -314,7 +317,7 @@ class _NewStudentState extends State<NewStudent> {
                               width: 40,
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  border: (_value)
+                                  border: (_paidReg)
                                       ? Border.all(color: kBlueColor)
                                       : null,
                                   borderRadius: BorderRadius.circular(6),
@@ -326,7 +329,7 @@ class _NewStudentState extends State<NewStudent> {
                                       offset: const Offset(0, 0),
                                     ),
                                   ]),
-                              child: _value
+                              child: _paidReg
                                   ? const Icon(
                                       Icons.check,
                                       size: 20.0,
@@ -652,7 +655,7 @@ class _NewStudentState extends State<NewStudent> {
                             alignment: Alignment.centerLeft,
                             child: ShortTextField(
                                 hint: '',
-                                controller: _phoneNumberController,
+                                controller: _feesPaidController,
                                 mainColor: kBlueColor),
                           ),
                           const SizedBox(
@@ -677,6 +680,26 @@ class _NewStudentState extends State<NewStudent> {
                         size: size,
                         color: kBlueColor,
                         title: 'Done',
+                        onTap: () async {
+                          print('tapped');
+                          final fees = int.parse(_feesPaidController.text);
+                          final record = StudentRecord(
+                            academicYear: SCHOOL_YEAR,
+                            fullName: _fullNameController.text,
+                            gender: genderNotifier.value,
+                            paidRegistration: _paidReg,
+                            sector: languageNotifier.value,
+                            studentClass: classesNotifier.value,
+                            guardianName: _parentNameController.text,
+                            guardianContact: _phoneNumberController.text,
+                            feesPaid: [fees],
+                          );
+
+                          final student =
+                              await serviceLocator<StudentRecordRepository>()
+                                  .registerStudent(record);
+                          debugPrint(student.recordId!.toString());
+                        },
                       ),
                     ],
                   ),
