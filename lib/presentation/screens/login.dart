@@ -89,7 +89,7 @@ class _LogInState extends State<LogIn> {
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Text(
-                                'Email',
+                                'Username',
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 12,
@@ -99,7 +99,8 @@ class _LogInState extends State<LogIn> {
                             )),
                         const SizedBox(height: 4),
                         LoginTextField(
-                            hint: 'enter email', controller: _emailController),
+                            hint: 'enter username',
+                            controller: _emailController),
                         const SizedBox(height: 10),
                         const Align(
                             alignment: Alignment.centerLeft,
