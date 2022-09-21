@@ -53,9 +53,9 @@ class _NewStudentState extends State<NewStudent> {
     _dropdownLanguages =
         buildDropdownItems<LanguageSector>(LanguageSector.values);
     _dropdownClasses = buildDropdownItems<StudentClass>(StudentClass.values);
-    if (mounted) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {});
-    }
+    });
   }
 
   List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
