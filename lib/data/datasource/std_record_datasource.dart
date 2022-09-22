@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
 
 @Singleton()
@@ -13,9 +16,11 @@ class StudentRecordDataSource {
   late IsarCollection<StudentRecordDto> _studentRecord;
 
   Future<void> _initIsar() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
     _isar ??= await Isar.open(
       [StudentRecordDtoSchema],
-      directory: 'database/studentRecords',
+      directory: appDocPath,
     );
     _studentRecord = _isar!.studentRecordDtos;
   }

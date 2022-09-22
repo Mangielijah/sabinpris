@@ -144,15 +144,15 @@ class _LogInState extends State<LogIn> {
                                       }),
                                     );
                                   } else {
-                                    //Show wrong password
+                                    //TODO:Show wrong password
                                     debugPrint("Incorrect Password");
                                   }
                                 } else {
-                                  //Show email not found error
+                                  //TODO:Show email not found error
                                   debugPrint("Incorrect Email");
                                 }
                               } else {
-                                //Show an error here
+                                //TODO:Show an error here
                                 debugPrint("No Email and Password Entered");
                               }
                             },

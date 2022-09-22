@@ -695,10 +695,7 @@ class _NewStudentState extends State<NewStudent> {
                             feesPaid: [fees],
                           );
 
-                          final student =
-                              await serviceLocator<StudentRecordRepository>()
-                                  .registerStudent(record);
-                          debugPrint(student.recordId!.toString());
+                          await registerNewStudent(record);
                         },
                       ),
                     ],
@@ -710,5 +707,24 @@ class _NewStudentState extends State<NewStudent> {
         ),
       ),
     );
+  }
+
+  Future<void> registerNewStudent(StudentRecord record) async {
+    try {
+      final student = await serviceLocator<StudentRecordRepository>()
+          .registerStudent(record);
+      _fullNameController.text = '';
+      _paidReg = false;
+      _feesPaidController.text = '';
+      _parentNameController.text = '';
+      _phoneNumberController.text = '';
+      if (student.recordId != null) {
+        //TODO:show successful pop up
+        debugPrint(student.recordId!.toString());
+      }
+    } catch (e) {
+      //TODO:show error pop up
+      debugPrint(e.toString());
+    }
   }
 }
