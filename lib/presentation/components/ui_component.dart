@@ -7,7 +7,6 @@ class Back extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     // return ValueListenableBuilder<bool>(
     //     valueListenable: UserSimplePreferences.isSwitchedDarkMode,
     //     builder: (context, state, _) {
@@ -249,12 +248,12 @@ class ShortTextField extends StatelessWidget {
 }
 
 class StudentTile extends StatelessWidget {
-  String studentNumber;
-  String studentName;
-  String studentClass;
-  String studentGender;
+  final String studentNumber;
+  final String studentName;
+  final String studentClass;
+  final String studentGender;
 
-  StudentTile(
+  const StudentTile(
       {Key? key,
       required this.studentNumber,
       required this.studentName,

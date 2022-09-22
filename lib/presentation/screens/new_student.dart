@@ -45,6 +45,7 @@ class _NewStudentState extends State<NewStudent> {
   late ValueNotifier<LanguageSector> languageNotifier;
   late ValueNotifier<StudentClass> classesNotifier;
   late ValueNotifier<Gender> genderNotifier;
+  bool initLoad = true;
 
   @override
   void initState() {
@@ -57,7 +58,11 @@ class _NewStudentState extends State<NewStudent> {
         buildDropdownItems<LanguageSector>(LanguageSector.values);
     _dropdownClasses = buildDropdownItems<StudentClass>(StudentClass.values);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {});
+      if (initLoad) {
+        setState(() {
+          initLoad = false;
+        });
+      }
     });
   }
 
@@ -681,7 +686,7 @@ class _NewStudentState extends State<NewStudent> {
                         color: kBlueColor,
                         title: 'Done',
                         onTap: () async {
-                          print('tapped');
+                          debugPrint('tapped');
                           final fees = int.parse(_feesPaidController.text);
                           final record = StudentRecord(
                             academicYear: SCHOOL_YEAR,
@@ -721,6 +726,7 @@ class _NewStudentState extends State<NewStudent> {
       if (student.recordId != null) {
         //TODO:show successful pop up
         debugPrint(student.recordId!.toString());
+        setState(() {});
       }
     } catch (e) {
       //TODO:show error pop up
