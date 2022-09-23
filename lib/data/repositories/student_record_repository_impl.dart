@@ -20,8 +20,32 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
   }
 
   @override
-  Future<StudentRecord> updateFees(int recordId, int fees) {
-    // TODO: implement updateFees
-    throw UnimplementedError();
+  Future<StudentRecord> updateFees(int recordId, int fees) async {
+    try {
+      final student = await dataSource.updateFees(recordId, fees);
+      return student.toDomain();
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
+  }
+
+  @override
+  Future<int> totalCollectedFees(String year) async {
+    try {
+      final fees = await dataSource.totalCollectedFees(year);
+      return fees;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
+  }
+
+  @override
+  Future<int> totalNumberOfRegisteredStudent(String year) async {
+    try {
+      final regStudents = await dataSource.totalNumberOfStudents(year);
+      return regStudents;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
   }
 }

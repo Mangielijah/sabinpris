@@ -21,6 +21,7 @@ import 'package:flutter/foundation.dart';
 //       ValueNotifier(UserSimplePreferences.getDarkMode()!);
 // }
 
+// ignore: constant_identifier_names
 const String _THEME_MODE = 'THEME_MODE';
 
 class LightMode extends ChangeNotifier {

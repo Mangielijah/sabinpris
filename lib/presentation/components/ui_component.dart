@@ -387,14 +387,14 @@ class LongButton extends StatelessWidget {
 }
 
 class ReportStudentTile extends StatelessWidget {
-  String studentNumber;
-  String studentName;
-  String studentRegFee;
-  String studentFeeAmt;
-  String studentFeePaid;
-  String studentFeeBalance;
+  final String studentNumber;
+  final String studentName;
+  final String studentRegFee;
+  final String studentFeeAmt;
+  final String studentFeePaid;
+  final String studentFeeBalance;
 
-  ReportStudentTile(
+  const ReportStudentTile(
       {Key? key,
       required this.studentNumber,
       required this.studentName,

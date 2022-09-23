@@ -37,7 +37,40 @@ class StudentRecordDataSource {
     }
   }
 
-  Future<StudentRecordDto> updateFees(int recordId, int fees) {
-    throw UnimplementedError();
+  Future<int> totalNumberOfStudents(String year) async {
+    try {
+      return (await _studentRecord.filter().academicYearEqualTo(year).findAll())
+          .length;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<StudentRecordDto> updateFees(int recordId, int fees) async {
+    try {
+      return await _isar!.writeTxn<StudentRecordDto>(() async {
+        final record = await _studentRecord.get(recordId);
+        final cFees = [...record!.feesPaid];
+        record.feesPaid = [...cFees, fees];
+        await _studentRecord.put(record); // perform update operations
+        return record;
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<int> totalCollectedFees(String year) async {
+    try {
+      return (await _studentRecord.filter().academicYearEqualTo(year).findAll())
+          .map((record) => record.feesPaid.reduce((a, b) => a + b))
+          .toList()
+          .reduce((c, d) => c + d);
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 }

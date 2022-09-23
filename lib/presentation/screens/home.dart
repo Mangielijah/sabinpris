@@ -2,12 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
+import 'package:sabinpris/credentials.dart';
+import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/providers.dart';
 // import 'package:sabinpris/components/user_shared_preference.dart';
 import 'package:sabinpris/presentation/screens/new_student.dart';
 import 'package:sabinpris/presentation/screens/report.dart';
 import 'package:sabinpris/presentation/screens/update_student_search.dart';
 import 'package:sabinpris/presentation/constants.dart';
+import 'package:sabinpris/service_locator.dart';
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,6 +22,7 @@ class Home extends ConsumerWidget {
     Size size = MediaQuery.of(context).size;
     return Consumer(builder: (context, state, child) {
       final modeProvider = ref.watch(themeModeProvider);
+      // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
       return Scaffold(
         backgroundColor: kBackgroundColorLight,
@@ -46,8 +52,8 @@ class Home extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             'Number Of Students',
                             style: TextStyle(
                               color: Color(0xff4D4D4D),
@@ -56,18 +62,40 @@ class Home extends ConsumerWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '257',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 30,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
+                          FutureBuilder(
+                              future: serviceLocator<StudentRecordRepository>()
+                                  .totalNumberOfRegisteredStudent(SCHOOL_YEAR),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    '${snapshot.data ?? '0'}',
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return const Text(
+                                    'Error Loading',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                return const SpinKitRotatingCircle(
+                                  color: kBlueColor,
+                                  size: 50.0,
+                                );
+                              })
                         ],
                       ),
                     ),
@@ -91,8 +119,8 @@ class Home extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             'Total Collected Fees',
                             style: TextStyle(
                               color: Color(0xff4D4D4D),
@@ -101,18 +129,42 @@ class Home extends ConsumerWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '2, 627, 500 XAF',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 20,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
+                          FutureBuilder(
+                              future: serviceLocator<StudentRecordRepository>()
+                                  .totalCollectedFees(SCHOOL_YEAR),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final amt =
+                                      NumberFormat().format(snapshot.data ?? 0);
+                                  return Text(
+                                    amt,
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return const Text(
+                                    'Error Loading',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                return const SpinKitRotatingCircle(
+                                  color: kBlueColor,
+                                  size: 50.0,
+                                );
+                              })
                         ],
                       ),
                     ),
@@ -314,7 +366,7 @@ class Home extends ConsumerWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                    return NewStudent();
+                                    return const NewStudent();
                                   }),
                                 );
                               },
