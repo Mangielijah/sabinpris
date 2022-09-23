@@ -30,20 +30,20 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
   }
 
   @override
-  Future<int> totalCollectedFees(String year) async {
+  Stream<int> totalCollectedFees(String year) async* {
     try {
-      final fees = await dataSource.totalCollectedFees(year);
-      return fees;
+      final fees = dataSource.totalCollectedFees(year);
+      yield* fees;
     } catch (e) {
       throw Exception('Could Not Register Student');
     }
   }
 
   @override
-  Future<int> totalNumberOfRegisteredStudent(String year) async {
+  Stream<int> totalNumberOfRegisteredStudent(String year) async* {
     try {
-      final regStudents = await dataSource.totalNumberOfStudents(year);
-      return regStudents;
+      final regStudents = dataSource.totalNumberOfStudents(year);
+      yield* regStudents;
     } catch (e) {
       throw Exception('Could Not Register Student');
     }

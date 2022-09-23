@@ -65,8 +65,8 @@ class Home extends ConsumerWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          FutureBuilder(
-                              future: serviceLocator<StudentRecordRepository>()
+                          StreamBuilder(
+                              stream: serviceLocator<StudentRecordRepository>()
                                   .totalNumberOfRegisteredStudent(SCHOOL_YEAR),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
@@ -91,7 +91,7 @@ class Home extends ConsumerWidget {
                                     ),
                                   );
                                 }
-                                return const SpinKitRotatingCircle(
+                                return const SpinKitPulse(
                                   color: kBlueColor,
                                   size: 50.0,
                                 );
@@ -132,8 +132,8 @@ class Home extends ConsumerWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          FutureBuilder(
-                              future: serviceLocator<StudentRecordRepository>()
+                          StreamBuilder(
+                              stream: serviceLocator<StudentRecordRepository>()
                                   .totalCollectedFees(SCHOOL_YEAR),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
@@ -160,7 +160,7 @@ class Home extends ConsumerWidget {
                                     ),
                                   );
                                 }
-                                return const SpinKitRotatingCircle(
+                                return const SpinKitPulse(
                                   color: kBlueColor,
                                   size: 50.0,
                                 );

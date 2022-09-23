@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
 
 @Singleton()
@@ -14,6 +15,7 @@ class StudentRecordDataSource {
 
   Isar? _isar;
   late IsarCollection<StudentRecordDto> _studentRecord;
+  late Stream<List<StudentRecordDto>> _recordStream;
 
   Future<void> _initIsar() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -23,6 +25,11 @@ class StudentRecordDataSource {
       directory: appDocPath,
     );
     _studentRecord = _isar!.studentRecordDtos;
+    _recordStream = _studentRecord
+        .filter()
+        .academicYearEqualTo(SCHOOL_YEAR)
+        .watch(fireImmediately: true)
+        .asBroadcastStream();
   }
 
   Future<StudentRecordDto> registerStudent(StudentRecordDto record) async {
@@ -37,10 +44,9 @@ class StudentRecordDataSource {
     }
   }
 
-  Future<int> totalNumberOfStudents(String year) async {
+  Stream<int> totalNumberOfStudents(String year) async* {
     try {
-      return (await _studentRecord.filter().academicYearEqualTo(year).findAll())
-          .length;
+      yield* (_recordStream.map((r) => r.length));
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -62,12 +68,14 @@ class StudentRecordDataSource {
     }
   }
 
-  Future<int> totalCollectedFees(String year) async {
+  Stream<int> totalCollectedFees(String year) async* {
     try {
-      return (await _studentRecord.filter().academicYearEqualTo(year).findAll())
-          .map((record) => record.feesPaid.reduce((a, b) => a + b))
-          .toList()
-          .reduce((c, d) => c + d);
+      yield* (_recordStream.map(
+        (recordList) => (recordList
+            .map((record) => record.feesPaid.reduce((a, b) => a + b))
+            .toList()
+            .reduce((c, d) => c + d)),
+      ));
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
