@@ -2,38 +2,100 @@
 
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
+import 'package:sabinpris/presentation/providers.dart';
 
-class UpdateStudentSearch extends StatelessWidget {
-  UpdateStudentSearch({Key? key}) : super(key: key);
+class UpdateStudentSearch extends ConsumerStatefulWidget {
+  const UpdateStudentSearch({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<UpdateStudentSearch> createState() =>
+      _UpdateStudentSearchState();
+}
+
+class _UpdateStudentSearchState extends ConsumerState<UpdateStudentSearch> {
   final TextEditingController _fullNameController = TextEditingController();
 
-  List<DropdownMenuItem<Object?>> _dropdownLanguages = [];
-  final List<DropdownMenuItem<Object?>> _dropdownClasses = [];
-  List<String> languages = ['English Sector', 'French Sector'];
-  List<String> classes = [
-    'Pre-Nursery',
-    'Nursery I',
-    'Nursery II',
-    'Class 1',
-    'Class 2',
-    'Class 3',
-    'Class 4',
-    'Class 5',
-    'Class 6'
-  ];
+  List<DropdownMenuItem<LanguageSector?>> _dropdownLanguages = [];
 
-  List<DropdownMenuItem<Object?>> buildDropdownItems(List itemList) {
-    List<DropdownMenuItem<Object?>> items = [];
-    for (var i in itemList) {
-      items.add(
-        DropdownMenuItem(
-          value: i,
-          child: Text(i),
-        ),
-      );
+  List<DropdownMenuItem<StudentClass?>> _dropdownClasses = [];
+
+  late ValueNotifier<LanguageSector> languageNotifier;
+  late ValueNotifier<StudentClass> classesNotifier;
+  bool initLoad = true;
+  @override
+  void initState() {
+    super.initState();
+    languageNotifier = ValueNotifier(LanguageSector.english);
+    classesNotifier = ValueNotifier(StudentClass.preNusery);
+    _dropdownLanguages =
+        buildDropdownItems<LanguageSector>(LanguageSector.values);
+    _dropdownClasses = buildDropdownItems<StudentClass>(StudentClass.values);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (initLoad) {
+        setState(() {
+          initLoad = false;
+        });
+      }
+    });
+  }
+
+  // List<String> languages = ['English Sector', 'French Sector'];
+  List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
+    List<DropdownMenuItem<T?>> items = [];
+    for (var item in itemList) {
+      if (item is Gender) {
+        items.add(
+          DropdownMenuItem(
+            value: item,
+            child: Text(
+              (item.name),
+            ),
+          ),
+        );
+      }
+      if (item is LanguageSector) {
+        items.add(
+          DropdownMenuItem(
+            value: item,
+            child: Text(
+              (item.name),
+            ),
+          ),
+        );
+      }
+      if (item is StudentClass) {
+        late String displayClass;
+        if (item == StudentClass.preNusery) {
+          displayClass = 'Pre-Nursery';
+        } else if (item == StudentClass.nuseryOne) {
+          displayClass = 'Nursery I';
+        } else if (item == StudentClass.nuseryTwo) {
+          displayClass = 'Nursery II';
+        } else if (item == StudentClass.classOne) {
+          displayClass = 'Class 1';
+        } else if (item == StudentClass.classTwo) {
+          displayClass = 'Class 2';
+        } else if (item == StudentClass.classThree) {
+          displayClass = 'Class 3';
+        } else if (item == StudentClass.classFour) {
+          displayClass = 'Class 4';
+        } else if (item == StudentClass.classFive) {
+          displayClass = 'Class 5';
+        } else if (item == StudentClass.classSix) {
+          displayClass = 'Class 6';
+        }
+        items.add(
+          DropdownMenuItem(
+            value: item,
+            child: Text(displayClass),
+          ),
+        );
+      }
     }
     return items;
   }
@@ -41,9 +103,6 @@ class UpdateStudentSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    ValueNotifier<String> cutterntItemType = ValueNotifier(languages[0]);
-    ValueNotifier<String> cutterntItemType2 = ValueNotifier(classes[0]);
 
     return Scaffold(
       backgroundColor: kBackgroundColorLight,
@@ -158,12 +217,12 @@ class UpdateStudentSearch extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              ValueListenableBuilder<String>(
-                                valueListenable: cutterntItemType,
-                                builder: (BuildContext context, String value,
-                                    Widget? child) {
+                              ValueListenableBuilder<LanguageSector>(
+                                valueListenable: languageNotifier,
+                                builder: (BuildContext context,
+                                    LanguageSector lang, Widget? child) {
                                   return DropdownBelow(
-                                    value: value,
+                                    value: lang,
                                     itemWidth: size.width * .2,
                                     itemTextstyle: const TextStyle(
                                       fontFamily: 'Montserrat',
@@ -200,10 +259,10 @@ class UpdateStudentSearch extends StatelessWidget {
                                     ),
                                     boxHeight: 40,
                                     dropdownColor: Colors.white,
-                                    items: _dropdownLanguages =
-                                        buildDropdownItems(languages),
+                                    items: _dropdownLanguages,
                                     onChanged: (value) {
-                                      cutterntItemType.value = value.toString();
+                                      languageNotifier.value =
+                                          value ?? LanguageSector.english;
                                     },
                                   );
                                 },
@@ -229,12 +288,12 @@ class UpdateStudentSearch extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              ValueListenableBuilder<String>(
-                                valueListenable: cutterntItemType2,
-                                builder: (BuildContext context, String value2,
-                                    Widget? child) {
+                              ValueListenableBuilder<StudentClass>(
+                                valueListenable: classesNotifier,
+                                builder: (BuildContext context,
+                                    StudentClass studentClass, Widget? child) {
                                   return DropdownBelow(
-                                    value: value2,
+                                    value: studentClass,
                                     itemWidth: size.width * .2,
                                     itemTextstyle: const TextStyle(
                                       fontFamily: 'Montserrat',
@@ -271,11 +330,10 @@ class UpdateStudentSearch extends StatelessWidget {
                                     ),
                                     boxHeight: 40,
                                     dropdownColor: Colors.white,
-                                    items: _dropdownLanguages =
-                                        buildDropdownItems(classes),
-                                    onChanged: (value2) {
-                                      cutterntItemType2.value =
-                                          value2.toString();
+                                    items: _dropdownClasses,
+                                    onChanged: (stdClass) {
+                                      classesNotifier.value =
+                                          stdClass ?? StudentClass.preNusery;
                                     },
                                   );
                                 },
@@ -287,7 +345,17 @@ class UpdateStudentSearch extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     LongButton(
-                        size: size, color: kYellowColor, title: 'Search'),
+                      size: size,
+                      color: kYellowColor,
+                      title: 'Search',
+                      onTap: () {
+                        ref.read(studentSearchProvider).search(
+                              _fullNameController.text,
+                              languageNotifier.value,
+                              classesNotifier.value,
+                            );
+                      },
+                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10.0),
@@ -388,23 +456,29 @@ class UpdateStudentSearch extends StatelessWidget {
                                 ),
                               ),
                               Expanded(
-                                child: ListView(
-                                  physics: const BouncingScrollPhysics(),
-                                  children: [
-                                    StudentTile(
-                                      studentNumber: '1',
-                                      studentName: 'Richard Nkolosombe Fimbo',
-                                      studentClass: 'Class 3',
-                                      studentGender: 'Male',
-                                    ),
-                                    StudentTile(
-                                      studentNumber: '2',
-                                      studentName: 'Desmond Piku Abanseka',
-                                      studentClass: 'Class 3',
-                                      studentGender: 'Female',
-                                    ),
-                                  ],
-                                ),
+                                child: Consumer(builder: (context, ref, _) {
+                                  final studentsNotifier =
+                                      ref.watch(studentSearchProvider);
+                                  final students = studentsNotifier.students;
+                                  if (studentsNotifier.isLoading) {
+                                    return const Center(
+                                      child: SpinKitPulse(
+                                        color: kBlueColor,
+                                        size: 100,
+                                      ),
+                                    );
+                                  }
+                                  return ListView.builder(
+                                    itemCount: students.length,
+                                    physics: const BouncingScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      StudentRecord student = students[index];
+                                      return StudentTile(
+                                        student: student,
+                                      );
+                                    },
+                                  );
+                                }),
                               ),
                             ],
                           ),

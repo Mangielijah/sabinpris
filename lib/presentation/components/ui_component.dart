@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sabinpris/presentation/providers.dart';
+import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/screens/update_student.dart';
 import 'package:sabinpris/presentation/constants.dart';
 
-class Back extends ConsumerWidget {
+class Back extends StatelessWidget {
   const Back({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      // ignore: unused_local_variable
-      final currentMode = modeProvider.currentMode;
+  Widget build(BuildContext context) {
+    // return ValueListenableBuilder<bool>(
+    //     valueListenable: UserSimplePreferences.isSwitchedDarkMode,
+    //     builder: (context, state, _) {
     return SizedBox(
       width: 30,
       height: 30,
       child: Container(
         decoration: BoxDecoration(
-          color: (!currentMode)? Colors.white :Colors.black,
+          color: Colors.white,
           // color: (state) ? ButtonColor : backGroundColorLight,
           boxShadow: [
             // (state)?
@@ -41,21 +39,21 @@ class Back extends ConsumerWidget {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             size: 16,
-            color: (!currentMode) ? kTextMainColorLight: Colors.white,
+            color: kTextMainColorLight,
             // color: (state) ? Colors.grey : Colors.black,
           ),
         ),
       ),
     );
-    }
-    );
+    // }
+    // );
   }
 }
 
-class LoginTextField extends ConsumerWidget{
+class LoginTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final bool obscureText;
@@ -68,16 +66,12 @@ class LoginTextField extends ConsumerWidget{
       : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      // ignore: unused_local_variable
-      final currentMode = modeProvider.currentMode;
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         decoration: BoxDecoration(
-            color: (!currentMode)?Colors.white:Colors.black,
+          color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -90,12 +84,13 @@ class LoginTextField extends ConsumerWidget{
         ),
         child: TextFormField(
           controller: controller,
-          style: TextStyle(
-            backgroundColor: (!currentMode) ?Colors.transparent : Colors.black,
-            color: (!currentMode) ?Colors.black : Colors.white,
+          style: const TextStyle(
+            backgroundColor: Colors.transparent,
+            color: Colors.black,
           ),
           cursorColor: Colors.green,
           // controller: _emailController,
+
           obscureText: obscureText,
           keyboardType: TextInputType.name,
           textInputAction: TextInputAction.done,
@@ -106,7 +101,7 @@ class LoginTextField extends ConsumerWidget{
             hintStyle: TextStyle(
               fontFamily: 'Montserrat',
               fontSize: 12,
-              color: (!currentMode) ?Colors.grey[500]:Colors.grey[500],
+              color: Colors.grey[300],
               fontWeight: FontWeight.w400,
             ),
             enabledBorder: OutlineInputBorder(
@@ -121,31 +116,29 @@ class LoginTextField extends ConsumerWidget{
         ),
       ),
     );
-  });}
+  }
 }
 
-class LongTextField extends ConsumerWidget {
+class LongTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final Color mainColor;
+  final bool disable;
 
-  const LongTextField(
-      {Key? key,
-      required this.hint,
-      required this.controller,
-      required this.mainColor})
-      : super(key: key);
+  const LongTextField({
+    Key? key,
+    required this.hint,
+    required this.controller,
+    required this.mainColor,
+    this.disable = false,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      // ignore: unused_local_variable
-      final currentMode = modeProvider.currentMode;
+  Widget build(BuildContext context) {
     return Container(
       height: 40,
       decoration: BoxDecoration(
-        color: (!currentMode) ? Colors.white :Colors.black,
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -158,11 +151,14 @@ class LongTextField extends ConsumerWidget {
       ),
       child: TextFormField(
         controller: controller,
-        style: TextStyle(
+        enabled: !disable,
+        style: const TextStyle(
             backgroundColor: Colors.transparent,
-            color: (!currentMode) ? Colors.black : Colors.white,
+            color: Colors.black,
             fontSize: 12),
         cursorColor: mainColor,
+        // controller: _emailController,
+
         obscureText: false,
         keyboardType: TextInputType.name,
         textInputAction: TextInputAction.done,
@@ -173,7 +169,7 @@ class LongTextField extends ConsumerWidget {
           hintStyle: TextStyle(
             fontFamily: 'Montserrat',
             fontSize: 12,
-            color: (!currentMode) ? Colors.grey[300] : Colors.grey[500],
+            color: Colors.grey[300],
             fontWeight: FontWeight.w400,
           ),
           enabledBorder: OutlineInputBorder(
@@ -187,32 +183,30 @@ class LongTextField extends ConsumerWidget {
         ),
       ),
     );
-  });}
+  }
 }
 
-class ShortTextField extends ConsumerWidget {
+class ShortTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final Color mainColor;
+  final bool disable;
 
-  const ShortTextField(
-      {Key? key,
-      required this.hint,
-      required this.controller,
-      required this.mainColor})
-      : super(key: key);
+  const ShortTextField({
+    Key? key,
+    required this.hint,
+    required this.controller,
+    required this.mainColor,
+    this.disable = false,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      // ignore: unused_local_variable
-      final currentMode = modeProvider.currentMode;
+  Widget build(BuildContext context) {
     return Container(
       height: 40,
       width: 200,
       decoration: BoxDecoration(
-        color: (!currentMode) ? Colors.white :Colors.black,
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -225,12 +219,13 @@ class ShortTextField extends ConsumerWidget {
       ),
       child: TextFormField(
         controller: controller,
-        style: TextStyle(
+        style: const TextStyle(
             backgroundColor: Colors.transparent,
-            color: (!currentMode) ? Colors.black : Colors.white,
+            color: Colors.black,
             fontSize: 12),
         cursorColor: mainColor,
-
+        // controller: _emailController,
+        enabled: !disable,
         obscureText: false,
         keyboardType: TextInputType.name,
         textInputAction: TextInputAction.done,
@@ -241,7 +236,7 @@ class ShortTextField extends ConsumerWidget {
           hintStyle: TextStyle(
             fontFamily: 'Montserrat',
             fontSize: 12,
-            color: (!currentMode) ? Colors.grey[300]:Colors.grey[500],
+            color: Colors.grey[300],
             fontWeight: FontWeight.w400,
           ),
           enabledBorder: OutlineInputBorder(
@@ -255,36 +250,26 @@ class ShortTextField extends ConsumerWidget {
         ),
       ),
     );
-  });}
+  }
 }
 
-class StudentTile extends ConsumerWidget {
-  final String studentNumber;
-  final String studentName;
-  final String studentClass;
-  final String studentGender;
+class StudentTile extends StatelessWidget {
+  final StudentRecord student;
 
-  const StudentTile(
-      {Key? key,
-      required this.studentNumber,
-      required this.studentName,
-      required this.studentClass,
-      required this.studentGender})
-      : super(key: key);
+  const StudentTile({
+    Key? key,
+    required this.student,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      // ignore: unused_local_variable
-      final currentMode = modeProvider.currentMode;
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (BuildContext context) {
-              return UpdateStudent();
+              return UpdateStudent(student: student);
             }),
           );
         },
@@ -292,7 +277,7 @@ class StudentTile extends ConsumerWidget {
             height: 40,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: (!currentMode)?Colors.white:Color(0xff202020),
+              color: Colors.white,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -308,9 +293,9 @@ class StudentTile extends ConsumerWidget {
                   flex: 2,
                   child: Center(
                     child: Text(
-                      studentNumber,
-                      style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+                      student.recordId.toString(),
+                      style: const TextStyle(
+                          color: kTextMainColorLight, fontSize: 10),
                     ),
                   ),
                 ),
@@ -320,9 +305,9 @@ class StudentTile extends ConsumerWidget {
                     children: [
                       const SizedBox(width: 20),
                       Text(
-                        studentName,
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+                        student.fullName,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
                       )
                     ],
                   ),
@@ -333,9 +318,9 @@ class StudentTile extends ConsumerWidget {
                     children: [
                       const SizedBox(width: 16),
                       Text(
-                        studentClass,
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+                        student.studentClass.name,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
                       )
                     ],
                   ),
@@ -346,9 +331,9 @@ class StudentTile extends ConsumerWidget {
                     children: [
                       const SizedBox(width: 16),
                       Text(
-                        studentGender,
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+                        student.gender.name,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
                       )
                     ],
                   ),
@@ -357,10 +342,10 @@ class StudentTile extends ConsumerWidget {
             )),
       ),
     );
-  });}
+  }
 }
 
-class LongButton extends ConsumerWidget {
+class LongButton extends StatelessWidget {
   const LongButton({
     Key? key,
     required this.size,
@@ -375,11 +360,7 @@ class LongButton extends ConsumerWidget {
   final Function? onTap;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      // ignore: unused_local_variable
-      final currentMode = modeProvider.currentMode;
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: () => (onTap != null) ? onTap!() : () {},
       child: Container(
@@ -392,8 +373,8 @@ class LongButton extends ConsumerWidget {
         child: Center(
           child: Text(
             title,
-            style: TextStyle(
-              color: (!currentMode)? Colors.white : Colors.black,
+            style: const TextStyle(
+              color: Colors.white,
               fontSize: 12,
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w500,
@@ -402,11 +383,10 @@ class LongButton extends ConsumerWidget {
         ),
       ),
     );
-  });}
+  }
 }
 
-
-class ReportStudentTile extends ConsumerWidget{
+class ReportStudentTile extends StatelessWidget {
   final String studentNumber;
   final String studentName;
   final String studentRegFee;
@@ -425,114 +405,111 @@ class ReportStudentTile extends ConsumerWidget{
       : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      final currentMode = modeProvider.currentMode;
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) {
-              return UpdateStudent();
-            }),
-          );
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(builder: (BuildContext context) {
+          //     return UpdateStudent(student: Student,);
+          //   }),
+          // );
         },
         child: Container(
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: (!currentMode)?Colors.white:Color(0xff202020),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                spreadRadius: 1,
-                blurRadius: 4,
-                offset: const Offset(0, 0),
-              )
-            ],
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: Text(
-                    studentNumber,
-                    style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 4,
+                  offset: const Offset(0, 0),
+                )
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Center(
+                    child: Text(
+                      studentNumber,
+                      style: const TextStyle(
+                          color: kTextMainColorLight, fontSize: 10),
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 9,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 20),
-                    Text(
-                      studentName,
-                      style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                    )
-                  ],
+                Expanded(
+                  flex: 9,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 20),
+                      Text(
+                        studentName,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    Text(
-                      studentRegFee,
-                      style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                    )
-                  ],
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      Text(
+                        studentRegFee,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    Text(
-                      studentFeeAmt,
-                      style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                    )
-                  ],
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      Text(
+                        studentFeeAmt,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    Text(
-                      studentFeePaid,
-                      style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                    )
-                  ],
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      Text(
+                        studentFeePaid,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    Text(
-                      studentFeeBalance,
-                      style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                    )
-                  ],
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      Text(
+                        studentFeeBalance,
+                        style: const TextStyle(
+                            color: kTextMainColorLight, fontSize: 10),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          )),
-    ),
+              ],
+            )),
+      ),
     );
-  });}
+  }
 }

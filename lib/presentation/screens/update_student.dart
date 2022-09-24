@@ -2,61 +2,66 @@
 
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
+import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
+import 'package:sabinpris/presentation/util.dart';
 
 class UpdateStudent extends StatefulWidget {
-  UpdateStudent({Key? key}) : super(key: key);
+  final StudentRecord student;
+  const UpdateStudent({
+    Key? key,
+    required this.student,
+  }) : super(key: key);
 
   @override
   State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
 class _UpdateStudentState extends State<UpdateStudent> {
-  bool _value = false;
+  bool _paidReg = false;
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _parentNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _feesPaidController = TextEditingController();
 
-  List<DropdownMenuItem<Object?>> _dropdownLanguages = [];
-  List<DropdownMenuItem<Object?>> _dropdownGenders = [];
-  List<DropdownMenuItem<Object?>> _dropdownClasses = [];
+  List<DropdownMenuItem<LanguageSector?>> _dropdownLanguages = [];
+  List<DropdownMenuItem<Gender?>> _dropdownGenders = [];
+  List<DropdownMenuItem<StudentClass?>> _dropdownClasses = [];
 
-  List<String> languages = ['English Sector', 'French Sector'];
-  List<String> genders = ['Male', 'Female'];
-  List<String> classes = [
-    'Pre-Nursery',
-    'Nursery I',
-    'Nursery II',
-    'Class 1',
-    'Class 2',
-    'Class 3',
-    'Class 4',
-    'Class 5',
-    'Class 6'
-  ];
+  late ValueNotifier<LanguageSector> languageNotifier;
+  late ValueNotifier<StudentClass> classesNotifier;
+  late ValueNotifier<Gender> genderNotifier;
+  bool initLoad = true;
 
-  List<DropdownMenuItem<Object?>> buildDropdownItems(List _itemList) {
-    List<DropdownMenuItem<Object?>> items = [];
-    for (var i in _itemList) {
-      items.add(
-        DropdownMenuItem(
-          value: i,
-          child: Text(i),
-        ),
-      );
-    }
-    return items;
+  @override
+  void initState() {
+    super.initState();
+    _fullNameController.text = widget.student.fullName;
+    _parentNameController.text = widget.student.guardianName;
+    _phoneNumberController.text = widget.student.guardianContact;
+    _paidReg = widget.student.paidRegistration;
+    languageNotifier = ValueNotifier(widget.student.sector);
+    classesNotifier = ValueNotifier(widget.student.studentClass);
+    genderNotifier = ValueNotifier(widget.student.gender);
+    _dropdownGenders = buildDropdownItems<Gender>([widget.student.gender]);
+    _dropdownLanguages =
+        buildDropdownItems<LanguageSector>([widget.student.sector]);
+    _dropdownClasses =
+        buildDropdownItems<StudentClass>([widget.student.studentClass]);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (initLoad) {
+        setState(() {
+          initLoad = false;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    ValueNotifier<String> cutterntItemType = ValueNotifier(languages[0]);
-    ValueNotifier<String> cutterntItemType2 = ValueNotifier(classes[0]);
-    ValueNotifier<String> cutterntItemType3 = ValueNotifier(genders[0]);
 
     return Scaffold(
       backgroundColor: kBackgroundColorLight,
@@ -133,9 +138,11 @@ class _UpdateStudentState extends State<UpdateStudent> {
                       ),
                       const SizedBox(height: 4),
                       LongTextField(
-                          hint: 'Enter Full Name Here',
-                          controller: _fullNameController,
-                          mainColor: kYellowColor),
+                        hint: 'Enter Full Name Here',
+                        controller: _fullNameController,
+                        mainColor: kYellowColor,
+                        disable: true,
+                      ),
                       const SizedBox(height: 10),
                       Row(
                         children: [
@@ -172,58 +179,55 @@ class _UpdateStudentState extends State<UpdateStudent> {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                ValueListenableBuilder<String>(
-                                  valueListenable: cutterntItemType3,
-                                  builder: (BuildContext context, String value3,
-                                      Widget? child) {
-                                    return DropdownBelow(
-                                      value: value3,
-                                      itemWidth: size.width * .2,
-                                      itemTextstyle: const TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      hint: Text(
-                                        'select a gender',
-                                        style: TextStyle(
+                                ValueListenableBuilder(
+                                    valueListenable: genderNotifier,
+                                    builder: (context, gender, _) {
+                                      return DropdownBelow(
+                                        value: gender,
+                                        itemWidth: size.width * .2,
+                                        itemTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: Colors.grey[300],
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                      ),
-                                      boxTextstyle: const TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      boxDecoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                          border:
-                                              Border.all(color: kYellowColor)),
-                                      boxPadding: const EdgeInsets.symmetric(
-                                          horizontal: 14.0, vertical: 4),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        color: Colors.black,
-                                        size: 25,
-                                      ),
-                                      boxHeight: 40,
-                                      dropdownColor: Colors.white,
-                                      items: _dropdownGenders =
-                                          buildDropdownItems(genders),
-                                      onChanged: (value3) {
-                                        cutterntItemType3.value =
-                                            value3.toString();
-                                      },
-                                    );
-                                  },
-                                ),
+                                        hint: Text(
+                                          'select a gender',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 12,
+                                            color: Colors.grey[300],
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        boxTextstyle: const TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        boxDecoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                            border:
+                                                Border.all(color: kBlueColor)),
+                                        boxPadding: const EdgeInsets.symmetric(
+                                            horizontal: 14.0, vertical: 4),
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: Colors.black,
+                                          size: 25,
+                                        ),
+                                        boxHeight: 40,
+                                        dropdownColor: Colors.white,
+                                        items: _dropdownGenders,
+                                        onChanged: (g) {
+                                          genderNotifier.value =
+                                              g ?? Gender.male;
+                                        },
+                                      );
+                                    })
                               ],
                             ),
                           ),
@@ -248,17 +252,17 @@ class _UpdateStudentState extends State<UpdateStudent> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _value = !_value;
-                            });
-                          },
+                          // onTap: () {
+                          //   // setState(() {
+                          //   //   _value = !_value;
+                          //   // });
+                          // },
                           child: Container(
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  border: (_value)
+                                  border: (_paidReg)
                                       ? Border.all(color: kYellowColor)
                                       : null,
                                   borderRadius: BorderRadius.circular(6),
@@ -270,7 +274,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                                       offset: const Offset(0, 0),
                                     ),
                                   ]),
-                              child: _value
+                              child: _paidReg
                                   ? const Icon(
                                       Icons.check,
                                       size: 20.0,
@@ -315,58 +319,55 @@ class _UpdateStudentState extends State<UpdateStudent> {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                ValueListenableBuilder<String>(
-                                  valueListenable: cutterntItemType,
-                                  builder: (BuildContext context, String value,
-                                      Widget? child) {
-                                    return DropdownBelow(
-                                      value: value,
-                                      itemWidth: size.width * .2,
-                                      itemTextstyle: const TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      hint: Text(
-                                        'select a language sector',
-                                        style: TextStyle(
+                                ValueListenableBuilder(
+                                    valueListenable: languageNotifier,
+                                    builder: (context, sector, _) {
+                                      return DropdownBelow(
+                                        value: sector,
+                                        itemWidth: size.width * .2,
+                                        itemTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: Colors.grey[300],
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                      ),
-                                      boxTextstyle: const TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      boxDecoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                          border:
-                                              Border.all(color: kYellowColor)),
-                                      boxPadding: const EdgeInsets.symmetric(
-                                          horizontal: 14.0, vertical: 4),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        color: Colors.black,
-                                        size: 25,
-                                      ),
-                                      boxHeight: 40,
-                                      dropdownColor: Colors.white,
-                                      items: _dropdownLanguages =
-                                          buildDropdownItems(languages),
-                                      onChanged: (value) {
-                                        cutterntItemType.value =
-                                            value.toString();
-                                      },
-                                    );
-                                  },
-                                ),
+                                        hint: Text(
+                                          'select a language sector',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 12,
+                                            color: Colors.grey[300],
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        boxTextstyle: const TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        boxDecoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                            border:
+                                                Border.all(color: kBlueColor)),
+                                        boxPadding: const EdgeInsets.symmetric(
+                                            horizontal: 14.0, vertical: 4),
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: Colors.black,
+                                          size: 25,
+                                        ),
+                                        boxHeight: 40,
+                                        dropdownColor: Colors.white,
+                                        items: _dropdownLanguages,
+                                        onChanged: (value) {
+                                          languageNotifier.value =
+                                              value ?? LanguageSector.english;
+                                        },
+                                      );
+                                    }),
                               ],
                             ),
                           ),
@@ -404,58 +405,55 @@ class _UpdateStudentState extends State<UpdateStudent> {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                ValueListenableBuilder<String>(
-                                  valueListenable: cutterntItemType2,
-                                  builder: (BuildContext context, String value2,
-                                      Widget? child) {
-                                    return DropdownBelow(
-                                      value: value2,
-                                      itemWidth: size.width * .2,
-                                      itemTextstyle: const TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      hint: Text(
-                                        'select a class',
-                                        style: TextStyle(
+                                ValueListenableBuilder(
+                                    valueListenable: classesNotifier,
+                                    builder: (context, studentClass, _) {
+                                      return DropdownBelow(
+                                        value: studentClass,
+                                        itemWidth: size.width * .2,
+                                        itemTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: Colors.grey[300],
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                      ),
-                                      boxTextstyle: const TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      boxDecoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(6),
-                                          border:
-                                              Border.all(color: kYellowColor)),
-                                      boxPadding: const EdgeInsets.symmetric(
-                                          horizontal: 14.0, vertical: 4),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        color: Colors.black,
-                                        size: 25,
-                                      ),
-                                      boxHeight: 40,
-                                      dropdownColor: Colors.white,
-                                      items: _dropdownLanguages =
-                                          buildDropdownItems(classes),
-                                      onChanged: (value2) {
-                                        cutterntItemType2.value =
-                                            value2.toString();
-                                      },
-                                    );
-                                  },
-                                ),
+                                        hint: Text(
+                                          'select a class',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 12,
+                                            color: Colors.grey[300],
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        boxTextstyle: const TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        boxDecoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                            border:
+                                                Border.all(color: kBlueColor)),
+                                        boxPadding: const EdgeInsets.symmetric(
+                                            horizontal: 14.0, vertical: 4),
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: Colors.black,
+                                          size: 25,
+                                        ),
+                                        boxHeight: 40,
+                                        dropdownColor: Colors.white,
+                                        items: _dropdownClasses,
+                                        onChanged: (stdClass) {
+                                          classesNotifier.value = stdClass ??
+                                              StudentClass.preNusery;
+                                        },
+                                      );
+                                    }),
                               ],
                             ),
                           ),
@@ -492,9 +490,11 @@ class _UpdateStudentState extends State<UpdateStudent> {
                       ),
                       const SizedBox(height: 4),
                       LongTextField(
-                          hint: 'Enter Full Name Here',
-                          controller: _parentNameController,
-                          mainColor: kYellowColor),
+                        hint: 'Enter Full Name Here',
+                        controller: _parentNameController,
+                        mainColor: kYellowColor,
+                        disable: true,
+                      ),
                       const SizedBox(height: 10),
                       Row(
                         children: const [
@@ -557,9 +557,11 @@ class _UpdateStudentState extends State<UpdateStudent> {
                             width: 20,
                           ),
                           ShortTextField(
-                              hint: 'Phone number',
-                              controller: _phoneNumberController,
-                              mainColor: kYellowColor),
+                            hint: 'Phone number',
+                            controller: _phoneNumberController,
+                            mainColor: kYellowColor,
+                            disable: true,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -601,9 +603,11 @@ class _UpdateStudentState extends State<UpdateStudent> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: ShortTextField(
-                                hint: '',
-                                controller: _phoneNumberController,
-                                mainColor: kYellowColor),
+                              hint: '',
+                              controller: _phoneNumberController,
+                              mainColor: kYellowColor,
+                              disable: true,
+                            ),
                           ),
                           const SizedBox(
                             width: 10,
