@@ -46,6 +46,34 @@ class StudentRecordDataSource {
     }
   }
 
+  Future<List<StudentRecordDto>> searchStudents({
+    required String year,
+    required String fullName,
+    required int sector,
+    required int studentClass,
+  }) async {
+    try {
+      late QueryBuilder<StudentRecordDto, StudentRecordDto,
+              QAfterFilterCondition> studentSearchQuery =
+          _studentRecord
+              .filter()
+              .academicYearEqualTo(year)
+              .sectorEqualTo(sector)
+              .studentClassEqualTo(studentClass);
+
+      if (fullName.trim().isNotEmpty) {
+        studentSearchQuery = studentSearchQuery.fullNameContains(
+          fullName,
+          caseSensitive: false,
+        );
+      }
+      return await studentSearchQuery.findAll();
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
   Stream<int> totalNumberOfStudents(String year) async* {
     try {
       yield* (_recordStream.map((r) => r.length));

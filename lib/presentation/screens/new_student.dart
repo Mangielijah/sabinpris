@@ -7,6 +7,7 @@ import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
+import 'package:sabinpris/presentation/util.dart';
 import 'package:sabinpris/service_locator.dart';
 
 class NewStudent extends StatefulWidget {
@@ -27,20 +28,6 @@ class _NewStudentState extends State<NewStudent> {
   List<DropdownMenuItem<LanguageSector?>> _dropdownLanguages = [];
   List<DropdownMenuItem<Gender?>> _dropdownGenders = [];
   List<DropdownMenuItem<StudentClass?>> _dropdownClasses = [];
-
-  // List<String> languages = ['English Sector', 'French Sector'];
-  // List<String> genders = ['Male', 'Female'];
-  // List<String> classes = [
-  //   'Pre-Nursery',
-  //   'Nursery I',
-  //   'Nursery II',
-  //   'Class 1',
-  //   'Class 2',
-  //   'Class 3',
-  //   'Class 4',
-  //   'Class 5',
-  //   'Class 6'
-  // ];
 
   late ValueNotifier<LanguageSector> languageNotifier;
   late ValueNotifier<StudentClass> classesNotifier;
@@ -64,61 +51,6 @@ class _NewStudentState extends State<NewStudent> {
         });
       }
     });
-  }
-
-  List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
-    List<DropdownMenuItem<T?>> items = [];
-    for (var item in itemList) {
-      if (item is Gender) {
-        items.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(
-              (item.name),
-            ),
-          ),
-        );
-      }
-      if (item is LanguageSector) {
-        items.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(
-              (item.name),
-            ),
-          ),
-        );
-      }
-      if (item is StudentClass) {
-        late String displayClass;
-        if (item == StudentClass.preNusery) {
-          displayClass = 'Pre-Nursery';
-        } else if (item == StudentClass.nuseryOne) {
-          displayClass = 'Nursery I';
-        } else if (item == StudentClass.nuseryTwo) {
-          displayClass = 'Nursery II';
-        } else if (item == StudentClass.classOne) {
-          displayClass = 'Class 1';
-        } else if (item == StudentClass.classTwo) {
-          displayClass = 'Class 2';
-        } else if (item == StudentClass.classThree) {
-          displayClass = 'Class 3';
-        } else if (item == StudentClass.classFour) {
-          displayClass = 'Class 4';
-        } else if (item == StudentClass.classFive) {
-          displayClass = 'Class 5';
-        } else if (item == StudentClass.classSix) {
-          displayClass = 'Class 6';
-        }
-        items.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(displayClass),
-          ),
-        );
-      }
-    }
-    return items;
   }
 
   @override

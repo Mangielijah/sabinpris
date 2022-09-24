@@ -68,4 +68,26 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
       throw Exception('Could Not Register Student');
     }
   }
+
+  @override
+  Future<List<StudentRecord>> searchStudent({
+    required String year,
+    required String fullName,
+    required LanguageSector sector,
+    required StudentClass studentClass,
+  }) async {
+    try {
+      final students = (await dataSource.searchStudents(
+        year: year,
+        fullName: fullName,
+        sector: sector.index,
+        studentClass: studentClass.index,
+      ))
+          .map((e) => e.toDomain())
+          .toList();
+      return students;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
+  }
 }

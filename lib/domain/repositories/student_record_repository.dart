@@ -7,4 +7,10 @@ abstract class StudentRecordRepository {
   Stream<int> totalCollectedFees(String year);
   Stream<int> numStudentWithCompleteFees(String year);
   Stream<int> numStudentWithInCompleteFees(String year);
+  Future<List<StudentRecord>> searchStudent({
+    required String year,
+    required String fullName,
+    required LanguageSector sector,
+    required StudentClass studentClass,
+  });
 }

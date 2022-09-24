@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/screens/update_student.dart';
 import 'package:sabinpris/presentation/constants.dart';
 
@@ -122,13 +123,15 @@ class LongTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final Color mainColor;
+  final bool disable;
 
-  const LongTextField(
-      {Key? key,
-      required this.hint,
-      required this.controller,
-      required this.mainColor})
-      : super(key: key);
+  const LongTextField({
+    Key? key,
+    required this.hint,
+    required this.controller,
+    required this.mainColor,
+    this.disable = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +151,7 @@ class LongTextField extends StatelessWidget {
       ),
       child: TextFormField(
         controller: controller,
+        enabled: !disable,
         style: const TextStyle(
             backgroundColor: Colors.transparent,
             color: Colors.black,
@@ -186,13 +190,15 @@ class ShortTextField extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final Color mainColor;
+  final bool disable;
 
-  const ShortTextField(
-      {Key? key,
-      required this.hint,
-      required this.controller,
-      required this.mainColor})
-      : super(key: key);
+  const ShortTextField({
+    Key? key,
+    required this.hint,
+    required this.controller,
+    required this.mainColor,
+    this.disable = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +225,7 @@ class ShortTextField extends StatelessWidget {
             fontSize: 12),
         cursorColor: mainColor,
         // controller: _emailController,
-
+        enabled: !disable,
         obscureText: false,
         keyboardType: TextInputType.name,
         textInputAction: TextInputAction.done,
@@ -248,18 +254,12 @@ class ShortTextField extends StatelessWidget {
 }
 
 class StudentTile extends StatelessWidget {
-  final String studentNumber;
-  final String studentName;
-  final String studentClass;
-  final String studentGender;
+  final StudentRecord student;
 
-  const StudentTile(
-      {Key? key,
-      required this.studentNumber,
-      required this.studentName,
-      required this.studentClass,
-      required this.studentGender})
-      : super(key: key);
+  const StudentTile({
+    Key? key,
+    required this.student,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -269,7 +269,7 @@ class StudentTile extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (BuildContext context) {
-              return UpdateStudent();
+              return UpdateStudent(student: student);
             }),
           );
         },
@@ -293,7 +293,7 @@ class StudentTile extends StatelessWidget {
                   flex: 2,
                   child: Center(
                     child: Text(
-                      studentNumber,
+                      student.recordId.toString(),
                       style: const TextStyle(
                           color: kTextMainColorLight, fontSize: 10),
                     ),
@@ -305,7 +305,7 @@ class StudentTile extends StatelessWidget {
                     children: [
                       const SizedBox(width: 20),
                       Text(
-                        studentName,
+                        student.fullName,
                         style: const TextStyle(
                             color: kTextMainColorLight, fontSize: 10),
                       )
@@ -318,7 +318,7 @@ class StudentTile extends StatelessWidget {
                     children: [
                       const SizedBox(width: 16),
                       Text(
-                        studentClass,
+                        student.studentClass.name,
                         style: const TextStyle(
                             color: kTextMainColorLight, fontSize: 10),
                       )
@@ -331,7 +331,7 @@ class StudentTile extends StatelessWidget {
                     children: [
                       const SizedBox(width: 16),
                       Text(
-                        studentGender,
+                        student.gender.name,
                         style: const TextStyle(
                             color: kTextMainColorLight, fontSize: 10),
                       )
@@ -410,11 +410,11 @@ class ReportStudentTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) {
-              return UpdateStudent();
-            }),
-          );
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(builder: (BuildContext context) {
+          //     return UpdateStudent(student: Student,);
+          //   }),
+          // );
         },
         child: Container(
             height: 40,
