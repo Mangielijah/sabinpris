@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
@@ -15,163 +14,18 @@ import 'package:sabinpris/presentation/screens/update_student_search.dart';
 import 'package:sabinpris/presentation/constants.dart';
 import 'package:sabinpris/service_locator.dart';
 
-class Home extends ConsumerStatefulWidget {
+class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<Home> createState() => _HomeState();
-}
-
-class _HomeState extends ConsumerState<Home> {
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
     return Consumer(builder: (context, state, child) {
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
       return Scaffold(
-        key: _scaffoldkey,
-        backgroundColor:
-            (!currentMode) ? kBackgroundColorLight : kBackgroundColorDark,
-        endDrawer: Container(
-          height: size.height,
-          width: size.width * .25,
-          color: (!currentMode) ? kBackgroundColorLight : kBackgroundColorDark,
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              InkWell(
-                onTap: () {
-                  _scaffoldkey.currentState?.closeEndDrawer();
-                },
-                child: Container(
-                  width: size.width * .2,
-                  height: size.height * .09,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: (!currentMode) ? kTabColorLight : kTabColorDark,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          spreadRadius: 2,
-                          blurRadius: 2,
-                        )
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // SvgPicture.asset('assets/Settings.png'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Backup & Restore',
-                          style: TextStyle(
-                            color: (!currentMode)
-                                ? Color(0xff4D4D4D)
-                                : Colors.white,
-                            fontSize: 14,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),const SizedBox(height: 14),
-              InkWell(
-                onTap: () {
-                  _scaffoldkey.currentState?.closeEndDrawer();
-                },
-                child: Container(
-                  width: size.width * .2,
-                  height: size.height * .09,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: (!currentMode) ? kTabColorLight : kTabColorDark,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          spreadRadius: 2,
-                          blurRadius: 2,
-                        )
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // SvgPicture.asset('assets/Settings.svg'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Report Issue',
-                          style: TextStyle(
-                            color: (!currentMode)
-                                ? Color(0xff4D4D4D)
-                                : Colors.white,
-                            fontSize: 14,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),const SizedBox(height: 14),
-              InkWell(
-                onTap: () {
-                  _scaffoldkey.currentState?.closeEndDrawer();
-                },
-                child: Container(
-                  width: size.width * .2,
-                  height: size.height * .09,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: (!currentMode) ? kTabColorLight : kTabColorDark,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          spreadRadius: 2,
-                          blurRadius: 2,
-                        )
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // SvgPicture.asset('assets/Settings.png'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Exit',
-                          style: TextStyle(
-                            color: (!currentMode)
-                                ? Color(0xff4D4D4D)
-                                : Colors.white,
-                            fontSize: 14,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        backgroundColor: kBackgroundColorLight,
         body: Column(
           children: [
             Padding(
@@ -183,7 +37,7 @@ class _HomeState extends ConsumerState<Home> {
                     height: size.height * .2,
                     width: size.width * .18,
                     decoration: BoxDecoration(
-                        color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                        color: kTabColorLight,
                         borderRadius: BorderRadius.circular(6),
                         border: Border.all(color: Colors.green, width: 1),
                         boxShadow: [
@@ -199,12 +53,10 @@ class _HomeState extends ConsumerState<Home> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             'Number Of Students',
                             style: TextStyle(
-                              color: (!currentMode)
-                                  ? Color(0xff4D4D4D)
-                                  : Colors.white,
+                              color: Color(0xff4D4D4D),
                               fontSize: 14,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
@@ -218,8 +70,10 @@ class _HomeState extends ConsumerState<Home> {
                                   .totalNumberOfRegisteredStudent(SCHOOL_YEAR),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  final amt =
+                                      NumberFormat().format(snapshot.data ?? 0);
                                   return Text(
-                                    '${snapshot.data ?? '0'}',
+                                    amt,
                                     style: const TextStyle(
                                       color: Colors.green,
                                       fontSize: 30,
@@ -252,7 +106,7 @@ class _HomeState extends ConsumerState<Home> {
                     height: size.height * .2,
                     width: size.width * .18,
                     decoration: BoxDecoration(
-                        color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                        color: kTabColorLight,
                         border: Border.all(color: Colors.green, width: 1),
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
@@ -268,12 +122,10 @@ class _HomeState extends ConsumerState<Home> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             'Total Collected Fees',
                             style: TextStyle(
-                              color: (!currentMode)
-                                  ? Color(0xff4D4D4D)
-                                  : Colors.white,
+                              color: Color(0xff4D4D4D),
                               fontSize: 14,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
@@ -323,7 +175,7 @@ class _HomeState extends ConsumerState<Home> {
                     height: size.height * .2,
                     width: size.width * .18,
                     decoration: BoxDecoration(
-                        color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                        color: kTabColorLight,
                         border: Border.all(color: Colors.green, width: 1),
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
@@ -339,30 +191,52 @@ class _HomeState extends ConsumerState<Home> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             'Students With Incomplete Fee Payments',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: (!currentMode)
-                                  ? Color(0xff4D4D4D)
-                                  : Colors.white,
+                              color: Color(0xff4D4D4D),
                               fontSize: 12,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '51',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 30,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
+                          StreamBuilder(
+                              stream: serviceLocator<StudentRecordRepository>()
+                                  .numStudentWithInCompleteFees(SCHOOL_YEAR),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final amt =
+                                      NumberFormat().format(snapshot.data ?? 0);
+                                  return Text(
+                                    amt,
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return const Text(
+                                    'Error Loading',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                return const SpinKitPulse(
+                                  color: kBlueColor,
+                                  size: 50.0,
+                                );
+                              })
                         ],
                       ),
                     ),
@@ -372,7 +246,7 @@ class _HomeState extends ConsumerState<Home> {
                     width: size.width * .18,
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.green, width: 1),
-                        color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                        color: kTabColorLight,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
@@ -387,30 +261,52 @@ class _HomeState extends ConsumerState<Home> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             'Students With Complete Fee Payments',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: (!currentMode)
-                                  ? Color(0xff4D4D4D)
-                                  : Colors.white,
+                              color: Color(0xff4D4D4D),
                               fontSize: 12,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '206',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 30,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
+                          StreamBuilder(
+                              stream: serviceLocator<StudentRecordRepository>()
+                                  .numStudentWithCompleteFees(SCHOOL_YEAR),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final amt =
+                                      NumberFormat().format(snapshot.data ?? 0);
+                                  return Text(
+                                    amt,
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return const Text(
+                                    'Error Loading',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                return const SpinKitPulse(
+                                  color: kBlueColor,
+                                  size: 50.0,
+                                );
+                              })
                         ],
                       ),
                     ),
@@ -426,9 +322,7 @@ class _HomeState extends ConsumerState<Home> {
                           height: size.height * .09,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              color: (!currentMode)
-                                  ? kTabColorLight
-                                  : kTabColorDark,
+                              color: kTabColorLight,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.06),
@@ -445,17 +339,15 @@ class _HomeState extends ConsumerState<Home> {
                                   const EdgeInsets.symmetric(horizontal: 30),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // SvgPicture.asset('assets/SVGs/LM.svg'),
+                                children: const [
+                                  // SvgPicture.asset('assets/Moon.png'),
                                   SizedBox(
                                     width: 10,
                                   ),
                                   Text(
                                     'Dark Mode',
                                     style: TextStyle(
-                                      color: (!currentMode)
-                                          ? Color(0xff4D4D4D)
-                                          : Colors.white,
+                                      color: Color(0xff4D4D4D),
                                       fontSize: 16,
                                       fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.w600,
@@ -466,48 +358,38 @@ class _HomeState extends ConsumerState<Home> {
                             ),
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            _scaffoldkey.currentState?.openEndDrawer();
-                          },
-                          child: Container(
-                            width: size.width * .18,
-                            height: size.height * .09,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: (!currentMode)
-                                    ? kTabColorLight
-                                    : kTabColorDark,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.06),
-                                    spreadRadius: 2,
-                                    blurRadius: 2,
-                                  )
-                                ]),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 30),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // SvgPicture.asset('assets/Settings.png'),
-                                  SizedBox(
-                                    width: 10,
+                        Container(
+                          width: size.width * .18,
+                          height: size.height * .09,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: kTabColorLight,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.06),
+                                  spreadRadius: 2,
+                                  blurRadius: 2,
+                                )
+                              ]),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                // SvgPicture.asset('assets/Settings.png'),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Settings',
+                                  style: TextStyle(
+                                    color: Color(0xff4D4D4D),
+                                    fontSize: 16,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  Text(
-                                    'Settings',
-                                    style: TextStyle(
-                                      color: (!currentMode)
-                                          ? Color(0xff4D4D4D)
-                                          : Colors.white,
-                                      fontSize: 16,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -541,9 +423,7 @@ class _HomeState extends ConsumerState<Home> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
-                                    color: (!currentMode)
-                                        ? kTabColorLight
-                                        : kTabColorDark,
+                                    color: kTabColorLight,
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.06),
@@ -555,19 +435,15 @@ class _HomeState extends ConsumerState<Home> {
                                   children: [
                                     Align(
                                       alignment: Alignment.bottomRight,
-                                      child: (!currentMode)
-                                          ? Image.asset('assets/1L.png')
-                                          : Image.asset('assets/1D.png'),
+                                      child: Image.asset('assets/1L.png'),
                                     ),
-                                    Padding(
+                                    const Padding(
                                       padding:
                                           EdgeInsets.only(top: 25, left: 25),
                                       child: Text(
                                         'Register a \nNew Student',
                                         style: TextStyle(
-                                          color: (!currentMode)
-                                              ? Color(0xff4D4D4D)
-                                              : Colors.white,
+                                          color: Color(0xff4D4D4D),
                                           fontSize: 20,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -594,9 +470,7 @@ class _HomeState extends ConsumerState<Home> {
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
-                                    color: (!currentMode)
-                                        ? kTabColorLight
-                                        : kTabColorDark,
+                                    color: kTabColorLight,
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.06),
@@ -608,19 +482,17 @@ class _HomeState extends ConsumerState<Home> {
                                   children: [
                                     Align(
                                       alignment: Alignment.bottomRight,
-                                      child: (!currentMode)
-                                          ? Image.asset('assets/2L.png')
-                                          : Image.asset('assets/2D.png'),
+                                      child: Image.asset(
+                                        'assets/2L.png',
+                                      ),
                                     ),
-                                    Padding(
+                                    const Padding(
                                       padding:
                                           EdgeInsets.only(top: 25, left: 25),
                                       child: Text(
                                         'Edit / Update Student \nInformation',
                                         style: TextStyle(
-                                          color: (!currentMode)
-                                              ? Color(0xff4D4D4D)
-                                              : Colors.white,
+                                          color: Color(0xff4D4D4D),
                                           fontSize: 20,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -655,9 +527,7 @@ class _HomeState extends ConsumerState<Home> {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              color: (!currentMode)
-                                  ? kTabColorLight
-                                  : kTabColorDark,
+                              color: kTabColorLight,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.06),
@@ -669,20 +539,15 @@ class _HomeState extends ConsumerState<Home> {
                             children: [
                               Align(
                                 alignment: Alignment.bottomRight,
-                                child: (!currentMode)
-                                    ? Image.asset('assets/1L.png',
-                                        width: size.width * .35)
-                                    : Image.asset('assets/1D.png',
-                                        width: size.width * .35),
+                                child: Image.asset('assets/3L.png',
+                                    width: size.width * .35),
                               ),
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(top: 25, left: 25),
                                 child: Text(
                                   'Financial Report',
                                   style: TextStyle(
-                                    color: (!currentMode)
-                                        ? Color(0xff4D4D4D)
-                                        : Colors.white,
+                                    color: Color(0xff4D4D4D),
                                     fontSize: 20,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,

@@ -1,21 +1,18 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/credentials.dart';
-import 'package:sabinpris/presentation/constants.dart';
-import 'package:sabinpris/presentation/providers.dart';
 import 'package:sabinpris/presentation/screens/home.dart';
 
-class LogIn extends ConsumerStatefulWidget{
+class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<LogIn> createState() => _LogInState();
+  State<LogIn> createState() => _LogInState();
 }
 
-class _LogInState extends ConsumerState<LogIn> {
+class _LogInState extends State<LogIn> {
   final TextEditingController _pswdController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
@@ -23,11 +20,7 @@ class _LogInState extends ConsumerState<LogIn> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Consumer(builder: (context, state, child) {
-    final modeProvider = ref.watch(themeModeProvider);
-    final currentMode = modeProvider.currentMode;
     return Scaffold(
-      backgroundColor: (!currentMode)? kBackgroundColorLight:kBackgroundColorDark,
       body: Center(
         child: Stack(
           children: [
@@ -44,7 +37,7 @@ class _LogInState extends ConsumerState<LogIn> {
                 height: size.height * .7,
                 width: size.height * .48,
                 decoration: BoxDecoration(
-                    color: (!currentMode)? Colors.white:Color(0xff202020),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -68,7 +61,7 @@ class _LogInState extends ConsumerState<LogIn> {
                               width: 90,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: (!currentMode)?Colors.white:Colors.black,
+                                  color: Colors.white,
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.06),
@@ -81,7 +74,7 @@ class _LogInState extends ConsumerState<LogIn> {
                                 child: Text(
                                   'Log In',
                                   style: TextStyle(
-                                    color: (!currentMode)?Colors.grey[400]:Colors.white,
+                                    color: Colors.grey[400],
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -91,7 +84,7 @@ class _LogInState extends ConsumerState<LogIn> {
                           ),
                         ),
                         const SizedBox(height: 34),
-                        Align(
+                        const Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -100,7 +93,6 @@ class _LogInState extends ConsumerState<LogIn> {
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 12,
-                                  color: (!currentMode)?Colors.black:Colors.white,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -110,7 +102,7 @@ class _LogInState extends ConsumerState<LogIn> {
                             hint: 'enter username',
                             controller: _emailController),
                         const SizedBox(height: 10),
-                        Align(
+                        const Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -119,7 +111,6 @@ class _LogInState extends ConsumerState<LogIn> {
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 12,
-                                  color: (!currentMode)?Colors.black:Colors.white,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -154,7 +145,6 @@ class _LogInState extends ConsumerState<LogIn> {
                                     );
                                   } else {
                                     //TODO:Show wrong password
-                                    
                                     debugPrint("Incorrect Password");
                                   }
                                 } else {
@@ -172,12 +162,12 @@ class _LogInState extends ConsumerState<LogIn> {
                                 color: Colors.green,
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              child: Center(
+                              child: const Center(
                                   child: Text(
                                 'Log In',
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
-                                  color: (!currentMode)?Colors.white:Colors.black,
+                                  color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -195,5 +185,5 @@ class _LogInState extends ConsumerState<LogIn> {
         ),
       ),
     );
-  });}
+  }
 }

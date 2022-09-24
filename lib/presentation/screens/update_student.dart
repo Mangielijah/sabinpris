@@ -2,22 +2,18 @@
 
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sabinpris/credentials.dart';
-import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
-import 'package:sabinpris/presentation/providers.dart';
 
-class UpdateStudent extends ConsumerStatefulWidget {
-  const UpdateStudent({Key? key}) : super(key: key);
+class UpdateStudent extends StatefulWidget {
+  UpdateStudent({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<UpdateStudent> createState() => _UpdateStudentState();
+  State<UpdateStudent> createState() => _UpdateStudentState();
 }
 
-class _UpdateStudentState extends ConsumerState<UpdateStudent> {
-  bool _paidReg = false;
+class _UpdateStudentState extends State<UpdateStudent> {
+  bool _value = false;
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _parentNameController = TextEditingController();
@@ -27,96 +23,43 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
   List<DropdownMenuItem<Object?>> _dropdownLanguages = [];
   List<DropdownMenuItem<Object?>> _dropdownGenders = [];
   List<DropdownMenuItem<Object?>> _dropdownClasses = [];
-  
-  late ValueNotifier<LanguageSector> languageNotifier;
-  late ValueNotifier<StudentClass> classesNotifier;
-  late ValueNotifier<Gender> genderNotifier;
-  bool initLoad = true;
-    
-  List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
-    List<DropdownMenuItem<T?>> items = [];
-    for (var item in itemList) {
-      if (item is Gender) {
-        items.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(
-              (item.name),
-            ),
-          ),
-        );
-      }
-      if (item is LanguageSector) {
-        items.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(
-              (item.name),
-            ),
-          ),
-        );
-      }
-      if (item is StudentClass) {
-        late String displayClass;
-        if (item == StudentClass.preNusery) {
-          displayClass = 'Pre-Nursery';
-        } else if (item == StudentClass.nuseryOne) {
-          displayClass = 'Nursery I';
-        } else if (item == StudentClass.nuseryTwo) {
-          displayClass = 'Nursery II';
-        } else if (item == StudentClass.classOne) {
-          displayClass = 'Class 1';
-        } else if (item == StudentClass.classTwo) {
-          displayClass = 'Class 2';
-        } else if (item == StudentClass.classThree) {
-          displayClass = 'Class 3';
-        } else if (item == StudentClass.classFour) {
-          displayClass = 'Class 4';
-        } else if (item == StudentClass.classFive) {
-          displayClass = 'Class 5';
-        } else if (item == StudentClass.classSix) {
-          displayClass = 'Class 6';
-        }
-        items.add(
-          DropdownMenuItem(
-            value: item,
-            child: Text(displayClass),
-          ),
-        );
-      }
+
+  List<String> languages = ['English Sector', 'French Sector'];
+  List<String> genders = ['Male', 'Female'];
+  List<String> classes = [
+    'Pre-Nursery',
+    'Nursery I',
+    'Nursery II',
+    'Class 1',
+    'Class 2',
+    'Class 3',
+    'Class 4',
+    'Class 5',
+    'Class 6'
+  ];
+
+  List<DropdownMenuItem<Object?>> buildDropdownItems(List _itemList) {
+    List<DropdownMenuItem<Object?>> items = [];
+    for (var i in _itemList) {
+      items.add(
+        DropdownMenuItem(
+          value: i,
+          child: Text(i),
+        ),
+      );
     }
     return items;
-  }
-
-  
-  @override
-  void initState() {
-    super.initState();
-    languageNotifier = ValueNotifier(LanguageSector.english);
-    classesNotifier = ValueNotifier(StudentClass.preNusery);
-    genderNotifier = ValueNotifier(Gender.male);
-    _dropdownGenders = buildDropdownItems<Gender>(Gender.values);
-    _dropdownLanguages = buildDropdownItems<LanguageSector>(LanguageSector.values);
-    _dropdownClasses = buildDropdownItems<StudentClass>(StudentClass.values);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (initLoad) {
-        setState(() {
-          initLoad = false;
-        });
-      }
-    });
-
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    ValueNotifier<String> cutterntItemType = ValueNotifier(languages[0]);
+    ValueNotifier<String> cutterntItemType2 = ValueNotifier(classes[0]);
+    ValueNotifier<String> cutterntItemType3 = ValueNotifier(genders[0]);
 
-    return Consumer(builder: (context, state, child) {
-    final modeProvider = ref.watch(themeModeProvider);
-    final currentMode = modeProvider.currentMode;
-      return Scaffold(
-        backgroundColor: (!currentMode)? kTabColorLight: kTabColorDark,
+    return Scaffold(
+      backgroundColor: kBackgroundColorLight,
       body: Center(
         child: Stack(
           alignment: AlignmentDirectional.center,
@@ -129,7 +72,7 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
               height: size.height * .9,
               width: size.height * .8,
               decoration: BoxDecoration(
-                  color: (!currentMode)? Colors.white :Color(0xff202020),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -161,13 +104,13 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                       ),
                       const SizedBox(height: 20),
                       Row(
-                        children: [
+                        children: const [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Full Name',
                               style: TextStyle(
-                                color: (!currentMode)? kTextMainColorLight:kTextMainColorDark,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -201,13 +144,13 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                             child: Column(
                               children: [
                                 Row(
-                                  children: [
+                                  children: const [
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Gender',
                                         style: TextStyle(
-                                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark,
+                                          color: kTextMainColorLight,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -229,54 +172,58 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                ValueListenableBuilder(
-                                    valueListenable: genderNotifier,
-                                    builder: (context, gender, _) {
-                                      return DropdownBelow(
-                                        value: gender,
-                                        itemWidth: size.width * .22,
-                                        itemTextstyle: TextStyle(
+                                ValueListenableBuilder<String>(
+                                  valueListenable: cutterntItemType3,
+                                  builder: (BuildContext context, String value3,
+                                      Widget? child) {
+                                    return DropdownBelow(
+                                      value: value3,
+                                      itemWidth: size.width * .2,
+                                      itemTextstyle: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      hint: Text(
+                                        'select a gender',
+                                        style: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black : Colors.white,
+                                          color: Colors.grey[300],
                                           fontWeight: FontWeight.w400,
                                         ),
-                                        hint: Text(
-                                          'select a gender',
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        boxTextstyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            border:
-                                                Border.all(color: kYellowColor)),
-                                        boxPadding: const EdgeInsets.symmetric(
-                                            horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          size: 25,
-                                        ),
-                                        boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
-                                        items: _dropdownGenders,
-                                        onChanged: (g) {
-                                          genderNotifier.value = g ?? Gender.male as dynamic;
-                                        },
-                                      );
-                                    })
+                                      ),
+                                      boxTextstyle: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      boxDecoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                          border:
+                                              Border.all(color: kYellowColor)),
+                                      boxPadding: const EdgeInsets.symmetric(
+                                          horizontal: 14.0, vertical: 4),
+                                      icon: const Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: Colors.black,
+                                        size: 25,
+                                      ),
+                                      boxHeight: 40,
+                                      dropdownColor: Colors.white,
+                                      items: _dropdownGenders =
+                                          buildDropdownItems(genders),
+                                      onChanged: (value3) {
+                                        cutterntItemType3.value =
+                                            value3.toString();
+                                      },
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -285,12 +232,12 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Paid Registration Fee (5000xaf)',
                           style: TextStyle(
-                            color: (!currentMode)?kTextMainColorLight:Colors.white,
+                            color: kTextMainColorLight,
                             fontSize: 12,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
@@ -303,15 +250,15 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              _paidReg = !_paidReg;
+                              _value = !_value;
                             });
                           },
                           child: Container(
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                  color: (!currentMode)?Colors.white:Colors.black,
-                                  border: (_paidReg)
+                                  color: Colors.white,
+                                  border: (_value)
                                       ? Border.all(color: kYellowColor)
                                       : null,
                                   borderRadius: BorderRadius.circular(6),
@@ -323,7 +270,7 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                       offset: const Offset(0, 0),
                                     ),
                                   ]),
-                              child: _paidReg
+                              child: _value
                                   ? const Icon(
                                       Icons.check,
                                       size: 20.0,
@@ -340,13 +287,13 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                             child: Column(
                               children: [
                                 Row(
-                                  children: [
+                                  children: const [
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Language Sector',
                                         style: TextStyle(
-                                          color: (!currentMode)?kTextMainColorLight:Colors.white,
+                                          color: kTextMainColorLight,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -368,54 +315,58 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                ValueListenableBuilder(
-                                    valueListenable: languageNotifier,
-                                    builder: (context, sector, _) {
-                                      return DropdownBelow(
-                                        value: sector,
-                                        itemWidth: size.width * .22,
-                                        itemTextstyle: TextStyle(
+                                ValueListenableBuilder<String>(
+                                  valueListenable: cutterntItemType,
+                                  builder: (BuildContext context, String value,
+                                      Widget? child) {
+                                    return DropdownBelow(
+                                      value: value,
+                                      itemWidth: size.width * .2,
+                                      itemTextstyle: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      hint: Text(
+                                        'select a language sector',
+                                        style: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black : Colors.white,
+                                          color: Colors.grey[300],
                                           fontWeight: FontWeight.w400,
                                         ),
-                                        hint: Text(
-                                          'select a Language Sector',
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        boxTextstyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            border:
-                                                Border.all(color: kYellowColor)),
-                                        boxPadding: const EdgeInsets.symmetric(
-                                            horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          size: 25,
-                                        ),
-                                        boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
-                                        items: _dropdownLanguages,
-                                        onChanged: (value) {
-                                          languageNotifier.value = value ?? LanguageSector.english as dynamic;
-                                        },
-                                      );
-                                    }),
+                                      ),
+                                      boxTextstyle: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      boxDecoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                          border:
+                                              Border.all(color: kYellowColor)),
+                                      boxPadding: const EdgeInsets.symmetric(
+                                          horizontal: 14.0, vertical: 4),
+                                      icon: const Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: Colors.black,
+                                        size: 25,
+                                      ),
+                                      boxHeight: 40,
+                                      dropdownColor: Colors.white,
+                                      items: _dropdownLanguages =
+                                          buildDropdownItems(languages),
+                                      onChanged: (value) {
+                                        cutterntItemType.value =
+                                            value.toString();
+                                      },
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -425,13 +376,13 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                             child: Column(
                               children: [
                                 Row(
-                                  children: [
+                                  children: const [
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Class',
                                         style: TextStyle(
-                                          color: (!currentMode)? kTextMainColorLight:Colors.white,
+                                          color: kTextMainColorLight,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -453,54 +404,58 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                ValueListenableBuilder(
-                                    valueListenable: classesNotifier,
-                                    builder: (context, studentClass, _) {
-                                      return DropdownBelow(
-                                        value: studentClass,
-                                        itemWidth: size.width * .2,
-                                        itemTextstyle: TextStyle(
+                                ValueListenableBuilder<String>(
+                                  valueListenable: cutterntItemType2,
+                                  builder: (BuildContext context, String value2,
+                                      Widget? child) {
+                                    return DropdownBelow(
+                                      value: value2,
+                                      itemWidth: size.width * .2,
+                                      itemTextstyle: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      hint: Text(
+                                        'select a class',
+                                        style: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black : Colors.white,
+                                          color: Colors.grey[300],
                                           fontWeight: FontWeight.w400,
                                         ),
-                                        hint: Text(
-                                          'select a class',
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        boxTextstyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            border:
-                                                Border.all(color: kYellowColor)),
-                                        boxPadding: const EdgeInsets.symmetric(
-                                            horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          size: 25,
-                                        ),
-                                        boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
-                                        items: _dropdownClasses,
-                                        onChanged: (stdClass) {
-                                          classesNotifier.value = stdClass ?? StudentClass.preNusery as dynamic;
-                                        },
-                                      );
-                                    }),
+                                      ),
+                                      boxTextstyle: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      boxDecoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                          border:
+                                              Border.all(color: kYellowColor)),
+                                      boxPadding: const EdgeInsets.symmetric(
+                                          horizontal: 14.0, vertical: 4),
+                                      icon: const Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: Colors.black,
+                                        size: 25,
+                                      ),
+                                      boxHeight: 40,
+                                      dropdownColor: Colors.white,
+                                      items: _dropdownLanguages =
+                                          buildDropdownItems(classes),
+                                      onChanged: (value2) {
+                                        cutterntItemType2.value =
+                                            value2.toString();
+                                      },
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -508,13 +463,13 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                       ),
                       const SizedBox(height: 10),
                       Row(
-                        children: [
+                        children: const [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Parent / Guardian Full Name',
                               style: TextStyle(
-                                color: (!currentMode)?kTextMainColorLight:Colors.white,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -542,13 +497,13 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                           mainColor: kYellowColor),
                       const SizedBox(height: 10),
                       Row(
-                        children: [
+                        children: const [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Parent Phone Number',
                               style: TextStyle(
-                                color: (!currentMode)? kTextMainColorLight:Colors.white,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -577,7 +532,7 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                             height: 40,
                             width: 50,
                             decoration: BoxDecoration(
-                                color: (!currentMode)?Colors.white:Colors.black,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(6),
                                 boxShadow: [
                                   BoxShadow(
@@ -587,11 +542,11 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                     offset: const Offset(0, 0),
                                   ),
                                 ]),
-                            child: Center(
+                            child: const Center(
                                 child: Text(
                               '+237',
                               style: TextStyle(
-                                color: (!currentMode)?kTextMainColorLight:Colors.grey[500],
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w500,
@@ -610,12 +565,12 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          Align(
+                          const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Fees Paid',
                               style: TextStyle(
-                                color: (!currentMode)?kTextMainColorLight:Colors.white,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -639,15 +594,6 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Fee Amount'),
-                          Text('Fee Paid'),
-                          Text('Balance'),
-                          Text('Date of Payment'),
-                        ],
-                      ),
                       const SizedBox(height: 4),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -656,7 +602,7 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                             alignment: Alignment.centerLeft,
                             child: ShortTextField(
                                 hint: '',
-                                controller: _feesPaidController,
+                                controller: _phoneNumberController,
                                 mainColor: kYellowColor),
                           ),
                           const SizedBox(
@@ -681,21 +627,6 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                         size: size,
                         color: kYellowColor,
                         title: 'Done',
-                        onTap: () async {
-                          debugPrint('tapped');
-                          final fees = int.parse(_feesPaidController.text);
-                          final record = StudentRecord(
-                            academicYear: SCHOOL_YEAR,
-                            fullName: _fullNameController.text,
-                            gender: genderNotifier.value,
-                            paidRegistration: _paidReg,
-                            sector: languageNotifier.value,
-                            studentClass: classesNotifier.value,
-                            guardianName: _parentNameController.text,
-                            guardianContact: _phoneNumberController.text,
-                            feesPaid: [fees],
-                          );
-                        },
                       ),
                     ],
                   ),
@@ -706,6 +637,5 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
         ),
       ),
     );
-  });
   }
-  }
+}

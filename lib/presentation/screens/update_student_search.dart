@@ -2,12 +2,10 @@
 
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
-import 'package:sabinpris/presentation/providers.dart';
 
-class UpdateStudentSearch extends ConsumerWidget{
+class UpdateStudentSearch extends StatelessWidget {
   UpdateStudentSearch({Key? key}) : super(key: key);
 
   final TextEditingController _fullNameController = TextEditingController();
@@ -41,18 +39,14 @@ class UpdateStudentSearch extends ConsumerWidget{
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     ValueNotifier<String> cutterntItemType = ValueNotifier(languages[0]);
     ValueNotifier<String> cutterntItemType2 = ValueNotifier(classes[0]);
 
-    return Consumer(builder: (context, state, child) {
-      final modeProvider = ref.watch(themeModeProvider);
-      // ignore: unused_local_variable
-      final currentMode = modeProvider.currentMode;
     return Scaffold(
-      backgroundColor: (!currentMode)?kBackgroundColorLight:kBackgroundColorDark,
+      backgroundColor: kBackgroundColorLight,
       body: Center(
         child: Stack(
           alignment: AlignmentDirectional.center,
@@ -65,7 +59,7 @@ class UpdateStudentSearch extends ConsumerWidget{
               height: size.height * .9,
               width: size.height * .85,
               decoration: BoxDecoration(
-                    color: (!currentMode) ? Colors.white : Color(0xff202020),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -106,12 +100,12 @@ class UpdateStudentSearch extends ConsumerWidget{
                         ),
                       ),
                     ),
-                    Align(
+                    const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Full Name',
                         style: TextStyle(
-                          color: (!currentMode) ? Colors.black : Colors.white,
+                          color: kTextMainColorLight,
                           fontSize: 12,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w600,
@@ -123,12 +117,12 @@ class UpdateStudentSearch extends ConsumerWidget{
                         hint: 'Enter Full Name Here',
                         controller: _fullNameController,
                         mainColor: kYellowColor),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(vertical: 10.0),
                       child: Text(
                         'OR',
                         style: TextStyle(
-                          color: (!currentMode) ? Colors.black : Colors.white,
+                          color: kTextMainColorLight,
                           fontSize: 10,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w600,
@@ -151,12 +145,12 @@ class UpdateStudentSearch extends ConsumerWidget{
                           flex: 1,
                           child: Column(
                             children: [
-                              Align(
+                              const Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Language Sector',
                                   style: TextStyle(
-                                    color: (!currentMode) ? Colors.black : Colors.white,
+                                    color: kTextMainColorLight,
                                     fontSize: 12,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -171,42 +165,41 @@ class UpdateStudentSearch extends ConsumerWidget{
                                   return DropdownBelow(
                                     value: value,
                                     itemWidth: size.width * .2,
-                                    itemTextstyle: TextStyle(
+                                    itemTextstyle: const TextStyle(
                                       fontFamily: 'Montserrat',
                                       fontSize: 12,
-                                      color: (!currentMode) ?Colors.black : Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        hint: Text(
-                                          'select a language sector',
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        boxTextstyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            border:
-                                                Border.all(color: kYellowColor)),
-                                        boxPadding: const EdgeInsets.symmetric(
-                                            horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          size: 25,
-                                        ),
-                                        boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hint: Text(
+                                      'select a language sector',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.grey[300],
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    boxTextstyle: const TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    boxDecoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border:
+                                            Border.all(color: kYellowColor)),
+                                    boxPadding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0, vertical: 4),
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down_rounded,
+                                      color: Colors.black,
+                                      size: 25,
+                                    ),
+                                    boxHeight: 40,
+                                    dropdownColor: Colors.white,
                                     items: _dropdownLanguages =
                                         buildDropdownItems(languages),
                                     onChanged: (value) {
@@ -223,12 +216,12 @@ class UpdateStudentSearch extends ConsumerWidget{
                           flex: 1,
                           child: Column(
                             children: [
-                              Align(
+                              const Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Class',
                                   style: TextStyle(
-                                    color: (!currentMode) ? Colors.black : Colors.white,
+                                    color: kTextMainColorLight,
                                     fontSize: 12,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -243,42 +236,41 @@ class UpdateStudentSearch extends ConsumerWidget{
                                   return DropdownBelow(
                                     value: value2,
                                     itemWidth: size.width * .2,
-                                    itemTextstyle: TextStyle(
+                                    itemTextstyle: const TextStyle(
                                       fontFamily: 'Montserrat',
                                       fontSize: 12,
-                                      color: (!currentMode) ?Colors.black : Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        hint: Text(
-                                          'select a class',
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        boxTextstyle: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                        boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            border:
-                                                Border.all(color: kYellowColor)),
-                                        boxPadding: const EdgeInsets.symmetric(
-                                            horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
-                                          size: 25,
-                                        ),
-                                        boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    hint: Text(
+                                      'select a class',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 12,
+                                        color: Colors.grey[300],
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    boxTextstyle: const TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    boxDecoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(6),
+                                        border:
+                                            Border.all(color: kYellowColor)),
+                                    boxPadding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0, vertical: 4),
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down_rounded,
+                                      color: Colors.black,
+                                      size: 25,
+                                    ),
+                                    boxHeight: 40,
+                                    dropdownColor: Colors.white,
                                     items: _dropdownLanguages =
                                         buildDropdownItems(classes),
                                     onChanged: (value2) {
@@ -304,24 +296,17 @@ class UpdateStudentSearch extends ConsumerWidget{
                           decoration: BoxDecoration(
                             // color: kBackgroundColorLight,
                             borderRadius: BorderRadius.circular(6),
-                              color:
-                                  (!currentMode) ? Colors.white : Colors.black,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                ),
-                                (!currentMode)
-                                    ? BoxShadow(
-                                        color: kBackgroundColorLight,
-                                        spreadRadius: -2.0,
-                                        blurRadius: 8.0,
-                                      )
-                                    : BoxShadow(
-                                        color: kBackgroundColorLight
-                                            .withOpacity(0),
-                                      )
-                              ],
-                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                              ),
+                              const BoxShadow(
+                                color: kBackgroundColorLight,
+                                spreadRadius: -2.0,
+                                blurRadius: 8.0,
+                              ),
+                            ],
+                          ),
                           child: Column(
                             children: [
                               SizedBox(
@@ -434,5 +419,5 @@ class UpdateStudentSearch extends ConsumerWidget{
         ),
       ),
     );
-  });}
+  }
 }

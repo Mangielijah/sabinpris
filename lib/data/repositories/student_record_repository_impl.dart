@@ -48,4 +48,24 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
       throw Exception('Could Not Register Student');
     }
   }
+
+  @override
+  Stream<int> numStudentWithCompleteFees(String year) async* {
+    try {
+      final regStudents = dataSource.numStudentWithCompleteFees(year);
+      yield* regStudents;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
+  }
+
+  @override
+  Stream<int> numStudentWithInCompleteFees(String year) async* {
+    try {
+      final regStudents = dataSource.numStudentWithInCompleteFees(year);
+      yield* regStudents;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
+  }
 }

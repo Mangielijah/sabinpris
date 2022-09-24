@@ -1,27 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
-
-// class UserSimplePreferences {
-//   static SharedPreferences? _prefrences;
-
-//   static const _darkMode = 'darkmodeTheme';
-
-//   static Future init() async {
-//     if (_prefrences != null) {
-//       _prefrences = await SharedPreferences.getInstance();
-//     }
-//   }
-
-//   static Future<Future<bool>?> setDarkMode(bool theme) async =>
-//       _prefrences?.setBool(_darkMode, theme);
-
-//   static bool? getDarkMode() => _prefrences?.getBool(_darkMode);
-
-//   static ValueNotifier<bool> isSwitchedDarkMode =
-//       ValueNotifier(UserSimplePreferences.getDarkMode()!);
-// }
-
-// ignore: constant_identifier_names
 const String _THEME_MODE = 'THEME_MODE';
 
 class LightMode extends ChangeNotifier {

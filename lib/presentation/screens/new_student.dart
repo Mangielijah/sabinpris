@@ -2,23 +2,21 @@
 
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
-import 'package:sabinpris/presentation/providers.dart';
 import 'package:sabinpris/service_locator.dart';
 
-class NewStudent extends ConsumerStatefulWidget  {
+class NewStudent extends StatefulWidget {
   const NewStudent({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<NewStudent> createState() => _NewStudentState();
+  State<NewStudent> createState() => _NewStudentState();
 }
 
-class _NewStudentState extends ConsumerState<NewStudent> {
+class _NewStudentState extends State<NewStudent> {
   bool _paidReg = false;
 
   final TextEditingController _fullNameController = TextEditingController();
@@ -127,11 +125,8 @@ class _NewStudentState extends ConsumerState<NewStudent> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Consumer(builder: (context, state, child) {
-    final modeProvider = ref.watch(themeModeProvider);
-    final currentMode = modeProvider.currentMode;
-      return Scaffold(
-        backgroundColor: (!currentMode)? kTabColorLight: kTabColorDark,
+    return Scaffold(
+      backgroundColor: kBackgroundColorLight,
       body: Center(
         child: Stack(
           alignment: AlignmentDirectional.center,
@@ -144,7 +139,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
               height: size.height * .9,
               width: size.height * .8,
               decoration: BoxDecoration(
-                  color: (!currentMode)? Colors.white :Color(0xff202020),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -176,13 +171,13 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                       ),
                       const SizedBox(height: 20),
                       Row(
-                        children: [
+                        children: const [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Full Name',
                               style: TextStyle(
-                                color: (!currentMode)? kTextMainColorLight:kTextMainColorDark,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -216,13 +211,13 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                             child: Column(
                               children: [
                                 Row(
-                                  children: [
+                                  children: const [
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Gender',
                                         style: TextStyle(
-                                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark,
+                                          color: kTextMainColorLight,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -249,11 +244,11 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                     builder: (context, gender, _) {
                                       return DropdownBelow(
                                         value: gender,
-                                        itemWidth: size.width * .22,
-                                        itemTextstyle: TextStyle(
+                                        itemWidth: size.width * .2,
+                                        itemTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black : Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
                                         hint: Text(
@@ -261,31 +256,31 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                           style: TextStyle(
                                             fontFamily: 'Montserrat',
                                             fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
+                                            color: Colors.grey[300],
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        boxTextstyle: TextStyle(
+                                        boxTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
                                         boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(6),
                                             border:
                                                 Border.all(color: kBlueColor)),
                                         boxPadding: const EdgeInsets.symmetric(
                                             horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
+                                          color: Colors.black,
                                           size: 25,
                                         ),
                                         boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
+                                        dropdownColor: Colors.white,
                                         items: _dropdownGenders,
                                         onChanged: (g) {
                                           genderNotifier.value =
@@ -301,12 +296,12 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Paid Registration Fee (5000xaf)',
                           style: TextStyle(
-                            color: (!currentMode)?kTextMainColorLight:Colors.white,
+                            color: kTextMainColorLight,
                             fontSize: 12,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
@@ -326,7 +321,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                  color: (!currentMode)?Colors.white:Colors.black,
+                                  color: Colors.white,
                                   border: (_paidReg)
                                       ? Border.all(color: kBlueColor)
                                       : null,
@@ -356,13 +351,13 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                             child: Column(
                               children: [
                                 Row(
-                                  children: [
+                                  children: const [
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Language Sector',
                                         style: TextStyle(
-                                          color: (!currentMode)?kTextMainColorLight:Colors.white,
+                                          color: kTextMainColorLight,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -389,43 +384,43 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                     builder: (context, sector, _) {
                                       return DropdownBelow(
                                         value: sector,
-                                        itemWidth: size.width * .22,
-                                        itemTextstyle: TextStyle(
+                                        itemWidth: size.width * .2,
+                                        itemTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black : Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
                                         hint: Text(
-                                          'select a Language Sector',
+                                          'select a language sector',
                                           style: TextStyle(
                                             fontFamily: 'Montserrat',
                                             fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
+                                            color: Colors.grey[300],
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        boxTextstyle: TextStyle(
+                                        boxTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
                                         boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(6),
                                             border:
                                                 Border.all(color: kBlueColor)),
                                         boxPadding: const EdgeInsets.symmetric(
                                             horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
+                                          color: Colors.black,
                                           size: 25,
                                         ),
                                         boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
+                                        dropdownColor: Colors.white,
                                         items: _dropdownLanguages,
                                         onChanged: (value) {
                                           languageNotifier.value =
@@ -442,13 +437,13 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                             child: Column(
                               children: [
                                 Row(
-                                  children: [
+                                  children: const [
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Class',
                                         style: TextStyle(
-                                          color: (!currentMode)? kTextMainColorLight:Colors.white,
+                                          color: kTextMainColorLight,
                                           fontSize: 12,
                                           fontFamily: 'Montserrat',
                                           fontWeight: FontWeight.w600,
@@ -476,10 +471,10 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                       return DropdownBelow(
                                         value: studentClass,
                                         itemWidth: size.width * .2,
-                                        itemTextstyle: TextStyle(
+                                        itemTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black : Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
                                         hint: Text(
@@ -487,31 +482,31 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                           style: TextStyle(
                                             fontFamily: 'Montserrat',
                                             fontSize: 12,
-                                            color: (!currentMode) ?Colors.grey[300] : Colors.grey[500],
+                                            color: Colors.grey[300],
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        boxTextstyle: TextStyle(
+                                        boxTextstyle: const TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                         ),
                                         boxDecoration: BoxDecoration(
-                                            color: (!currentMode) ?Colors.white:Colors.black,
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(6),
                                             border:
                                                 Border.all(color: kBlueColor)),
                                         boxPadding: const EdgeInsets.symmetric(
                                             horizontal: 14.0, vertical: 4),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.keyboard_arrow_down_rounded,
-                                          color: (!currentMode) ?Colors.black:Colors.white,
+                                          color: Colors.black,
                                           size: 25,
                                         ),
                                         boxHeight: 40,
-                                        dropdownColor: (!currentMode) ?Colors.white :Colors.black,
+                                        dropdownColor: Colors.white,
                                         items: _dropdownClasses,
                                         onChanged: (stdClass) {
                                           classesNotifier.value = stdClass ??
@@ -526,13 +521,13 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                       ),
                       const SizedBox(height: 10),
                       Row(
-                        children: [
+                        children: const [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Parent / Guardian Full Name',
                               style: TextStyle(
-                                color: (!currentMode)?kTextMainColorLight:Colors.white,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -560,13 +555,13 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                           mainColor: kBlueColor),
                       const SizedBox(height: 10),
                       Row(
-                        children: [
+                        children: const [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Parent Phone Number',
                               style: TextStyle(
-                                color: (!currentMode)? kTextMainColorLight:Colors.white,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -595,7 +590,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                             height: 40,
                             width: 50,
                             decoration: BoxDecoration(
-                                color: (!currentMode)?Colors.white:Colors.black,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(6),
                                 boxShadow: [
                                   BoxShadow(
@@ -605,11 +600,11 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                     offset: const Offset(0, 0),
                                   ),
                                 ]),
-                            child: Center(
+                            child: const Center(
                                 child: Text(
                               '+237',
                               style: TextStyle(
-                                color: (!currentMode)?kTextMainColorLight:Colors.grey[500],
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w500,
@@ -628,12 +623,12 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          Align(
+                          const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Fees Paid',
                               style: TextStyle(
-                                color: (!currentMode)?kTextMainColorLight:Colors.white,
+                                color: kTextMainColorLight,
                                 fontSize: 12,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.w600,
@@ -704,6 +699,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                             guardianContact: _phoneNumberController.text,
                             feesPaid: [fees],
                           );
+
                           await registerNewStudent(record);
                         },
                       ),
@@ -716,7 +712,6 @@ class _NewStudentState extends ConsumerState<NewStudent> {
         ),
       ),
     );
-  });
   }
 
   Future<void> registerNewStudent(StudentRecord record) async {
