@@ -5,4 +5,6 @@ abstract class StudentRecordRepository {
   Future<StudentRecord> updateFees(int recordId, int fees);
   Stream<int> totalNumberOfRegisteredStudent(String year);
   Stream<int> totalCollectedFees(String year);
+  Stream<int> numStudentWithCompleteFees(String year);
+  Stream<int> numStudentWithInCompleteFees(String year);
 }

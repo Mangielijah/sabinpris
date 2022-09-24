@@ -6,6 +6,8 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
+import 'package:sabinpris/domain/entity/student_record.dart';
+import 'package:sabinpris/fee.dart';
 
 @Singleton()
 class StudentRecordDataSource {
@@ -76,6 +78,162 @@ class StudentRecordDataSource {
             .toList()
             .reduce((c, d) => c + d)),
       ));
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Stream<int> numStudentWithCompleteFees(String year) async* {
+    try {
+      yield* _recordStream.map((recordList) {
+        int count = 0;
+
+        for (StudentRecordDto record in recordList) {
+          //pre nursery
+          if (record.studentClass == StudentClass.preNusery.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.preNusery) {
+              count++;
+            }
+          }
+          //nursery one
+          if (record.studentClass == StudentClass.nuseryOne.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.nurseryOne) {
+              count++;
+            }
+          }
+          //nursery two
+          if (record.studentClass == StudentClass.nuseryTwo.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.nurseryTwo) {
+              count++;
+            }
+          }
+          //class one
+          if (record.studentClass == StudentClass.classOne.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.classOne) {
+              count++;
+            }
+          }
+          //class two
+          if (record.studentClass == StudentClass.classTwo.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.classTwo) {
+              count++;
+            }
+          }
+          //class three
+          if (record.studentClass == StudentClass.classThree.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.classThree) {
+              count++;
+            }
+          }
+          //class four
+          if (record.studentClass == StudentClass.classFour.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.classFour) {
+              count++;
+            }
+          }
+          //class Five
+          if (record.studentClass == StudentClass.classFive.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.classFive) {
+              count++;
+            }
+          }
+          //class six
+          if (record.studentClass == StudentClass.classSix.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees >= Fee.classSix) {
+              count++;
+            }
+          }
+        }
+
+        return count;
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Stream<int> numStudentWithInCompleteFees(String year) async* {
+    try {
+      yield* _recordStream.map((recordList) {
+        int count = 0;
+        for (StudentRecordDto record in recordList) {
+          //pre nursery
+          if (record.studentClass == StudentClass.preNusery.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.preNusery) {
+              count++;
+            }
+          }
+          //nursery one
+          if (record.studentClass == StudentClass.nuseryOne.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.nurseryOne) {
+              count++;
+            }
+          }
+          //nursery two
+          if (record.studentClass == StudentClass.nuseryTwo.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.nurseryTwo) {
+              count++;
+            }
+          }
+          //class one
+          if (record.studentClass == StudentClass.classOne.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.classOne) {
+              count++;
+            }
+          }
+          //class two
+          if (record.studentClass == StudentClass.classTwo.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.classTwo) {
+              count++;
+            }
+          }
+          //class three
+          if (record.studentClass == StudentClass.classThree.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.classThree) {
+              count++;
+            }
+          }
+          //class four
+          if (record.studentClass == StudentClass.classFour.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.classFour) {
+              count++;
+            }
+          }
+          //class Five
+          if (record.studentClass == StudentClass.classFive.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.classFive) {
+              count++;
+            }
+          }
+          //class six
+          if (record.studentClass == StudentClass.classSix.index) {
+            int paidFees = record.feesPaid.reduce((a, b) => a + b);
+            if (paidFees < Fee.classSix) {
+              count++;
+            }
+          }
+        }
+        return count;
+      });
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

@@ -70,8 +70,10 @@ class Home extends ConsumerWidget {
                                   .totalNumberOfRegisteredStudent(SCHOOL_YEAR),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  final amt =
+                                      NumberFormat().format(snapshot.data ?? 0);
                                   return Text(
-                                    '${snapshot.data ?? '0'}',
+                                    amt,
                                     style: const TextStyle(
                                       color: Colors.green,
                                       fontSize: 30,
@@ -188,8 +190,8 @@ class Home extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             'Students With Incomplete Fee Payments',
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -199,18 +201,42 @@ class Home extends ConsumerWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '51',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 30,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
+                          StreamBuilder(
+                              stream: serviceLocator<StudentRecordRepository>()
+                                  .numStudentWithInCompleteFees(SCHOOL_YEAR),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final amt =
+                                      NumberFormat().format(snapshot.data ?? 0);
+                                  return Text(
+                                    amt,
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return const Text(
+                                    'Error Loading',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                return const SpinKitPulse(
+                                  color: kBlueColor,
+                                  size: 50.0,
+                                );
+                              })
                         ],
                       ),
                     ),
@@ -234,8 +260,8 @@ class Home extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             'Students With Complete Fee Payments',
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -245,18 +271,42 @@ class Home extends ConsumerWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '206',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 30,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
+                          StreamBuilder(
+                              stream: serviceLocator<StudentRecordRepository>()
+                                  .numStudentWithCompleteFees(SCHOOL_YEAR),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final amt =
+                                      NumberFormat().format(snapshot.data ?? 0);
+                                  return Text(
+                                    amt,
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                if (snapshot.hasError) {
+                                  return const Text(
+                                    'Error Loading',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 30,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  );
+                                }
+                                return const SpinKitPulse(
+                                  color: kBlueColor,
+                                  size: 50.0,
+                                );
+                              })
                         ],
                       ),
                     ),
