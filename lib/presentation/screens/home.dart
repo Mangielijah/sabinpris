@@ -13,6 +13,7 @@ import 'package:sabinpris/presentation/screens/report.dart';
 import 'package:sabinpris/presentation/screens/update_student_search.dart';
 import 'package:sabinpris/presentation/constants.dart';
 import 'package:sabinpris/service_locator.dart';
+
 class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -64,14 +65,14 @@ class _HomeState extends ConsumerState<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // SvgPicture.asset('assets/Settings.png'),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
                           'Backup & Restore',
                           style: TextStyle(
                             color: (!currentMode)
-                                ? Color(0xff4D4D4D)
+                                ? const Color(0xff4D4D4D)
                                 : Colors.white,
                             fontSize: 14,
                             fontFamily: 'Montserrat',
@@ -82,7 +83,8 @@ class _HomeState extends ConsumerState<Home> {
                     ),
                   ),
                 ),
-              ),const SizedBox(height: 14),
+              ),
+              const SizedBox(height: 14),
               InkWell(
                 onTap: () {
                   _scaffoldkey.currentState?.closeEndDrawer();
@@ -106,14 +108,14 @@ class _HomeState extends ConsumerState<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // SvgPicture.asset('assets/Settings.svg'),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
                           'Report Issue',
                           style: TextStyle(
                             color: (!currentMode)
-                                ? Color(0xff4D4D4D)
+                                ? const Color(0xff4D4D4D)
                                 : Colors.white,
                             fontSize: 14,
                             fontFamily: 'Montserrat',
@@ -124,7 +126,8 @@ class _HomeState extends ConsumerState<Home> {
                     ),
                   ),
                 ),
-              ),const SizedBox(height: 14),
+              ),
+              const SizedBox(height: 14),
               InkWell(
                 onTap: () {
                   _scaffoldkey.currentState?.closeEndDrawer();
@@ -148,14 +151,14 @@ class _HomeState extends ConsumerState<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // SvgPicture.asset('assets/Settings.png'),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
                           'Exit',
                           style: TextStyle(
                             color: (!currentMode)
-                                ? Color(0xff4D4D4D)
+                                ? const Color(0xff4D4D4D)
                                 : Colors.white,
                             fontSize: 14,
                             fontFamily: 'Montserrat',
@@ -201,7 +204,7 @@ class _HomeState extends ConsumerState<Home> {
                             'Number Of Students',
                             style: TextStyle(
                               color: (!currentMode)
-                                  ? Color(0xff4D4D4D)
+                                  ? const Color(0xff4D4D4D)
                                   : Colors.white,
                               fontSize: 14,
                               fontFamily: 'Montserrat',
@@ -270,7 +273,7 @@ class _HomeState extends ConsumerState<Home> {
                             'Total Collected Fees',
                             style: TextStyle(
                               color: (!currentMode)
-                                  ? Color(0xff4D4D4D)
+                                  ? const Color(0xff4D4D4D)
                                   : Colors.white,
                               fontSize: 14,
                               fontFamily: 'Montserrat',
@@ -342,7 +345,7 @@ class _HomeState extends ConsumerState<Home> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: (!currentMode)
-                                  ? Color(0xff4D4D4D)
+                                  ? const Color(0xff4D4D4D)
                                   : Colors.white,
                               fontSize: 12,
                               fontFamily: 'Montserrat',
@@ -394,7 +397,7 @@ class _HomeState extends ConsumerState<Home> {
                     width: size.width * .18,
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.green, width: 1),
-                        color: (!currentMode)? kTabColorLight:kTabColorDark,
+                        color: (!currentMode) ? kTabColorLight : kTabColorDark,
                         borderRadius: BorderRadius.circular(6),
                         boxShadow: [
                           BoxShadow(
@@ -413,7 +416,9 @@ class _HomeState extends ConsumerState<Home> {
                             'Students With Complete Fee Payments',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: (!currentMode)? Color(0xff4D4D4D) : Colors.white,
+                              color: (!currentMode)
+                                  ? const Color(0xff4D4D4D)
+                                  : Colors.white,
                               fontSize: 12,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.w500,
@@ -491,14 +496,14 @@ class _HomeState extends ConsumerState<Home> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   // SvgPicture.asset('assets/SVGs/LM.svg'),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
                                     'Dark Mode',
                                     style: TextStyle(
                                       color: (!currentMode)
-                                          ? Color(0xff4D4D4D)
+                                          ? const Color(0xff4D4D4D)
                                           : Colors.white,
                                       fontSize: 16,
                                       fontFamily: 'Montserrat',
@@ -536,14 +541,14 @@ class _HomeState extends ConsumerState<Home> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   // SvgPicture.asset('assets/Settings.png'),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
                                     'Settings',
                                     style: TextStyle(
                                       color: (!currentMode)
-                                          ? Color(0xff4D4D4D)
+                                          ? const Color(0xff4D4D4D)
                                           : Colors.white,
                                       fontSize: 16,
                                       fontFamily: 'Montserrat',
@@ -604,13 +609,13 @@ class _HomeState extends ConsumerState<Home> {
                                           : Image.asset('assets/1D.png'),
                                     ),
                                     Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 25, left: 25),
+                                      padding: const EdgeInsets.only(
+                                          top: 25, left: 25),
                                       child: Text(
                                         'Register a \nNew Student',
                                         style: TextStyle(
                                           color: (!currentMode)
-                                              ? Color(0xff4D4D4D)
+                                              ? const Color(0xff4D4D4D)
                                               : Colors.white,
                                           fontSize: 20,
                                           fontFamily: 'Montserrat',
@@ -631,7 +636,7 @@ class _HomeState extends ConsumerState<Home> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                    return UpdateStudentSearch();
+                                    return const UpdateStudentSearch();
                                   }),
                                 );
                               },
@@ -657,13 +662,13 @@ class _HomeState extends ConsumerState<Home> {
                                           : Image.asset('assets/2D.png'),
                                     ),
                                     Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 25, left: 25),
+                                      padding: const EdgeInsets.only(
+                                          top: 25, left: 25),
                                       child: Text(
                                         'Edit / Update Student \nInformation',
                                         style: TextStyle(
                                           color: (!currentMode)
-                                              ? Color(0xff4D4D4D)
+                                              ? const Color(0xff4D4D4D)
                                               : Colors.white,
                                           fontSize: 20,
                                           fontFamily: 'Montserrat',
@@ -692,7 +697,7 @@ class _HomeState extends ConsumerState<Home> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (BuildContext context) {
-                              return Report();
+                              return const Report();
                             }),
                           );
                         },
@@ -720,12 +725,13 @@ class _HomeState extends ConsumerState<Home> {
                                         width: size.width * .35),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 25, left: 25),
+                                padding:
+                                    const EdgeInsets.only(top: 25, left: 25),
                                 child: Text(
                                   'Financial Report',
                                   style: TextStyle(
                                     color: (!currentMode)
-                                        ? Color(0xff4D4D4D)
+                                        ? const Color(0xff4D4D4D)
                                         : Colors.white,
                                     fontSize: 20,
                                     fontFamily: 'Montserrat',

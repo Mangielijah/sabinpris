@@ -6,7 +6,7 @@ import 'package:sabinpris/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DesktopWindow.setWindowSize(const Size(1080, 720));
+  await DesktopWindow.setWindowSize(const Size(1280, 960));
   DesktopWindow.setMinWindowSize(const Size(1080, 720));
   setupDependencies();
   runApp(const ProviderScope(child: MyApp()));

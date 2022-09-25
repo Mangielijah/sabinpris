@@ -42,10 +42,12 @@ class _LogInState extends ConsumerState<LogIn> {
               ),
               Center(
                 child: Container(
-                  height: size.height * .7,
+                  height: size.height * .54,
                   width: size.height * .48,
                   decoration: BoxDecoration(
-                      color: (!currentMode) ? Colors.white : Color(0xff202020),
+                      color: (!currentMode)
+                          ? Colors.white
+                          : const Color(0xff202020),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -99,7 +101,8 @@ class _LogInState extends ConsumerState<LogIn> {
                           Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 child: Text(
                                   'Username',
                                   style: TextStyle(
@@ -120,7 +123,8 @@ class _LogInState extends ConsumerState<LogIn> {
                           Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                                 child: Text(
                                   'Password',
                                   style: TextStyle(
@@ -191,56 +195,56 @@ class _LogInState extends ConsumerState<LogIn> {
                                     //TODO:Show email not found error
                                     debugPrint("Incorrect Email");
                                     ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.red[400],
-                                            borderRadius:
-                                                BorderRadius.circular(6)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Text(
-                                            'Error: Incorrect Email',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontSize: 14,
-                                              color: (!currentMode)
-                                                  ? Colors.black
-                                                  : Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                        .showSnackBar(SnackBar(
+                                            content: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.red[400],
+                                          borderRadius:
+                                              BorderRadius.circular(6)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          'Error: Incorrect Email',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 14,
+                                            color: (!currentMode)
+                                                ? Colors.black
+                                                : Colors.black,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                      )));
+                                      ),
+                                    )));
                                   }
                                 } else {
                                   //TODO:Show an error here
                                   debugPrint("No Email and Password Entered");
                                   ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                            SnackBar(
-                                              backgroundColor: Colors.transparent,
-                                              elevation: 0,
-                                              content: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.red[400],
-                                            borderRadius:
-                                                BorderRadius.circular(6)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Text(
-                                            'Error: No Email and Password Entered',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontSize: 14,
-                                              color: (!currentMode)
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontWeight: FontWeight.w500,
+                                      .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.transparent,
+                                          elevation: 0,
+                                          content: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.red[400],
+                                                borderRadius:
+                                                    BorderRadius.circular(6)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Text(
+                                                'Error: No Email and Password Entered',
+                                                style: TextStyle(
+                                                  fontFamily: 'Montserrat',
+                                                  fontSize: 14,
+                                                  color: (!currentMode)
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      )));
+                                          )));
                                 }
                               },
                               child: Container(

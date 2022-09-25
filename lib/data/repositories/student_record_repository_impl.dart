@@ -93,17 +93,14 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
   }
 
   @override
-  Future<List<GeneralStatistics>> getGeneralStatistics(String year) {
-    // TODO: implement getGeneralStatistics
-    return Future.value([
-      GeneralStatistics(
-        description: "TEST",
-        roll: 100,
-        feesDue: 1200,
-        registration: 5500,
-        feesPaid: 150000,
-        totalIncome: 10000,
-      )
-    ]);
+  Future<List<GeneralStatistics>> getGeneralStatistics(String year) async {
+    try {
+      final stats = (await dataSource.generateGeneralStatistics(year))
+          .map((e) => e.toDomain())
+          .toList();
+      return stats;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
   }
 }

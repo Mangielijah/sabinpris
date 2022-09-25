@@ -29,6 +29,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  better_open_file: ^3.6.4
   cupertino_icons: ^1.0.2
   desktop_window: 0.4.0
   dropdown_below: ^1.0.3
@@ -45,6 +46,7 @@ dependencies:
   isar_flutter_libs: ^3.0.0
   path_provider: ^2.0.11
   pdf: ^3.8.3
+  printing: ^5.9.3
   shared_preferences: ^2.0.15
 
 dev_dependencies:

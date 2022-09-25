@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sabinpris/credentials.dart';
+import 'package:sabinpris/data/models/statistics_dto.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/fee.dart';
@@ -266,5 +267,200 @@ class StudentRecordDataSource {
       debugPrint(e.toString());
       rethrow;
     }
+  }
+
+  Future<List<GeneralStatisticsDto>> generateGeneralStatistics(
+      String year) async {
+    try {
+      List<GeneralStatisticsDto> stats = [];
+      //ENGLISH SECTION
+
+      //NURSERY
+      final nurseryList = await _studentRecord
+          .filter()
+          .academicYearEqualTo(year)
+          .sectorEqualTo(LanguageSector.english.index)
+          .studentClassBetween(
+              StudentClass.preNusery.index, StudentClass.nuseryTwo.index)
+          .findAll();
+      int totalEnroll = 0;
+      int registration = 0;
+      int feesPaid = 0;
+      int feesDue = 0;
+      int ptotalEnroll = 0;
+      int pregistration = 0;
+      int pfeesPaid = 0;
+      int pfeesDue = 0;
+      if (nurseryList.isNotEmpty) {
+        totalEnroll = nurseryList.length;
+        registration = nurseryList
+            .map((e) => e.paidRegistration ? 5000 : 0)
+            .reduce((a, b) => a + b);
+        feesPaid = nurseryList
+            .map((e) => e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+        feesDue = nurseryList
+            .map((e) =>
+                _getClassFee(StudentClass.values[e.studentClass]) -
+                e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+      }
+
+      final totalIncome = feesPaid + registration;
+      stats.add(GeneralStatisticsDto(
+        description: 'NURSERY SECTION',
+        roll: totalEnroll,
+        feesDue: feesDue,
+        registration: registration,
+        feesPaid: feesPaid,
+        totalIncome: totalIncome,
+      ));
+      //PRIMARY
+      final primaryList = await _studentRecord
+          .filter()
+          .academicYearEqualTo(year)
+          .sectorEqualTo(LanguageSector.english.index)
+          .studentClassBetween(
+              StudentClass.classOne.index, StudentClass.classSix.index)
+          .findAll();
+      if (primaryList.isNotEmpty) {
+        ptotalEnroll = primaryList.length;
+        pregistration = primaryList
+            .map((e) => e.paidRegistration ? 5000 : 0)
+            .reduce((a, b) => a + b);
+        pfeesPaid = primaryList
+            .map((e) => e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+        pfeesDue = primaryList
+            .map((e) =>
+                _getClassFee(StudentClass.values[e.studentClass]) -
+                e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+      }
+      final ptotalIncome = pfeesPaid + pregistration;
+      stats.add(GeneralStatisticsDto(
+        description: 'PRIMARY SECTION',
+        roll: ptotalEnroll,
+        feesDue: pfeesDue,
+        registration: pregistration,
+        feesPaid: pfeesPaid,
+        totalIncome: ptotalIncome,
+      ));
+      stats.add(GeneralStatisticsDto(
+        description: 'TOTAL',
+        roll: totalEnroll + ptotalEnroll,
+        feesDue: feesDue + pfeesDue,
+        registration: registration + pregistration,
+        feesPaid: feesPaid + pfeesPaid,
+        totalIncome: totalIncome + ptotalIncome,
+      ));
+
+      //FRENCH SECTION
+      //NURSERY
+      final fnurseryList = await _studentRecord
+          .filter()
+          .academicYearEqualTo(year)
+          .sectorEqualTo(LanguageSector.french.index)
+          .studentClassBetween(
+              StudentClass.preNusery.index, StudentClass.nuseryTwo.index)
+          .findAll();
+      int ftotalEnroll = 0;
+      int fregistration = 0;
+      int ffeesPaid = 0;
+      int ffeesDue = 0;
+      int fptotalEnroll = 0;
+      int fpregistration = 0;
+      int fpfeesPaid = 0;
+      int fpfeesDue = 0;
+      if (fnurseryList.isNotEmpty) {
+        ftotalEnroll = fnurseryList.length;
+        fregistration = fnurseryList
+            .map((e) => e.paidRegistration ? 5000 : 0)
+            .reduce((a, b) => a + b);
+        ffeesPaid = fnurseryList
+            .map((e) => e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+        ffeesDue = fnurseryList
+            .map((e) =>
+                _getClassFee(StudentClass.values[e.studentClass]) -
+                e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+      }
+      final ftotalIncome = ffeesPaid + fregistration;
+      stats.add(GeneralStatisticsDto(
+        description: 'SECTION MATERNELLE',
+        roll: ftotalEnroll,
+        feesDue: ffeesDue,
+        registration: fregistration,
+        feesPaid: ffeesPaid,
+        totalIncome: ftotalIncome,
+      ));
+
+      //PRIMARY
+      final fprimaryList = await _studentRecord
+          .filter()
+          .academicYearEqualTo(year)
+          .sectorEqualTo(LanguageSector.french.index)
+          .studentClassBetween(
+              StudentClass.classOne.index, StudentClass.classSix.index)
+          .findAll();
+      if (fprimaryList.isNotEmpty) {
+        fptotalEnroll = fprimaryList.length;
+
+        fpregistration = fprimaryList
+            .map((e) => e.paidRegistration ? 5000 : 0)
+            .reduce((a, b) => a + b);
+        fpfeesPaid = fprimaryList
+            .map((e) => e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+        fpfeesDue = fprimaryList
+            .map((e) =>
+                _getClassFee(StudentClass.values[e.studentClass]) -
+                e.feesPaid.reduce((c, d) => c + d))
+            .reduce((a, b) => a + b);
+      }
+      final fptotalIncome = fpfeesPaid + fpregistration;
+      stats.add(GeneralStatisticsDto(
+        description: 'ECOLE PRIMAIRE',
+        roll: fptotalEnroll,
+        feesDue: fpfeesDue,
+        registration: fpregistration,
+        feesPaid: fpfeesPaid,
+        totalIncome: fptotalIncome,
+      ));
+      stats.add(GeneralStatisticsDto(
+        description: 'TOTAL',
+        roll: ftotalEnroll + fptotalEnroll,
+        feesDue: ffeesDue + fpfeesDue,
+        registration: fregistration + fpregistration,
+        feesPaid: ffeesPaid + fpfeesPaid,
+        totalIncome: ftotalIncome + fptotalIncome,
+      ));
+      stats.add(GeneralStatisticsDto(
+        description: 'GRAND TOTAL',
+        roll: totalEnroll + ptotalEnroll + ftotalEnroll + fptotalEnroll,
+        feesDue: feesDue + pfeesDue + ffeesDue + fpfeesDue,
+        registration:
+            registration + pregistration + fregistration + fpregistration,
+        feesPaid: feesPaid + pfeesPaid + ffeesPaid + fpfeesPaid,
+        totalIncome: totalIncome + ptotalIncome + ftotalIncome + fptotalIncome,
+      ));
+      return stats;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  _getClassFee(StudentClass sclass) {
+    if (sclass == StudentClass.preNusery) return Fee.preNusery;
+    if (sclass == StudentClass.nuseryOne) return Fee.nurseryOne;
+    if (sclass == StudentClass.nuseryTwo) return Fee.nurseryTwo;
+    if (sclass == StudentClass.classOne) return Fee.classOne;
+    if (sclass == StudentClass.classTwo) return Fee.classTwo;
+    if (sclass == StudentClass.classThree) return Fee.classThree;
+    if (sclass == StudentClass.classFour) return Fee.classFour;
+    if (sclass == StudentClass.classFive) return Fee.classFive;
+    if (sclass == StudentClass.classSix) return Fee.classSix;
   }
 }
