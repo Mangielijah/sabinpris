@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:sabinpris/data/datasource/std_record_datasource.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
+import 'package:sabinpris/domain/entity/statistics.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 
@@ -89,5 +90,20 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
     } catch (e) {
       throw Exception('Could Not Register Student');
     }
+  }
+
+  @override
+  Future<List<GeneralStatistics>> getGeneralStatistics(String year) {
+    // TODO: implement getGeneralStatistics
+    return Future.value([
+      GeneralStatistics(
+        description: "TEST",
+        roll: 100,
+        feesDue: 1200,
+        registration: 5500,
+        feesPaid: 150000,
+        totalIncome: 10000,
+      )
+    ]);
   }
 }

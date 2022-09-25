@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
+
 const String _THEME_MODE = 'THEME_MODE';
 
 class LightMode extends ChangeNotifier {
@@ -20,9 +21,8 @@ class LightMode extends ChangeNotifier {
   }
 
   void toggleMode() async {
-    final mode =
-        await _prefrences?.setBool(_THEME_MODE, !currentMode) ?? !currentMode;
-    _isLightMode = mode;
+    await _prefrences?.setBool(_THEME_MODE, !currentMode) ?? !currentMode;
+    _isLightMode = !currentMode;
     notifyListeners();
   }
 }

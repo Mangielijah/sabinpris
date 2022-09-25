@@ -132,7 +132,7 @@ class _NewStudentState extends State<NewStudent> {
                       ),
                       const SizedBox(height: 4),
                       LongTextField(
-                          hint: 'Enter Full Name Here',
+                          hint: 'Enxter Full Name Here',
                           controller: _fullNameController,
                           mainColor: kBlueColor),
                       const SizedBox(height: 10),

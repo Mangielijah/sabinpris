@@ -1,3 +1,4 @@
+import 'package:sabinpris/domain/entity/statistics.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 
 abstract class StudentRecordRepository {
@@ -13,4 +14,5 @@ abstract class StudentRecordRepository {
     required LanguageSector sector,
     required StudentClass studentClass,
   });
+  Future<List<GeneralStatistics>> getGeneralStatistics(String year);
 }
