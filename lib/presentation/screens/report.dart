@@ -1,9 +1,11 @@
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
+import 'package:sabinpris/presentation/providers.dart';
 
-class Report extends StatelessWidget {
+class Report extends ConsumerWidget {
   Report({Key? key}) : super(key: key);
 
   final TextEditingController _fullNameController = TextEditingController();
@@ -39,15 +41,19 @@ class Report extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
 
     ValueNotifier<String> currentItemType = ValueNotifier(languages[0]);
     ValueNotifier<String> currentItemType2 = ValueNotifier(classes[0]);
     ValueNotifier<String> currentItemType3 = ValueNotifier(reports[0]);
 
+    return Consumer(builder: (context, state, child) {
+      final modeProvider = ref.watch(themeModeProvider);
+      // ignore: unused_local_variable
+      final currentMode = modeProvider.currentMode;
     return Scaffold(
-      backgroundColor: kBackgroundColorLight,
+        backgroundColor: (!currentMode) ? kBackgroundColorLight : kBackgroundColorDark,
       body: Center(
         child: Stack(
           alignment: AlignmentDirectional.center,
@@ -60,7 +66,7 @@ class Report extends StatelessWidget {
               height: size.height * .9,
               width: size.height * 1.1,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                    color: (!currentMode) ? Colors.white : Color(0xff202020),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -87,52 +93,60 @@ class Report extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Container(
-                          height: 40,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: const Offset(0, 0),
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.download_rounded,
-                                size: 16,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                'Download',
-                                style: TextStyle(
-                                  color: Color(0xff4D4D4D),
-                                  fontSize: 10,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
+                          Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color:
+                                  (!currentMode) ? Colors.white : Colors.black,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0),
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.download_rounded,
+                                  size: 16,
+                                  color: (!currentMode)
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: 4),
+                                Text(
+                                  'Download',
+                                  style: TextStyle(
+                                    color: (!currentMode)
+                                        ? Color(0xff4D4D4D)
+                                        : Colors.white,
+                                    fontSize: 10,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
                       ],
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Align(
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Report Type',
                         style: TextStyle(
-                          color: kTextMainColorLight,
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
                           fontSize: 12,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w600,
@@ -147,40 +161,48 @@ class Report extends StatelessWidget {
                         return DropdownBelow(
                           value: value3,
                           itemWidth: size.width * .2,
-                          itemTextstyle: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          hint: Text(
-                            'select a type of report',
-                            style: TextStyle(
+                            itemTextstyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 12,
-                              color: Colors.grey[300],
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
                               fontWeight: FontWeight.w400,
                             ),
-                          ),
-                          boxTextstyle: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          boxDecoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: kGreenColor)),
-                          boxPadding: const EdgeInsets.symmetric(
-                              horizontal: 14.0, vertical: 4),
-                          icon: const Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: Colors.black,
-                            size: 25,
-                          ),
-                          boxHeight: 40,
-                          dropdownColor: Colors.white,
+                            hint: Text(
+                              'select a type of report',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: (!currentMode)
+                                    ? Colors.grey[300]
+                                    : Colors.grey[500],
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            boxTextstyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            boxDecoration: BoxDecoration(
+                                color: (!currentMode)
+                                    ? Colors.white
+                                    : Colors.black,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: kGreenColor)),
+                            boxPadding: const EdgeInsets.symmetric(
+                                horizontal: 14.0, vertical: 4),
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              size: 25,
+                            ),
+                            boxHeight: 40,
+                            dropdownColor:
+                                (!currentMode) ? Colors.white : Colors.black,
                           items: _dropdownReports = buildDropdownItems(reports),
                           onChanged: (value3) {
                             currentItemType.value = value3.toString();
@@ -195,12 +217,14 @@ class Report extends StatelessWidget {
                           flex: 1,
                           child: Column(
                             children: [
-                              const Align(
+                              Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Language Sector',
                                   style: TextStyle(
-                                    color: kTextMainColorLight,
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
                                     fontSize: 12,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -215,40 +239,48 @@ class Report extends StatelessWidget {
                                   return DropdownBelow(
                                     value: value,
                                     itemWidth: size.width * .2,
-                                    itemTextstyle: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    hint: Text(
-                                      'select a language sector',
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.grey[300],
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    boxTextstyle: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    boxDecoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(6),
-                                        border: Border.all(color: kGreenColor)),
-                                    boxPadding: const EdgeInsets.symmetric(
-                                        horizontal: 14.0, vertical: 4),
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down_rounded,
-                                      color: Colors.black,
-                                      size: 25,
-                                    ),
-                                    boxHeight: 40,
-                                    dropdownColor: Colors.white,
+                            itemTextstyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            hint: Text(
+                              'select a language sector',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: (!currentMode)
+                                    ? Colors.grey[300]
+                                    : Colors.grey[500],
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            boxTextstyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            boxDecoration: BoxDecoration(
+                                color: (!currentMode)
+                                    ? Colors.white
+                                    : Colors.black,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: kGreenColor)),
+                            boxPadding: const EdgeInsets.symmetric(
+                                horizontal: 14.0, vertical: 4),
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              size: 25,
+                            ),
+                            boxHeight: 40,
+                            dropdownColor:
+                                (!currentMode) ? Colors.white : Colors.black,
                                     items: _dropdownLanguages =
                                         buildDropdownItems(languages),
                                     onChanged: (value) {
@@ -265,12 +297,14 @@ class Report extends StatelessWidget {
                           flex: 1,
                           child: Column(
                             children: [
-                              const Align(
+                              Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   'Class',
                                   style: TextStyle(
-                                    color: kTextMainColorLight,
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
                                     fontSize: 12,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -285,40 +319,48 @@ class Report extends StatelessWidget {
                                   return DropdownBelow(
                                     value: value2,
                                     itemWidth: size.width * .2,
-                                    itemTextstyle: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    hint: Text(
-                                      'select a class',
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12,
-                                        color: Colors.grey[300],
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    boxTextstyle: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    boxDecoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(6),
-                                        border: Border.all(color: kGreenColor)),
-                                    boxPadding: const EdgeInsets.symmetric(
-                                        horizontal: 14.0, vertical: 4),
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_down_rounded,
-                                      color: Colors.black,
-                                      size: 25,
-                                    ),
-                                    boxHeight: 40,
-                                    dropdownColor: Colors.white,
+                            itemTextstyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            hint: Text(
+                              'select a class',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: (!currentMode)
+                                    ? Colors.grey[300]
+                                    : Colors.grey[500],
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            boxTextstyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            boxDecoration: BoxDecoration(
+                                color: (!currentMode)
+                                    ? Colors.white
+                                    : Colors.black,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: kGreenColor)),
+                            boxPadding: const EdgeInsets.symmetric(
+                                horizontal: 14.0, vertical: 4),
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
+                              size: 25,
+                            ),
+                            boxHeight: 40,
+                            dropdownColor:
+                                (!currentMode) ? Colors.white : Colors.black,
                                     items: _dropdownLanguages =
                                         buildDropdownItems(classes),
                                     onChanged: (value2) {
@@ -337,274 +379,291 @@ class Report extends StatelessWidget {
                     LongButton(
                         size: size, color: kGreenColor, title: 'Generate'),
                     Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: Container(
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                            // color: kBackgroundColorLight,
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                              ),
-                              const BoxShadow(
-                                color: kBackgroundColorLight,
-                                spreadRadius: -2.0,
-                                blurRadius: 8.0,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 30,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Center(
-                                          child: Text(
-                                        '#',
-                                        style: TextStyle(
-                                            color: Colors.grey[400],
-                                            fontSize: 10),
-                                      )),
-                                    ),
-                                    Expanded(
-                                      flex: 9,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 20),
-                                          Text(
-                                            'Name',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            'Reg Fee',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            'Fee Amt.',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            'Fees Paid',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            'Balance',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              // color: kBackgroundColorLight,
+                              borderRadius: BorderRadius.circular(6),
+                              color:
+                                  (!currentMode) ? Colors.white : Colors.black,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
                                 ),
-                              ),
-                              Expanded(
-                                child: ListView(
-                                  physics: const BouncingScrollPhysics(),
-                                  children: [
-                                    ReportStudentTile(
-                                      studentNumber: '1',
-                                      studentName: 'Richard Nkolosombe Fimbo',
-                                      studentRegFee: '5,000',
-                                      studentFeeAmt: '70,000',
-                                      studentFeePaid: '56,500',
-                                      studentFeeBalance: '13,000',
-                                    ),
-                                    ReportStudentTile(
-                                      studentNumber: '2',
-                                      studentName: 'Desmond Piku Abanseka',
-                                      studentRegFee: '5,000',
-                                      studentFeeAmt: '70,000',
-                                      studentFeePaid: '56,500',
-                                      studentFeeBalance: '13,000',
-                                    ),
-                                  ],
+                                (!currentMode)
+                                    ? BoxShadow(
+                                        color: kBackgroundColorLight,
+                                        spreadRadius: -2.0,
+                                        blurRadius: 8.0,
+                                      )
+                                    : BoxShadow(
+                                        color: kBackgroundColorLight
+                                            .withOpacity(0),
+                                      )
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Center(
+                                            child: Text(
+                                          '#',
+                                          style: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 10),
+                                        )),
+                                      ),
+                                      Expanded(
+                                        flex: 9,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            Text(
+                                              'Name',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              'Reg Fee',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              'Fee Amt.',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              'Fees Paid',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              'Balance',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 11,
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 20),
-                                          Text(
-                                            'Total',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
+                                Expanded(
+                                  child: ListView(
+                                    physics: const BouncingScrollPhysics(),
+                                    children: [
+                                      ReportStudentTile(
+                                        studentNumber: '1',
+                                        studentName: 'Richard Nkolosombe Fimbo',
+                                        studentRegFee: '5,000',
+                                        studentFeeAmt: '70,000',
+                                        studentFeePaid: '56,500',
+                                        studentFeeBalance: '13,000',
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            '10,000',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
+                                      ReportStudentTile(
+                                        studentNumber: '2',
+                                        studentName: 'Desmond Piku Abanseka',
+                                        studentRegFee: '5,000',
+                                        studentFeeAmt: '70,000',
+                                        studentFeePaid: '56,500',
+                                        studentFeeBalance: '13,000',
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            '140,000',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            '108,000',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            '31,500',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 30,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        flex: 11,
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(width: 20),
+                                            Text(
+                                              'Total',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              '10,000',
+                                              style: TextStyle(
+                                                  color: (!currentMode)
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              '140,000',
+                                              style: TextStyle(
+                                                  color: (!currentMode)
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              '108,000',
+                                              style: TextStyle(
+                                                  color: (!currentMode)
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  color: Colors.grey[400],
+                                                  fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Text(
+                                              '31,500',
+                                              style: TextStyle(
+                                                  color: (!currentMode)
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    )
+                      )
                   ],
                 ),
               ),
@@ -613,5 +672,5 @@ class Report extends StatelessWidget {
         ),
       ),
     );
-  }
+  });}
 }
