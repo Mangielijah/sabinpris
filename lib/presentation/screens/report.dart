@@ -1004,39 +1004,7 @@ class _ReportState extends State<Report> {
       statCount++;
       return _buildRow(statistic, statCount);
     }).toList();
-    // final body = GridView(
-    //   crossAxisCount: 7,
-    //   children: List<Widget>.generate(42, (int index) {
-    //     final d = start.add(Duration(days: index - startId));
-    //     final currentMonth = index >= startId && index < endId;
-    //     final currentDay = d.year == _date.year &&
-    //         d.month == _date.month &&
-    //         d.day == _date.day;
-    //     return Container(
-    //       foregroundDecoration: BoxDecoration(
-    //           border: Border(
-    //         left: const BorderSide(color: PdfColors.grey),
-    //         right: index % 7 == 6
-    //             ? const BorderSide(color: PdfColors.grey)
-    //             : BorderSide.none,
-    //         bottom: const BorderSide(color: PdfColors.grey),
-    //       )),
-    //       child: day(context, d, currentMonth, currentDay),
-    //     );
-    //   }),
-    // );
 
-    // return Container(
-    //   child: Column(
-    //     mainAxisAlignment: MainAxisAlignment.start,
-    //     mainAxisSize: MainAxisSize.min,
-    //     children: <Widget>[
-    //       headline6(context, DateTime(_year, _month)),
-    //       head,
-    //       Expanded(child: body),
-    //     ],
-    //   ),
-    // );
     return Scaffold(
       body: Container(
         width: double.infinity,
