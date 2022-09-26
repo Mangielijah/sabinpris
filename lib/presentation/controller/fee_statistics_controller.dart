@@ -41,18 +41,28 @@ class FeeStatistics extends ChangeNotifier {
       _sector,
       _class,
     );
-    if (studentsFeeStats != result && result.isNotEmpty) {
+    if (studentsFeeStats != result) {
       studentsFeeStats = [...result];
-      totalStats = result.reduce(
-        (aStats, bStats) => FeeCollectionStatistics(
-          name: 'Totat',
-          reg: aStats.reg + bStats.reg,
-          feeAmt: aStats.feeAmt + bStats.feeAmt,
-          feesPaid: [...aStats.feesPaid, ...bStats.feesPaid],
-          totalPaid: aStats.totalPaid + bStats.totalPaid,
-          balance: aStats.balance + bStats.balance,
-        ),
-      );
+      if (result.isNotEmpty) {
+        totalStats = result.reduce(
+          (aStats, bStats) => FeeCollectionStatistics(
+            name: 'Totat',
+            reg: aStats.reg + bStats.reg,
+            feeAmt: aStats.feeAmt + bStats.feeAmt,
+            feesPaid: [...aStats.feesPaid, ...bStats.feesPaid],
+            totalPaid: aStats.totalPaid + bStats.totalPaid,
+            balance: aStats.balance + bStats.balance,
+          ),
+        );
+      } else {
+        totalStats = FeeCollectionStatistics(
+            balance: 0,
+            feeAmt: 0,
+            feesPaid: [],
+            reg: 0,
+            name: '',
+            totalPaid: 0);
+      }
       isLoading = false;
       notifyListeners();
     } else {
