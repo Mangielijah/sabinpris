@@ -41,7 +41,7 @@ class FeeStatistics extends ChangeNotifier {
       _sector,
       _class,
     );
-    if (studentsFeeStats != result) {
+    if (studentsFeeStats != result && result.isNotEmpty) {
       studentsFeeStats = [...result];
       totalStats = result.reduce(
         (aStats, bStats) => FeeCollectionStatistics(
