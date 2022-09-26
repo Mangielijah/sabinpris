@@ -1220,12 +1220,9 @@ Future buildFeeCollectionSummary(List<FeeCollectionStatistics> feeStatistics,
   );
   final output = await getApplicationDocumentsDirectory();
   late String fileName;
-  if (sector == LanguageSector.english) {
-    fileName =
-        'english_section_summary_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
-  } else {
-    fileName = 'french_section_summary_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
-  }
+  fileName =
+      'class_${className.toLowerCase().replaceAll(' ', '')}_summary_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
+
   final file = File("${output.path}/$fileName");
   final res = await file.writeAsBytes(await pdf.save());
   // ignore: unnecessary_null_comparison
