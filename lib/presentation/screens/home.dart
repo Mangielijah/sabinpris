@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/providers.dart';
+import 'package:sabinpris/presentation/screens/login.dart';
 // import 'package:sabinpris/components/user_shared_preference.dart';
 import 'package:sabinpris/presentation/screens/new_student.dart';
 import 'package:sabinpris/presentation/screens/report.dart';
@@ -130,7 +131,11 @@ class _HomeState extends ConsumerState<Home> {
               const SizedBox(height: 14),
               InkWell(
                 onTap: () {
-                  _scaffoldkey.currentState?.closeEndDrawer();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      return const LogIn();
+                    }),
+                  );
                 },
                 child: Container(
                   width: size.width * .2,

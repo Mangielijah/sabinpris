@@ -93,27 +93,32 @@ class _ReportState extends ConsumerState<Report> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Back(),
-                        Text(
-                          'Financial Report',
-                          style: TextStyle(
-                            color: kGreenColor,
-                            fontSize: 12,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w600,
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              'Financial Report',
+                              style: TextStyle(
+                                color: kGreenColor,
+                                fontSize: 12,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const Align(
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Report Type',
                         style: TextStyle(
-                          color: kTextMainColorLight,
+                          color: (!currentMode)
+                              ? kTextMainColorLight
+                              : kTextMainColorDark,
                           fontSize: 12,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.w600,
@@ -122,15 +127,59 @@ class _ReportState extends ConsumerState<Report> {
                     ),
                     const SizedBox(height: 4),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
                           onTap: () async {
                             try {
                               final File file = await buildSummary();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: kGreenColor,
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'General Report Successfully Downloaded: File is saved in ../Documents/ folder',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                               await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.red[400],
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'Error Downloading Report: Please try again',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                             }
                           },
                           child: Container(
@@ -138,7 +187,8 @@ class _ReportState extends ConsumerState<Report> {
                             width: 140,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              color: Colors.white,
+                              color:
+                                  (!currentMode) ? Colors.white : Colors.black,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
@@ -150,16 +200,21 @@ class _ReportState extends ConsumerState<Report> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.download_rounded,
                                   size: 16,
+                                  color: (!currentMode)
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
                                 SizedBox(width: 4),
                                 Text(
                                   'General Summary',
                                   style: TextStyle(
-                                    color: Color(0xff4D4D4D),
+                                    color: (!currentMode)
+                                        ? Color(0xff4D4D4D)
+                                        : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -174,9 +229,53 @@ class _ReportState extends ConsumerState<Report> {
                             try {
                               final File file = await buildSectionSummary(
                                   LanguageSector.english);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: kGreenColor,
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'English Summary Report Successfully Downloaded: File is saved in ../Documents/ folder',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                               await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.red[400],
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'Error Downloading Report: Please try again',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                             }
                           },
                           child: Container(
@@ -184,7 +283,8 @@ class _ReportState extends ConsumerState<Report> {
                             width: 170,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              color: Colors.white,
+                              color:
+                                  (!currentMode) ? Colors.white : Colors.black,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
@@ -196,16 +296,21 @@ class _ReportState extends ConsumerState<Report> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.download_rounded,
                                   size: 16,
+                                  color: (!currentMode)
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
                                 SizedBox(width: 4),
                                 Text(
                                   'English section summary',
                                   style: TextStyle(
-                                    color: Color(0xff4D4D4D),
+                                    color: (!currentMode)
+                                        ? Color(0xff4D4D4D)
+                                        : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -220,9 +325,53 @@ class _ReportState extends ConsumerState<Report> {
                             try {
                               final File file = await buildSectionSummary(
                                   LanguageSector.french);
+                                  ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: kGreenColor,
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'French Sector Report Successfully Downloaded: File is saved in ../Documents/ folder',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                               await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.red[400],
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'Error Downloading Report: Please try again',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                             }
                           },
                           child: Container(
@@ -230,7 +379,8 @@ class _ReportState extends ConsumerState<Report> {
                             width: 160,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              color: Colors.white,
+                              color:
+                                  (!currentMode) ? Colors.white : Colors.black,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
@@ -242,16 +392,21 @@ class _ReportState extends ConsumerState<Report> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.download_rounded,
                                   size: 16,
+                                  color: (!currentMode)
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
                                 SizedBox(width: 4),
                                 Text(
                                   'French section summary',
                                   style: TextStyle(
-                                    color: Color(0xff4D4D4D),
+                                    color: (!currentMode)
+                                        ? Color(0xff4D4D4D)
+                                        : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -291,10 +446,12 @@ class _ReportState extends ConsumerState<Report> {
                                     return DropdownBelow(
                                       value: sector,
                                       itemWidth: size.width * .2,
-                                      itemTextstyle: const TextStyle(
+                                      itemTextstyle: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 12,
-                                        color: Colors.black,
+                                        color: (!currentMode)
+                                            ? Colors.black
+                                            : Colors.white,
                                         fontWeight: FontWeight.w400,
                                       ),
                                       hint: Text(
@@ -302,31 +459,41 @@ class _ReportState extends ConsumerState<Report> {
                                         style: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: Colors.grey[300],
+                                          color: (!currentMode)
+                                              ? Colors.grey[300]
+                                              : Colors.white,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
-                                      boxTextstyle: const TextStyle(
+                                      boxTextstyle: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 12,
-                                        color: Colors.black,
+                                        color: (!currentMode)
+                                            ? Colors.black
+                                            : Colors.white,
                                         fontWeight: FontWeight.w400,
                                       ),
                                       boxDecoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: (!currentMode)
+                                              ? Colors.white
+                                              : Colors.black,
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           border:
-                                              Border.all(color: kBlueColor)),
+                                              Border.all(color: kGreenColor)),
                                       boxPadding: const EdgeInsets.symmetric(
                                           horizontal: 14.0, vertical: 4),
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.keyboard_arrow_down_rounded,
-                                        color: Colors.black,
+                                        color: (!currentMode)
+                                            ? Colors.black
+                                            : Colors.white,
                                         size: 25,
                                       ),
                                       boxHeight: 40,
-                                      dropdownColor: Colors.white,
+                                      dropdownColor: (!currentMode)
+                                          ? Colors.white
+                                          : Colors.black,
                                       items: _dropdownLanguages,
                                       onChanged: (value) {
                                         languageNotifier.value =
@@ -363,10 +530,12 @@ class _ReportState extends ConsumerState<Report> {
                                     return DropdownBelow(
                                       value: studentClass,
                                       itemWidth: size.width * .2,
-                                      itemTextstyle: const TextStyle(
+                                      itemTextstyle: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 12,
-                                        color: Colors.black,
+                                        color: (!currentMode)
+                                            ? Colors.black
+                                            : Colors.white,
                                         fontWeight: FontWeight.w400,
                                       ),
                                       hint: Text(
@@ -374,31 +543,41 @@ class _ReportState extends ConsumerState<Report> {
                                         style: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 12,
-                                          color: Colors.grey[300],
+                                          color: (!currentMode)
+                                              ? Colors.grey[300]
+                                              : Colors.white,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
-                                      boxTextstyle: const TextStyle(
+                                      boxTextstyle: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 12,
-                                        color: Colors.black,
+                                        color: (!currentMode)
+                                            ? Colors.black
+                                            : Colors.white,
                                         fontWeight: FontWeight.w400,
                                       ),
                                       boxDecoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: (!currentMode)
+                                              ? Colors.white
+                                              : Colors.black,
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           border:
-                                              Border.all(color: kBlueColor)),
+                                              Border.all(color: kGreenColor)),
                                       boxPadding: const EdgeInsets.symmetric(
                                           horizontal: 14.0, vertical: 4),
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.keyboard_arrow_down_rounded,
-                                        color: Colors.black,
+                                        color: (!currentMode)
+                                            ? Colors.black
+                                            : Colors.white,
                                         size: 25,
                                       ),
                                       boxHeight: 40,
-                                      dropdownColor: Colors.white,
+                                      dropdownColor: (!currentMode)
+                                          ? Colors.white
+                                          : Colors.black,
                                       items: _dropdownClasses,
                                       onChanged: (stdClass) {
                                         classesNotifier.value =
@@ -436,9 +615,53 @@ class _ReportState extends ConsumerState<Report> {
                             try {
                               final file =
                                   await ref.read(feeStatsProvider).download();
+                                  ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: kGreenColor,
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'Report Successfully Downloaded: File is saved in ../Documents/ folder',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                               await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      content: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.red[400],
+                                            borderRadius:
+                                                BorderRadius.circular(6)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Text(
+                                            'Error Downloading Report: Please try again',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      )));
                             }
                           },
                           child: Container(
@@ -446,7 +669,8 @@ class _ReportState extends ConsumerState<Report> {
                             width: 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
-                              color: Colors.white,
+                              color:
+                                  (!currentMode) ? Colors.white : Colors.black,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
@@ -458,16 +682,21 @@ class _ReportState extends ConsumerState<Report> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.download_rounded,
                                   size: 16,
+                                  color: (!currentMode)
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
                                 SizedBox(width: 4),
                                 Text(
                                   'Download',
                                   style: TextStyle(
-                                    color: Color(0xff4D4D4D),
+                                    color: (!currentMode)
+                                        ? Color(0xff4D4D4D)
+                                        : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
                                     fontWeight: FontWeight.w600,
@@ -509,7 +738,7 @@ class _ReportState extends ConsumerState<Report> {
                               if (feeStatsNotifier.isLoading) {
                                 return const Center(
                                   child: SpinKitPulse(
-                                    color: kBlueColor,
+                                    color: kGreenColor,
                                     size: 100,
                                   ),
                                 );

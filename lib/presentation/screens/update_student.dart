@@ -920,6 +920,30 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                             widget.student.recordId!,
                                             int.parse(
                                                 _feesPaidController.text));
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                          backgroundColor: Colors.transparent,
+                                          elevation: 0,
+                                          content: Container(
+                                            decoration: BoxDecoration(
+                                                color: kYellowColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(6)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Text(
+                                                'Successful: Student Fees have been updated',
+                                                style: TextStyle(
+                                                  fontFamily: 'Montserrat',
+                                                  fontSize: 14,
+                                                  color: (!currentMode)
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          )));
                                     _feesPaidController.text = '';
                                   }
                                 },
