@@ -15,4 +15,8 @@ abstract class StudentRecordRepository {
     required StudentClass studentClass,
   });
   Future<List<GeneralStatistics>> getGeneralStatistics(String year);
+  Future<List<GeneralStatistics>> getSectionSummaryStatistics(
+      String year, LanguageSector sector);
+  Future<List<FeeCollectionStatistics>> getFeeCollectionStatistics(
+      LanguageSector sector, StudentClass sclass);
 }

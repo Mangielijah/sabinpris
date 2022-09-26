@@ -12,5 +12,19 @@ class GeneralStatistics with _$GeneralStatistics {
     required int registration,
     required int feesPaid,
     required int totalIncome,
+    required int balance,
   }) = _GeneralStatistics;
+}
+
+@freezed
+class FeeCollectionStatistics with _$FeeCollectionStatistics {
+  const FeeCollectionStatistics._();
+  factory FeeCollectionStatistics({
+    required String name,
+    required int reg,
+    required int feeAmt,
+    required List<int> feesPaid,
+    required int totalPaid,
+    required int balance,
+  }) = _FeeCollectionStatistics;
 }

@@ -4,6 +4,9 @@ import 'package:better_open_file/better_open_file.dart';
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
+import 'package:sabinpris/domain/entity/statistics.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
@@ -21,8 +24,6 @@ class Report extends ConsumerStatefulWidget {
 class _ReportState extends ConsumerState<Report> {
   List<DropdownMenuItem<LanguageSector?>> _dropdownLanguages = [];
 
-  List<DropdownMenuItem<Gender?>> _dropdownGenders = [];
-
   List<DropdownMenuItem<StudentClass?>> _dropdownClasses = [];
 
   late ValueNotifier<LanguageSector> languageNotifier;
@@ -38,8 +39,6 @@ class _ReportState extends ConsumerState<Report> {
     super.initState();
     languageNotifier = ValueNotifier(LanguageSector.english);
     classesNotifier = ValueNotifier(StudentClass.preNusery);
-    genderNotifier = ValueNotifier(Gender.male);
-    _dropdownGenders = buildDropdownItems<Gender>(Gender.values);
     _dropdownLanguages =
         buildDropdownItems<LanguageSector>(LanguageSector.values);
     _dropdownClasses = buildDropdownItems<StudentClass>(StudentClass.values);
@@ -56,8 +55,12 @@ class _ReportState extends ConsumerState<Report> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final modeProvider = ref.watch(themeModeProvider);
-    // ignore: unused_local_variable
     final currentMode = modeProvider.currentMode;
+
+    final feeStatsNotifier = ref.watch(feeStatsProvider);
+    final feeStatistics = feeStatsNotifier.studentsFeeStats;
+
+    final totalStats = feeStatsNotifier.totalStats;
 
     return Scaffold(
       backgroundColor:
@@ -166,109 +169,96 @@ class _ReportState extends ConsumerState<Report> {
                             ),
                           ),
                         ),
-                        Container(
-                          height: 40,
-                          width: 170,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: const Offset(0, 0),
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.download_rounded,
-                                size: 16,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                'English section summary',
-                                style: TextStyle(
-                                  color: Color(0xff4D4D4D),
-                                  fontSize: 10,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
+                        InkWell(
+                          onTap: () async {
+                            try {
+                              final File file = await buildSectionSummary(
+                                  LanguageSector.english);
+                              await OpenFile.open(file.path);
+                            } catch (e) {
+                              debugPrint("error");
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 170,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0),
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.download_rounded,
+                                  size: 16,
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: 4),
+                                Text(
+                                  'English section summary',
+                                  style: TextStyle(
+                                    color: Color(0xff4D4D4D),
+                                    fontSize: 10,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Container(
-                          height: 40,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: const Offset(0, 0),
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.download_rounded,
-                                size: 16,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                'French section summary',
-                                style: TextStyle(
-                                  color: Color(0xff4D4D4D),
-                                  fontSize: 10,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
+                        InkWell(
+                          onTap: () async {
+                            try {
+                              final File file = await buildSectionSummary(
+                                  LanguageSector.french);
+                              await OpenFile.open(file.path);
+                            } catch (e) {
+                              debugPrint("error");
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 160,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0),
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.download_rounded,
+                                  size: 16,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 40,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: const Offset(0, 0),
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.download_rounded,
-                                size: 16,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                'Fee collection summary',
-                                style: TextStyle(
-                                  color: Color(0xff4D4D4D),
-                                  fontSize: 10,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
+                                SizedBox(width: 4),
+                                Text(
+                                  'French section summary',
+                                  style: TextStyle(
+                                    color: Color(0xff4D4D4D),
+                                    fontSize: 10,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -430,44 +420,61 @@ class _ReportState extends ConsumerState<Report> {
                             size: size,
                             color: kGreenColor,
                             title: 'Generate',
+                            onTap: () {
+                              ref.read(feeStatsProvider).search(
+                                    languageNotifier.value,
+                                    classesNotifier.value,
+                                  );
+                            },
                           ),
                         ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Container(
-                          height: 40,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 4,
-                                offset: const Offset(0, 0),
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.download_rounded,
-                                size: 16,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                'Download',
-                                style: TextStyle(
-                                  color: Color(0xff4D4D4D),
-                                  fontSize: 10,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w600,
+                        InkWell(
+                          onTap: () async {
+                            try {
+                              final file =
+                                  await ref.read(feeStatsProvider).download();
+                              await OpenFile.open(file.path);
+                            } catch (e) {
+                              debugPrint("error");
+                            }
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 0),
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.download_rounded,
+                                  size: 16,
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: 4),
+                                Text(
+                                  'Download',
+                                  style: TextStyle(
+                                    color: Color(0xff4D4D4D),
+                                    fontSize: 10,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -497,150 +504,164 @@ class _ReportState extends ConsumerState<Report> {
                                     )
                             ],
                           ),
-                          child: Column(children: [
-                            SizedBox(
-                              height: 30,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                          child: Builder(
+                            builder: (context) {
+                              if (feeStatsNotifier.isLoading) {
+                                return const Center(
+                                  child: SpinKitPulse(
+                                    color: kBlueColor,
+                                    size: 100,
+                                  ),
+                                );
+                              }
+                              return Column(
                                 children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Center(
-                                        child: Text(
-                                      '#',
-                                      style: TextStyle(
-                                          color: Colors.grey[400],
-                                          fontSize: 10),
-                                    )),
-                                  ),
-                                  Expanded(
-                                    flex: 9,
+                                  SizedBox(
+                                    height: 30,
                                     child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          '|',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 16),
+                                        Expanded(
+                                          flex: 2,
+                                          child: Center(
+                                              child: Text(
+                                            '#',
+                                            style: TextStyle(
+                                                color: Colors.grey[400],
+                                                fontSize: 10),
+                                          )),
                                         ),
-                                        const SizedBox(width: 20),
-                                        Text(
-                                          'Name',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 10),
-                                        )
+                                        Expanded(
+                                          flex: 9,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '|',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 16),
+                                              ),
+                                              const SizedBox(width: 20),
+                                              Text(
+                                                'Name',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 10),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '|',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 16),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              Text(
+                                                'Reg Fee',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 10),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '|',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 16),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              Text(
+                                                'Fee Amt.',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 10),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '|',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 16),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              Text(
+                                                'Fees Paid',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 10),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                '|',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 16),
+                                              ),
+                                              const SizedBox(width: 16),
+                                              Text(
+                                                'Balance',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 10),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                   Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '|',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 16),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Text(
-                                          'Reg Fee',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 10),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '|',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 16),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Text(
-                                          'Fee Amt.',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 10),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '|',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 16),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Text(
-                                          'Fees Paid',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 10),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '|',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 16),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Text(
-                                          'Balance',
-                                          style: TextStyle(
-                                              color: Colors.grey[400],
-                                              fontSize: 10),
-                                        )
-                                      ],
+                                    child: ListView.builder(
+                                      itemCount: feeStatistics.length,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        FeeCollectionStatistics stats =
+                                            feeStatistics[index];
+                                        return ReportStudentTile(
+                                          studentNumber: '${index + 1}',
+                                          studentName: stats.name,
+                                          studentRegFee:
+                                              NumberFormat().format(stats.reg),
+                                          studentFeeAmt: NumberFormat()
+                                              .format(stats.feeAmt),
+                                          studentFeePaid: NumberFormat()
+                                              .format(stats.totalPaid),
+                                          studentFeeBalance: NumberFormat()
+                                              .format(stats.balance),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ]),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        physics: const BouncingScrollPhysics(),
-                        children: const [
-                          ReportStudentTile(
-                            studentNumber: '1',
-                            studentName: 'Richard Nkolosombe Fimbo',
-                            studentRegFee: '5,000',
-                            studentFeeAmt: '70,000',
-                            studentFeePaid: '56,500',
-                            studentFeeBalance: '13,000',
-                          ),
-                          ReportStudentTile(
-                            studentNumber: '2',
-                            studentName: 'Desmond Piku Abanseka',
-                            studentRegFee: '5,000',
-                            studentFeeAmt: '70,000',
-                            studentFeePaid: '56,500',
-                            studentFeeBalance: '13,000',
-                          ),
-                        ],
                       ),
                     ),
                     SizedBox(
@@ -672,7 +693,7 @@ class _ReportState extends ConsumerState<Report> {
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
-                                  '10,000',
+                                  NumberFormat().format(totalStats.reg),
                                   style: TextStyle(
                                       color: (!currentMode)
                                           ? Colors.black
@@ -693,7 +714,7 @@ class _ReportState extends ConsumerState<Report> {
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
-                                  '140,000',
+                                  NumberFormat().format(totalStats.feeAmt),
                                   style: TextStyle(
                                       color: (!currentMode)
                                           ? Colors.black
@@ -714,7 +735,7 @@ class _ReportState extends ConsumerState<Report> {
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
-                                  '108,000',
+                                  NumberFormat().format(totalStats.totalPaid),
                                   style: TextStyle(
                                       color: (!currentMode)
                                           ? Colors.black
@@ -735,7 +756,7 @@ class _ReportState extends ConsumerState<Report> {
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
-                                  '31,500',
+                                  NumberFormat().format(totalStats.balance),
                                   style: TextStyle(
                                       color: (!currentMode)
                                           ? Colors.black

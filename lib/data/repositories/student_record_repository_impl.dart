@@ -103,4 +103,32 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
       throw Exception('Could Not Register Student');
     }
   }
+
+  @override
+  Future<List<GeneralStatistics>> getSectionSummaryStatistics(
+      String year, LanguageSector sector) async {
+    try {
+      final stats = (await dataSource.generateSectionSummaryStatistics(
+              year, sector.index))
+          .map((e) => e.toDomain())
+          .toList();
+      return stats;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
+  }
+
+  @override
+  Future<List<FeeCollectionStatistics>> getFeeCollectionStatistics(
+      LanguageSector sector, StudentClass sclass) async {
+    try {
+      final stats = (await dataSource.generateFeeCollectionStatistics(
+              sector.index, sclass.index))
+          .map((e) => e.toDomain())
+          .toList();
+      return stats;
+    } catch (e) {
+      throw Exception('Could Not Register Student');
+    }
+  }
 }

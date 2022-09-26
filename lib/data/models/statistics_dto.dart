@@ -13,6 +13,7 @@ class GeneralStatisticsDto with _$GeneralStatisticsDto {
     required int registration,
     required int feesPaid,
     required int totalIncome,
+    required int balance,
   }) = _GeneralStatisticsDto;
 
   GeneralStatistics toDomain() {
@@ -23,6 +24,31 @@ class GeneralStatisticsDto with _$GeneralStatisticsDto {
       registration: registration,
       feesPaid: feesPaid,
       totalIncome: totalIncome,
+      balance: balance,
+    );
+  }
+}
+
+@freezed
+class FeeCollectionStatisticsDto with _$FeeCollectionStatisticsDto {
+  const FeeCollectionStatisticsDto._();
+  factory FeeCollectionStatisticsDto({
+    required String name,
+    required int reg,
+    required int feeAmt,
+    required List<int> feesPaid,
+    required int totalPaid,
+    required int balance,
+  }) = _FeeCollectionStatisticsDto;
+
+  FeeCollectionStatistics toDomain() {
+    return FeeCollectionStatistics(
+      name: name,
+      reg: reg,
+      feeAmt: feeAmt,
+      feesPaid: feesPaid,
+      totalPaid: totalPaid,
+      balance: balance,
     );
   }
 }
