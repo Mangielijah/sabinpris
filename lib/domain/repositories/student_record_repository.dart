@@ -19,4 +19,5 @@ abstract class StudentRecordRepository {
       String year, LanguageSector sector);
   Future<List<FeeCollectionStatistics>> getFeeCollectionStatistics(
       LanguageSector sector, StudentClass sclass);
+  Stream<StudentRecord> watchRecord(int recordId);
 }

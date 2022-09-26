@@ -301,7 +301,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDue = nurseryList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
       }
@@ -334,7 +334,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         pfeesDue = primaryList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
       }
@@ -385,7 +385,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         ffeesDue = fnurseryList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
       }
@@ -419,7 +419,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         fpfeesDue = fprimaryList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
       }
@@ -490,7 +490,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDuePn = nurseryList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balancePn = (feesPaidPn - feesDuePn).abs();
@@ -531,7 +531,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueN1 = nurseryOneList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceN1 = (feesPaidN1 - feesDueN1).abs();
@@ -571,7 +571,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueN2 = nurserytwoList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceN2 = (feesPaidN2 - feesDueN2).abs();
@@ -611,7 +611,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueC1 = classOneList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceC1 = (feesPaidC1 - feesDueC1).abs();
@@ -651,7 +651,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueC2 = classTwoList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceC2 = (feesPaidC2 - feesDueC2).abs();
@@ -692,7 +692,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueC3 = classThreeList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceC3 = (feesPaidC3 - feesDueC3).abs();
@@ -732,7 +732,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueC4 = classFourList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceC4 = (feesPaidC4 - feesDueC4).abs();
@@ -773,7 +773,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueC5 = classFiveList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceC5 = (feesPaidC5 - feesDueC5).abs();
@@ -813,7 +813,7 @@ class StudentRecordDataSource {
             .reduce((a, b) => a + b);
         feesDueC6 = classSixList
             .map((e) =>
-                _getClassFee(StudentClass.values[e.studentClass]) -
+                getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
         balanceC6 = (feesPaidC6 - feesDueC6).abs();
@@ -903,7 +903,7 @@ class StudentRecordDataSource {
           .sectorEqualTo(sector)
           .studentClassEqualTo(sclass)
           .findAll();
-      final int feeAmt = _getClassFee(StudentClass.values[sclass]);
+      final int feeAmt = getClassFee(StudentClass.values[sclass]);
       return classList.map((stud) {
         int totalPaid = stud.feesPaid.reduce((a, b) => a + b);
         return FeeCollectionStatisticsDto(
@@ -921,7 +921,17 @@ class StudentRecordDataSource {
     }
   }
 
-  _getClassFee(StudentClass sclass) {
+  Stream<StudentRecordDto> watchRecord(int recordId) async* {
+    yield* _studentRecord
+        .filter()
+        .academicYearEqualTo(SCHOOL_YEAR)
+        .recordIdEqualTo(recordId)
+        .watch(fireImmediately: true)
+        .map((record) => record[0])
+        .asBroadcastStream();
+  }
+
+  getClassFee(StudentClass sclass) {
     if (sclass == StudentClass.preNusery) return Fee.preNusery;
     if (sclass == StudentClass.nuseryOne) return Fee.nurseryOne;
     if (sclass == StudentClass.nuseryTwo) return Fee.nurseryTwo;

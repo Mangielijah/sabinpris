@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
+import 'package:sabinpris/fee.dart';
 
 List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
   List<DropdownMenuItem<T?>> items = [];
@@ -59,4 +60,17 @@ String getClassName(StudentClass item) {
     displayClass = 'Class 6';
   }
   return displayClass;
+}
+
+int getClassFee(StudentClass sclass) {
+  if (sclass == StudentClass.preNusery) return Fee.preNusery;
+  if (sclass == StudentClass.nuseryOne) return Fee.nurseryOne;
+  if (sclass == StudentClass.nuseryTwo) return Fee.nurseryTwo;
+  if (sclass == StudentClass.classOne) return Fee.classOne;
+  if (sclass == StudentClass.classTwo) return Fee.classTwo;
+  if (sclass == StudentClass.classThree) return Fee.classThree;
+  if (sclass == StudentClass.classFour) return Fee.classFour;
+  if (sclass == StudentClass.classFive) return Fee.classFive;
+  if (sclass == StudentClass.classSix) return Fee.classSix;
+  return 0;
 }

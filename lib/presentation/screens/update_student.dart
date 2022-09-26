@@ -3,11 +3,15 @@
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
+import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
 import 'package:sabinpris/presentation/providers.dart';
 import 'package:sabinpris/presentation/util.dart';
+import 'package:sabinpris/service_locator.dart';
 
 class UpdateStudent extends ConsumerStatefulWidget {
   final StudentRecord student;
@@ -82,7 +86,8 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                 height: size.height * .9,
                 width: size.height * .8,
                 decoration: BoxDecoration(
-                    color: (!currentMode) ? Colors.white : Color(0xff202020),
+                    color:
+                        (!currentMode) ? Colors.white : const Color(0xff202020),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -688,168 +693,202 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                     )
                             ],
                           ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 30,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Center(
-                                          child: Text(
-                                        '#',
-                                        style: TextStyle(
-                                            color: Colors.grey[400],
-                                            fontSize: 10),
-                                      )),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 20),
-                                          Text(
-                                            'Fee Amt',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            'Amt Paid',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '|',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 16),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Text(
-                                            'Balance',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: 10),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              FeePaymentTile(),
-                              SizedBox(
-                                  height: 30,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                          child: StreamBuilder<StudentRecord>(
+                              stream: serviceLocator<StudentRecordRepository>()
+                                  .watchRecord(widget.student.recordId!),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final student = snapshot.data;
+                                  return Column(
                                     children: [
-                                      Expanded(
-                                        flex: 4,
+                                      SizedBox(
+                                        height: 30,
                                         child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            const SizedBox(width: 20),
-                                            Text(
-                                              'Total',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 10),
-                                            )
+                                            Expanded(
+                                              flex: 1,
+                                              child: Center(
+                                                  child: Text(
+                                                '#',
+                                                style: TextStyle(
+                                                    color: Colors.grey[400],
+                                                    fontSize: 10),
+                                              )),
+                                            ),
+                                            Expanded(
+                                              flex: 3,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '|',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 16),
+                                                  ),
+                                                  const SizedBox(width: 20),
+                                                  Text(
+                                                    'Fee Amt',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 10),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 3,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '|',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 16),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Text(
+                                                    'Amt Paid',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 10),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 3,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '|',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 16),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Text(
+                                                    'Balance',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 10),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '|',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 16),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Text(
-                                              '50,000',
-                                              style: TextStyle(
-                                                  color: (!currentMode)
-                                                      ? Colors.black
-                                                      : Colors.white,
-                                                  fontSize: 10),
-                                            )
-                                          ],
+                                      SizedBox(
+                                        height: 200,
+                                        child: ListView.builder(
+                                          itemCount: student!.feesPaid.length,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            int fees = student.feesPaid[index];
+                                            int fee = getClassFee(
+                                                student.studentClass);
+                                            return FeePaymentTile(
+                                              index: index,
+                                              feesPaid: fees,
+                                              classFee: fee,
+                                            );
+                                          },
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 3,
+                                      SizedBox(
+                                        height: 30,
                                         child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            Text(
-                                              '|',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 16),
+                                            Expanded(
+                                              flex: 4,
+                                              child: Row(
+                                                children: [
+                                                  const SizedBox(width: 20),
+                                                  Text(
+                                                    'Total',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 10),
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                            const SizedBox(width: 16),
-                                            Text(
-                                              '25,000',
-                                              style: TextStyle(
-                                                  color: (!currentMode)
-                                                      ? Colors.black
-                                                      : Colors.white,
-                                                  fontSize: 10),
-                                            )
+                                            Expanded(
+                                              flex: 3,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '|',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 16),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Text(
+                                                    NumberFormat().format(
+                                                        student.feesPaid.reduce(
+                                                            (a, b) => a + b)),
+                                                    style: TextStyle(
+                                                        color: (!currentMode)
+                                                            ? Colors.black
+                                                            : Colors.white,
+                                                        fontSize: 10),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 3,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '|',
+                                                    style: TextStyle(
+                                                        color: Colors.grey[400],
+                                                        fontSize: 16),
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Text(
+                                                    '',
+                                                    style: TextStyle(
+                                                        color: (!currentMode)
+                                                            ? Colors.black
+                                                            : Colors.white,
+                                                        fontSize: 10),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
                                     ],
+                                  );
+                                }
+                                return const Center(
+                                  child: SpinKitPulse(
+                                    size: 50,
+                                    color: kBlueColor,
                                   ),
-                                ),
-                            ],
-                          ),
+                                );
+                              }),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Align(
                               alignment: Alignment.centerLeft,
                               child: ShortTextField(
-                                hint: '',
-                                controller: _phoneNumberController,
+                                hint: 'Enter Fees',
+                                controller: _feesPaidController,
                                 mainColor: kYellowColor,
-                                disable: true,
+                                disable: false,
                               ),
                             ),
                             const SizedBox(
@@ -867,13 +906,26 @@ class _UpdateStudentState extends ConsumerState<UpdateStudent> {
                                 ),
                               ),
                             ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: LongButton(
+                                size: size,
+                                color: kYellowColor,
+                                title: 'SAVE',
+                                onTap: () async {
+                                  if (_feesPaidController.text.isNotEmpty) {
+                                    await serviceLocator<
+                                            StudentRecordRepository>()
+                                        .updateFees(
+                                            widget.student.recordId!,
+                                            int.parse(
+                                                _feesPaidController.text));
+                                    _feesPaidController.text = '';
+                                  }
+                                },
+                              ),
+                            ),
                           ],
-                        ),
-                        const SizedBox(height: 20),
-                        LongButton(
-                          size: size,
-                          color: kYellowColor,
-                          title: 'Done',
                         ),
                       ],
                     ),

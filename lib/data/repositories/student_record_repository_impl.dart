@@ -131,4 +131,15 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
       throw Exception('Could Not Register Student');
     }
   }
+
+  @override
+  Stream<StudentRecord> watchRecord(int recordId) async* {
+    try {
+      final r = (dataSource.watchRecord(recordId));
+
+      yield* r.map((e) => e.toDomain());
+    } catch (e) {
+      throw Exception('Could Not Watch Record');
+    }
+  }
 }

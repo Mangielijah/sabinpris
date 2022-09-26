@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/screens/update_student.dart';
 import 'package:sabinpris/presentation/constants.dart';
@@ -13,41 +14,40 @@ class Back extends ConsumerWidget {
     return Consumer(builder: (context, state, child) {
       final modeProvider = ref.watch(themeModeProvider);
       final currentMode = modeProvider.currentMode;
-    return SizedBox(
-      width: 30,
-      height: 30,
-      child: Container(
-        decoration: BoxDecoration(
-          color: (!currentMode)? Colors.white :Colors.black,
-          boxShadow: [
-            // (state)?
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 4,
-              offset: const Offset(0, 0),
-            )
-          ],
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            size: 16,
-            color: (!currentMode) ? kTextMainColorLight: Colors.white,
+      return SizedBox(
+        width: 30,
+        height: 30,
+        child: Container(
+          decoration: BoxDecoration(
+            color: (!currentMode) ? Colors.white : Colors.black,
+            boxShadow: [
+              // (state)?
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 4,
+                offset: const Offset(0, 0),
+              )
+            ],
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back,
+              size: 16,
+              color: (!currentMode) ? kTextMainColorLight : Colors.white,
+            ),
           ),
         ),
-      ),
-    );
-    }
-    );
+      );
+    });
   }
 }
 
-class LoginTextField extends ConsumerWidget{
+class LoginTextField extends ConsumerWidget {
   final String hint;
   final TextEditingController controller;
   final bool obscureText;
@@ -65,55 +65,57 @@ class LoginTextField extends ConsumerWidget{
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        decoration: BoxDecoration(
-            color: (!currentMode)?Colors.white:Colors.black,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 4,
-              offset: const Offset(0, 0),
-            )
-          ],
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: TextFormField(
-          controller: controller,
-          style: TextStyle(
-            backgroundColor: (!currentMode) ?Colors.transparent : Colors.black,
-            color: (!currentMode) ?Colors.black : Colors.white,
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          decoration: BoxDecoration(
+            color: (!currentMode) ? Colors.white : Colors.black,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 4,
+                offset: const Offset(0, 0),
+              )
+            ],
+            borderRadius: BorderRadius.circular(6),
           ),
-          cursorColor: Colors.green,
-          // controller: _emailController,
-          obscureText: obscureText,
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.done,
-          decoration: InputDecoration(
-            fillColor: Colors.transparent,
-            filled: false,
-            hintText: hint,
-            hintStyle: TextStyle(
-              fontFamily: 'Montserrat',
-              fontSize: 12,
-              color: (!currentMode) ?Colors.grey[500]:Colors.grey[500],
-              fontWeight: FontWeight.w400,
+          child: TextFormField(
+            controller: controller,
+            style: TextStyle(
+              backgroundColor:
+                  (!currentMode) ? Colors.transparent : Colors.black,
+              color: (!currentMode) ? Colors.black : Colors.white,
             ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: const BorderSide(color: Colors.green, width: 1),
-              borderRadius: BorderRadius.circular(6),
+            cursorColor: Colors.green,
+            // controller: _emailController,
+            obscureText: obscureText,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              fillColor: Colors.transparent,
+              filled: false,
+              hintText: hint,
+              hintStyle: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 12,
+                color: (!currentMode) ? Colors.grey[500] : Colors.grey[500],
+                fontWeight: FontWeight.w400,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: const BorderSide(color: Colors.green, width: 1),
+                borderRadius: BorderRadius.circular(6),
+              ),
             ),
           ),
         ),
-      ),
-    );
-  });}
+      );
+    });
+  }
 }
 
 class LongTextField extends ConsumerWidget {
@@ -136,53 +138,54 @@ class LongTextField extends ConsumerWidget {
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        color: (!currentMode) ? Colors.white :Colors.black,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 0),
-          )
-        ],
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: TextFormField(
-        controller: controller,
-        enabled: !disable,
-        style: TextStyle(
-            backgroundColor: Colors.transparent,
-            color: (!currentMode) ? Colors.black : Colors.white,
-            fontSize: 12),
-        cursorColor: mainColor,
-        obscureText: false,
-        keyboardType: TextInputType.name,
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(
-          fillColor: Colors.transparent,
-          filled: false,
-          hintText: hint,
-          hintStyle: TextStyle(
-            fontFamily: 'Montserrat',
-            fontSize: 12,
-            color: (!currentMode) ? Colors.grey[300] : Colors.grey[500],
-            fontWeight: FontWeight.w400,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: mainColor, width: 1),
-            borderRadius: BorderRadius.circular(6),
+      return Container(
+        height: 40,
+        decoration: BoxDecoration(
+          color: (!currentMode) ? Colors.white : Colors.black,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 0),
+            )
+          ],
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: TextFormField(
+          controller: controller,
+          enabled: !disable,
+          style: TextStyle(
+              backgroundColor: Colors.transparent,
+              color: (!currentMode) ? Colors.black : Colors.white,
+              fontSize: 12),
+          cursorColor: mainColor,
+          obscureText: false,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+            fillColor: Colors.transparent,
+            filled: false,
+            hintText: hint,
+            hintStyle: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 12,
+              color: (!currentMode) ? Colors.grey[300] : Colors.grey[500],
+              fontWeight: FontWeight.w400,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: mainColor, width: 1),
+              borderRadius: BorderRadius.circular(6),
+            ),
           ),
         ),
-      ),
-    );
-  });}
+      );
+    });
+  }
 }
 
 class ShortTextField extends ConsumerWidget {
@@ -205,64 +208,61 @@ class ShortTextField extends ConsumerWidget {
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
-    return Container(
-      height: 40,
-      width: 200,
-      decoration: BoxDecoration(
-        color: (!currentMode) ? Colors.white :Colors.black,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 0),
-          )
-        ],
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: TextFormField(
-        controller: controller,
-        style: TextStyle(
-            backgroundColor: Colors.transparent,
-            color: (!currentMode) ? Colors.black : Colors.white,
-            fontSize: 12),
-        cursorColor: mainColor,
-        enabled: !disable,
-        obscureText: false,
-        keyboardType: TextInputType.name,
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(
-          fillColor: Colors.transparent,
-          filled: false,
-          hintText: hint,
-          hintStyle: TextStyle(
-            fontFamily: 'Montserrat',
-            fontSize: 12,
-            color: (!currentMode) ? Colors.grey[300]:Colors.grey[500],
-            fontWeight: FontWeight.w400,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: mainColor, width: 1),
-            borderRadius: BorderRadius.circular(6),
+      return Container(
+        height: 40,
+        width: 200,
+        decoration: BoxDecoration(
+          color: (!currentMode) ? Colors.white : Colors.black,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 0),
+            )
+          ],
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: TextFormField(
+          controller: controller,
+          style: TextStyle(
+              backgroundColor: Colors.transparent,
+              color: (!currentMode) ? Colors.black : Colors.white,
+              fontSize: 12),
+          cursorColor: mainColor,
+          enabled: !disable,
+          obscureText: false,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+            fillColor: Colors.transparent,
+            filled: false,
+            hintText: hint,
+            hintStyle: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 12,
+              color: (!currentMode) ? Colors.grey[300] : Colors.grey[500],
+              fontWeight: FontWeight.w400,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: mainColor, width: 1),
+              borderRadius: BorderRadius.circular(6),
+            ),
           ),
         ),
-      ),
-    );
-  });}
+      );
+    });
+  }
 }
-
 
 class StudentTile extends ConsumerWidget {
   final StudentRecord student;
 
-  const StudentTile(
-      {Key? key,
-      required this.student})
-      : super(key: key);
+  const StudentTile({Key? key, required this.student}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -270,88 +270,100 @@ class StudentTile extends ConsumerWidget {
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) {
-              return UpdateStudent(student: student);
-            }),
-          );
-        },
-        child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: (!currentMode)?Colors.white:Color(0xff202020),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 0),
-                )
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Center(
-                    child: Text(
-                      student.recordId.toString(),
-                      style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (BuildContext context) {
+                return UpdateStudent(student: student);
+              }),
+            );
+          },
+          child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: (!currentMode) ? Colors.white : const Color(0xff202020),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: const Offset(0, 0),
+                  )
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        student.recordId.toString(),
+                        style: TextStyle(
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
+                            fontSize: 10),
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 9,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      Text(
-                        student.fullName,
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 9,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        Text(
+                          student.fullName,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        student.studentClass.name,
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          student.studentClass.name,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        student.gender.name,
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          student.gender.name,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )),
-      ),
-    );
-  });}
+                ],
+              )),
+        ),
+      );
+    });
+  }
 }
-
 
 class LongButton extends ConsumerWidget {
   const LongButton({
@@ -373,29 +385,30 @@ class LongButton extends ConsumerWidget {
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
-    return InkWell(
-      onTap: () => (onTap != null) ? onTap!() : () {},
-      child: Container(
-        height: 40,
-        width: size.width,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(6),
-        ),
-        child: Center(
-          child: Text(
-            title,
-            style: TextStyle(
-              color: (!currentMode)? Colors.white : Colors.black,
-              fontSize: 12,
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.w500,
+      return InkWell(
+        onTap: () => (onTap != null) ? onTap!() : () {},
+        child: Container(
+          height: 40,
+          width: size.width,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: (!currentMode) ? Colors.white : Colors.black,
+                fontSize: 12,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
-      ),
-    );
-  });}
+      );
+    });
+  }
 }
 
 class ReportStudentTile extends ConsumerWidget {
@@ -418,128 +431,149 @@ class ReportStudentTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     return Consumer(builder: (context, state, child) {
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
-      child: InkWell(
-        onTap: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(builder: (BuildContext context) {
-          //     return UpdateStudent(student: Student,);
-          //   }),
-          // );
-        },
-        child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-            color: (!currentMode)?Colors.white:Color(0xff202020),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 0),
-                )
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Center(
-                    child: Text(
-                      studentNumber,
-                      style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+        child: InkWell(
+          onTap: () {
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(builder: (BuildContext context) {
+            //     return UpdateStudent(student: Student,);
+            //   }),
+            // );
+          },
+          child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: (!currentMode) ? Colors.white : const Color(0xff202020),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: const Offset(0, 0),
+                  )
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Center(
+                      child: Text(
+                        studentNumber,
+                        style: TextStyle(
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
+                            fontSize: 10),
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 9,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      Text(
-                        studentName,
-                        style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 9,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        Text(
+                          studentName,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        studentRegFee,
-                        style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          studentRegFee,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        studentFeeAmt,
-                        style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          studentFeeAmt,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        studentFeePaid,
-                        style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          studentFeePaid,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        studentFeeBalance,
-                        style: TextStyle(
-                        color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          studentFeeBalance,
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )),
-      ),
-    );
-  });}
+                ],
+              )),
+        ),
+      );
+    });
+  }
 }
-
 
 class FeePaymentTile extends ConsumerWidget {
   // final StudentRecord student;
+  final int feesPaid;
+  final int classFee;
+  final int index;
 
-  const FeePaymentTile(
-      {Key? key,
-      // required this.student
-      })
-      : super(key: key);
+  const FeePaymentTile({
+    Key? key,
+    required this.classFee,
+    required this.feesPaid,
+    required this.index,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -547,88 +581,101 @@ class FeePaymentTile extends ConsumerWidget {
       final modeProvider = ref.watch(themeModeProvider);
       // ignore: unused_local_variable
       final currentMode = modeProvider.currentMode;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
-      child: InkWell(
-        onTap: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(builder: (BuildContext context) {
-          //     return UpdateStudent(student: student);
-          //   }),
-          // );
-        },
-        child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: (!currentMode)?Colors.white:Color(0xff202020),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: const Offset(0, 0),
-                )
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      // student.recordId.toString(),
-                      '1',
-                      style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+        child: InkWell(
+          onTap: () {
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(builder: (BuildContext context) {
+            //     return UpdateStudent(student: student);
+            //   }),
+            // );
+          },
+          child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: (!currentMode) ? Colors.white : const Color(0xff202020),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: const Offset(0, 0),
+                  )
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Text(
+                        // student.recordId.toString(),
+                        '${index + 1}',
+                        style: TextStyle(
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
+                            fontSize: 10),
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      Text(
-                        // student.fullName,
-                        '75,000',
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        Text(
+                          // student.fullName,
+                          NumberFormat().format(classFee),
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        // student.studentClass.name,
-                        '50,000',
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          // student.studentClass.name,
+                          NumberFormat().format(feesPaid),
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      Text(
-                        // student.gender.name,
-                        '25,000',
-                        style: TextStyle(
-                          color: (!currentMode)?kTextMainColorLight:kTextMainColorDark, fontSize: 10),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 16),
+                        Text(
+                          // student.gender.name,
+                          '',
+                          style: TextStyle(
+                              color: (!currentMode)
+                                  ? kTextMainColorLight
+                                  : kTextMainColorDark,
+                              fontSize: 10),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )),
-      ),
-    );
-  });}
+                ],
+              )),
+        ),
+      );
+    });
+  }
 }
