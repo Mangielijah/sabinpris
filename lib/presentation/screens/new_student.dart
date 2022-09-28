@@ -788,7 +788,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                         child: const Padding(
                                           padding: EdgeInsets.all(10.0),
                                           child: Text(
-                                            'Error: There was an error registering this student. Try again and ensure to fill all inputs',
+                                            'Error: There was an error registering this student. Try again and ensure to fill all inputs.',
                                             style: TextStyle(
                                               fontFamily: 'Montserrat',
                                               fontSize: 14,
