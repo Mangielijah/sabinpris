@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/providers.dart';
+import 'package:sabinpris/presentation/screens/expenditure.dart';
 import 'package:sabinpris/presentation/screens/login.dart';
 // import 'package:sabinpris/components/user_shared_preference.dart';
 import 'package:sabinpris/presentation/screens/new_student.dart';
@@ -694,59 +695,118 @@ class _HomeState extends ConsumerState<Home> {
                     width: size.width * .02,
                   ),
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Padding(
                       padding:
                           const EdgeInsets.only(right: 24, top: 30, bottom: 30),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext context) {
-                              return const Report();
-                            }),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: (!currentMode)
-                                  ? kTabColorLight
-                                  : kTabColorDark,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.06),
-                                  spreadRadius: 2,
-                                  blurRadius: 2,
-                                )
-                              ]),
-                          child: Stack(
-                            children: [
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: (!currentMode)
-                                    ? Image.asset('assets/1L.png',
-                                        width: size.width * .35)
-                                    : Image.asset('assets/1D.png',
-                                        width: size.width * .35),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 25, left: 25),
-                                child: Text(
-                                  'Financial Report',
-                                  style: TextStyle(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (BuildContext context) {
+                                    return const Report();
+                                  }),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
                                     color: (!currentMode)
-                                        ? const Color(0xff4D4D4D)
-                                        : Colors.white,
-                                    fontSize: 20,
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                        ? kTabColorLight
+                                        : kTabColorDark,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.06),
+                                        spreadRadius: 2,
+                                        blurRadius: 2,
+                                      )
+                                    ]),
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: (!currentMode)
+                                          ? Image.asset('assets/3L.png')
+                                          : Image.asset('assets/3D.png'),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(top: 25, left: 25),
+                                      child: Text(
+                                        'Financial Report',
+                                        style: TextStyle(
+                                          color: (!currentMode)
+                                              ? const Color(0xff4D4D4D)
+                                              : Colors.white,
+                                          fontSize: 20,
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                              ),
+                            ),
                           ),
+                  SizedBox(
+                    height: size.width * .02,
+                  ),
+                        Expanded(
+                          flex: 1,
+                          child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (BuildContext context) {
+                                    return const Expenditures();
+                                  }),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: (!currentMode)
+                                        ? kTabColorLight
+                                        : kTabColorDark,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.06),
+                                        spreadRadius: 2,
+                                        blurRadius: 2,
+                                      )
+                                    ]),
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: (!currentMode)
+                                          ? Image.asset('assets/4L.png')
+                                          : Image.asset('assets/4D.png'),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(top: 25, left: 25),
+                                      child: Text(
+                                        'Expenditures',
+                                        style: TextStyle(
+                                          color: (!currentMode)
+                                              ? const Color(0xff4D4D4D)
+                                              : Colors.white,
+                                          fontSize: 20,
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                         ),
+                        ],
                       ),
                     ),
                   ),

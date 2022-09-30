@@ -562,6 +562,106 @@ class ReportStudentTile extends ConsumerWidget {
   }
 }
 
+
+class ExpenditureTile extends ConsumerWidget {
+  final String Detail;
+  final int Amount;
+  final DateTime Date;
+
+  const ExpenditureTile({Key? key, required this.Detail, required this.Amount, required this.Date}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Consumer(builder: (context, state, child) {
+      final modeProvider = ref.watch(themeModeProvider);
+      // ignore: unused_local_variable
+      final currentMode = modeProvider.currentMode;
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
+        child: Container(
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: (!currentMode) ? Colors.white : const Color(0xff202020),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 4,
+                  offset: const Offset(0, 0),
+                )
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      '1',
+                      style: TextStyle(
+                          color: (!currentMode)
+                              ? kTextMainColorLight
+                              : kTextMainColorDark,
+                          fontSize: 10),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 7,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 20),
+                      Text(
+                        Detail,
+                        style: TextStyle(
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
+                            fontSize: 10),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      Text(
+                        Amount.toString(),
+                        style: TextStyle(
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
+                            fontSize: 10),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 16),
+                      Text(
+                        Date.toString(),
+                        style: TextStyle(
+                            color: (!currentMode)
+                                ? kTextMainColorLight
+                                : kTextMainColorDark,
+                            fontSize: 10),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            )),
+      );
+    });
+  }
+}
+
 class FeePaymentTile extends ConsumerWidget {
   // final StudentRecord student;
   final int feesPaid;

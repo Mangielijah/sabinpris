@@ -6,6 +6,10 @@ enum LanguageSector { english, french }
 
 enum Gender { male, female }
 
+enum Expenditures{ Salaries, Repairs_and_Maintenance, CNPs_and_Taxes, Public_Relations, Nursery_Feeding, Dues_and_Registration, Other}
+
+enum ExpenditureReportTypes{ General_Report, Salary_Report, Others}
+
 enum StudentClass {
   preNusery,
   nuseryOne,
