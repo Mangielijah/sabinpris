@@ -42,8 +42,8 @@ class _LogInState extends ConsumerState<LogIn> {
               ),
               Center(
                 child: Container(
-                  height: size.height * .54,
-                  width: size.height * .48,
+                  height: size.height * .65,
+                  width: size.height * .5,
                   decoration: BoxDecoration(
                       color: (!currentMode)
                           ? Colors.white
@@ -64,7 +64,7 @@ class _LogInState extends ConsumerState<LogIn> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 40),
+                            padding: const EdgeInsets.only(top: 30),
                             child: Center(
                               child: Container(
                                 height: 90,
@@ -166,7 +166,6 @@ class _LogInState extends ConsumerState<LogIn> {
                                         }),
                                       );
                                     } else {
-                                      //TODO:Show wrong password
                                       debugPrint("Incorrect Password");
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
@@ -192,7 +191,6 @@ class _LogInState extends ConsumerState<LogIn> {
                                       )));
                                     }
                                   } else {
-                                    //TODO:Show email not found error
                                     debugPrint("Incorrect Email");
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -218,7 +216,6 @@ class _LogInState extends ConsumerState<LogIn> {
                                     )));
                                   }
                                 } else {
-                                  //TODO:Show an error here
                                   debugPrint("No Email and Password Entered");
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
