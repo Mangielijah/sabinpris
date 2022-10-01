@@ -1,18 +1,13 @@
-import 'dart:io';
-
 import 'package:better_open_file/better_open_file.dart';
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:sabinpris/domain/entity/expenditure.dart';
 import 'package:sabinpris/domain/entity/statistics.dart';
-import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
-import 'package:sabinpris/presentation/pdf_util.dart';
 import 'package:sabinpris/presentation/providers.dart';
-import 'package:sabinpris/presentation/util.dart';
 
 class ExpenditureReport extends ConsumerStatefulWidget {
   const ExpenditureReport({Key? key}) : super(key: key);
@@ -33,9 +28,9 @@ class _ExpenditureReportState extends ConsumerState<ExpenditureReport> {
     super.initState();
     reportTypeNotifier = ValueNotifier(ExpenditureReportTypes.General_Report);
 
-    _dropdownReportTypes =
-        buildDropdownItems<ExpenditureReportTypes>(ExpenditureReportTypes.values);
-    
+    _dropdownReportTypes = buildDropdownItems<ExpenditureReportTypes>(
+        ExpenditureReportTypes.values);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (initLoad) {
         setState(() {
@@ -45,7 +40,7 @@ class _ExpenditureReportState extends ConsumerState<ExpenditureReport> {
     });
   }
 
-List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
+  List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
     List<DropdownMenuItem<T?>> items = [];
     for (var item in itemList) {
       if (item is ExpenditureReportTypes) {
@@ -61,11 +56,17 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
     }
     return items;
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final modeProvider = ref.watch(themeModeProvider);
     final currentMode = modeProvider.currentMode;
+
+    final expStatsNotifier = ref.watch(expStatsProvider);
+    final expStatistics = expStatsNotifier.expenditureStats;
+
+    final totalStats = expStatsNotifier.totalStats;
 
     return Scaffold(
       backgroundColor:
@@ -140,9 +141,8 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                             itemTextstyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 12,
-                              color: (!currentMode)
-                                  ? Colors.black
-                                  : Colors.white,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
                               fontWeight: FontWeight.w400,
                             ),
                             hint: Text(
@@ -159,36 +159,31 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                             boxTextstyle: TextStyle(
                               fontFamily: 'Montserrat',
                               fontSize: 12,
-                              color: (!currentMode)
-                                  ? Colors.black
-                                  : Colors.white,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
                               fontWeight: FontWeight.w400,
                             ),
                             boxDecoration: BoxDecoration(
                                 color: (!currentMode)
                                     ? Colors.white
                                     : Colors.black,
-                                borderRadius:
-                                    BorderRadius.circular(6),
-                                border:
-                                    Border.all(color: kGreenColor)),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: kGreenColor)),
                             boxPadding: const EdgeInsets.symmetric(
                                 horizontal: 14.0, vertical: 4),
                             icon: Icon(
                               Icons.keyboard_arrow_down_rounded,
-                              color: (!currentMode)
-                                  ? Colors.black
-                                  : Colors.white,
+                              color:
+                                  (!currentMode) ? Colors.black : Colors.white,
                               size: 25,
                             ),
                             boxHeight: 40,
-                            dropdownColor: (!currentMode)
-                                ? Colors.white
-                                : Colors.black,
+                            dropdownColor:
+                                (!currentMode) ? Colors.white : Colors.black,
                             items: _dropdownReportTypes,
                             onChanged: (value) {
-                              reportTypeNotifier.value =
-                                  value ?? ExpenditureReportTypes.General_Report;
+                              reportTypeNotifier.value = value ??
+                                  ExpenditureReportTypes.General_Report;
                             },
                           );
                         }),
@@ -202,10 +197,9 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                             color: kGreenColor,
                             title: 'Generate',
                             onTap: () {
-                              // ref.read(feeStatsProvider).search(
-                              //       languageNotifier.value,
-                              //       classesNotifier.value,
-                              //     );
+                              ref
+                                  .read(expStatsProvider)
+                                  .search(reportTypeNotifier.value);
                             },
                           ),
                         ),
@@ -215,9 +209,9 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                         InkWell(
                           onTap: () async {
                             try {
-                              // final file =
-                              //     await ref.read(feeStatsProvider).download();
-                                  ScaffoldMessenger.of(context)
+                              final file =
+                                  await ref.read(expStatsProvider).download();
+                              ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       backgroundColor: Colors.transparent,
                                       elevation: 0,
@@ -239,7 +233,7 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                                           ),
                                         ),
                                       )));
-                              // await OpenFile.open(file.path);
+                              await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
                               ScaffoldMessenger.of(context)
@@ -292,12 +286,12 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                                       ? Colors.black
                                       : Colors.white,
                                 ),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
                                   'Download',
                                   style: TextStyle(
                                     color: (!currentMode)
-                                        ? Color(0xff4D4D4D)
+                                        ? const Color(0xff4D4D4D)
                                         : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
@@ -310,7 +304,9 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Expanded(
                       child: Container(
                         width: double.maxFinite,
@@ -324,146 +320,161 @@ List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
                             ),
                             (!currentMode)
                                 ? BoxShadow(
-                                    color: kBackgroundColorDark.withOpacity(0.2),
+                                    color:
+                                        kBackgroundColorDark.withOpacity(0.2),
                                     spreadRadius: -2.0,
                                     blurRadius: 8.0,
                                   )
                                 : BoxShadow(
-                                    color: kBackgroundColorLight.withOpacity(0.2),
+                                    color:
+                                        kBackgroundColorLight.withOpacity(0.2),
                                     spreadRadius: -2.0,
                                     blurRadius: 8.0,
                                   )
                           ],
                         ),
                         child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 30,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Center(
-                                            child: Text(
-                                          '#',
+                          children: [
+                            SizedBox(
+                              height: 30,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Center(
+                                        child: Text(
+                                      '#',
+                                      style: TextStyle(
+                                          color: Colors.grey[400],
+                                          fontSize: 10),
+                                    )),
+                                  ),
+                                  Expanded(
+                                    flex: 7,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '|',
+                                          style: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 16),
+                                        ),
+                                        const SizedBox(width: 20),
+                                        Text(
+                                          'Detail',
                                           style: TextStyle(
                                               color: Colors.grey[400],
                                               fontSize: 10),
-                                        )),
-                                      ),
-                                      Expanded(
-                                        flex: 7,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '|',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 16),
-                                            ),
-                                            const SizedBox(width: 20),
-                                            Text(
-                                              'Detail',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 10),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '|',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 16),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Text(
-                                              'Amount',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 10),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 3,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              '|',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 16),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Text(
-                                              'Date',
-                                              style: TextStyle(
-                                                  color: Colors.grey[400],
-                                                  fontSize: 10),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                ExpenditureTile(Detail: 'Unknown', Amount: 00, Date: DateTime(2022, 10, 12),
-                                ),
-                              ],
+                                  Expanded(
+                                    flex: 3,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '|',
+                                          style: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 16),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Text(
+                                          'Amount',
+                                          style: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 10),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '|',
+                                          style: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 16),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Text(
+                                          'Date',
+                                          style: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 10),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: expStatistics.length,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  ExpenseStatistics stats =
+                                      expStatistics[index];
+                                  return ExpenditureTile(
+                                    index: index + 1,
+                                    Detail: stats.name,
+                                    Amount: NumberFormat().format(stats.amount),
+                                    Date: stats.date,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            flex: 11,
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 20),
-                                Text(
-                                  'Total',
-                                  style: TextStyle(
-                                      color: Colors.grey[400], fontSize: 10),
-                                )
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: [
-                                Text(
-                                  '|',
-                                  style: TextStyle(
-                                      color: Colors.grey[400], fontSize: 16),
-                                ),
-                                const SizedBox(width: 16),
-                                Text(
-                                  '0',
-                                  style: TextStyle(
-                                      color: (!currentMode)
-                                          ? Colors.black
-                                          : Colors.white,
-                                      fontSize: 10),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 30,
+                    //   child: Row(
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     children: [
+                    //       Expanded(
+                    //         flex: 11,
+                    //         child: Row(
+                    //           children: [
+                    //             const SizedBox(width: 20),
+                    //             Text(
+                    //               'Total',
+                    //               style: TextStyle(
+                    //                   color: Colors.grey[400], fontSize: 10),
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       Expanded(
+                    //         flex: 3,
+                    //         child: Row(
+                    //           children: [
+                    //             Text(
+                    //               '|',
+                    //               style: TextStyle(
+                    //                   color: Colors.grey[400], fontSize: 16),
+                    //             ),
+                    //             const SizedBox(width: 16),
+                    //             Text(
+                    //               NumberFormat().format(totalStats.amount),
+                    //               style: TextStyle(
+                    //                   color: (!currentMode)
+                    //                       ? Colors.black
+                    //                       : Colors.white,
+                    //                   fontSize: 10),
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

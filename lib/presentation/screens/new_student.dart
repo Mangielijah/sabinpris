@@ -144,7 +144,8 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                 height: size.height * .9,
                 width: size.height * .8,
                 decoration: BoxDecoration(
-                    color: (!currentMode) ? Colors.white : Color(0xff202020),
+                    color:
+                        (!currentMode) ? Colors.white : const Color(0xff202020),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -191,7 +192,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                 ),
                               ),
                             ),
-                            Align(
+                            const Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 '*',
@@ -233,7 +234,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                           ),
                                         ),
                                       ),
-                                      Align(
+                                      const Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
                                           '*',
@@ -393,7 +394,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                           ),
                                         ),
                                       ),
-                                      Align(
+                                      const Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
                                           '*',
@@ -495,7 +496,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                           ),
                                         ),
                                       ),
-                                      Align(
+                                      const Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
                                           '*',
@@ -595,7 +596,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                 ),
                               ),
                             ),
-                            Align(
+                            const Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 '*',
@@ -631,7 +632,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                                 ),
                               ),
                             ),
-                            Align(
+                            const Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 '*',
@@ -777,7 +778,7 @@ class _NewStudentState extends ConsumerState<NewStudent> {
                             } else {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                    duration: const Duration(seconds: 7),
+                                      duration: const Duration(seconds: 7),
                                       backgroundColor: Colors.transparent,
                                       elevation: 0,
                                       content: Container(
@@ -823,49 +824,15 @@ class _NewStudentState extends ConsumerState<NewStudent> {
       _parentNameController.text = '';
       _phoneNumberController.text = '';
       if (student.recordId != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            content: Container(
-              decoration: BoxDecoration(
-                  color: kBlueColor, borderRadius: BorderRadius.circular(6)),
-              child: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  'Successful: Student has been registered',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            )));
-        debugPrint(student.recordId!.toString());
+        showPopUp(context, PopUpType.success,
+            'Successful: Student has been registered');
+
         setState(() {});
       }
     } catch (e) {
       //TODO:show error pop up
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          content: Container(
-            decoration: BoxDecoration(
-                color: Colors.red[400], borderRadius: BorderRadius.circular(6)),
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                'Error: There was an error registering this student. Try again and ensure to fill all inputs',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 14,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          )));
+      showPopUp(context, PopUpType.error,
+          'Error: There was an error registering this student. Try again and ensure to fill all inputs');
       debugPrint(e.toString());
     }
   }

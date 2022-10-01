@@ -1,10 +1,13 @@
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sabinpris/domain/entity/student_record.dart';
+import 'package:sabinpris/credentials.dart';
+import 'package:sabinpris/domain/entity/expenditure.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
 import 'package:sabinpris/presentation/providers.dart';
+import 'package:sabinpris/service_locator.dart';
+import 'package:sabinpris/domain/repositories/expenditure_repository.dart';
 
 class AddExpenditure extends ConsumerStatefulWidget {
   const AddExpenditure({Key? key}) : super(key: key);
@@ -17,18 +20,18 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
   final TextEditingController _commentController = TextEditingController();
   final TextEditingController _feesPaidController = TextEditingController();
 
-  List<DropdownMenuItem<Expenditures?>> _dropdownExpenditures = [];
+  List<DropdownMenuItem<ExpenditureType?>> _dropdownExpenditures = [];
 
-  late ValueNotifier<Expenditures> expenditureNotifier;
+  late ValueNotifier<ExpenditureType> expenditureNotifier;
   bool initLoad = true;
 
   @override
   void initState() {
     super.initState();
-    expenditureNotifier = ValueNotifier(Expenditures.Salaries);
+    expenditureNotifier = ValueNotifier(ExpenditureType.Salaries);
 
     _dropdownExpenditures =
-        buildDropdownItems<Expenditures>(Expenditures.values);
+        buildDropdownItems<ExpenditureType>(ExpenditureType.values);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (initLoad) {
         setState(() {
@@ -41,7 +44,7 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
   List<DropdownMenuItem<T?>> buildDropdownItems<T>(List<T> itemList) {
     List<DropdownMenuItem<T?>> items = [];
     for (var item in itemList) {
-      if (item is Expenditures) {
+      if (item is ExpenditureType) {
         items.add(
           DropdownMenuItem(
             value: item,
@@ -76,7 +79,8 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
                 height: size.height * .9,
                 width: size.height * .8,
                 decoration: BoxDecoration(
-                    color: (!currentMode) ? Colors.white : Color(0xff202020),
+                    color:
+                        (!currentMode) ? Colors.white : const Color(0xff202020),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
@@ -92,11 +96,11 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
                     child: Column(
                       children: [
                         Row(
-                          children: [
-                            const Back(),
+                          children: const [
+                            Back(),
                             Expanded(
                               child: Center(
-                                child: const Text(
+                                child: Text(
                                   'Add an Expenditure',
                                   style: TextStyle(
                                     color: kBlueColor,
@@ -126,7 +130,7 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
                                 ),
                               ),
                             ),
-                            Align(
+                            const Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 '*',
@@ -196,7 +200,7 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
                                 items: _dropdownExpenditures,
                                 onChanged: (g) {
                                   expenditureNotifier.value =
-                                      g ?? Expenditures.Salaries;
+                                      g ?? ExpenditureType.Salaries;
                                 },
                               );
                             }),
@@ -265,8 +269,8 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: kBlueColor, width: 1),
+                                borderSide: const BorderSide(
+                                    color: kBlueColor, width: 1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                             ),
@@ -322,10 +326,27 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
                         ),
                         const SizedBox(height: 20),
                         LongButton(
-                            size: size,
-                            color: kBlueColor,
-                            title: 'Add',
-                            onTap: () {}),
+                          size: size,
+                          color: kBlueColor,
+                          title: 'Add',
+                          onTap: () async {
+                            debugPrint('tapped');
+                            if (_feesPaidController.text != '') {
+                              final fees = int.parse(_feesPaidController.text);
+                              final exp = Expenditure(
+                                academicYear: SCHOOL_YEAR,
+                                comment: _commentController.text,
+                                expenseType: expenditureNotifier.value,
+                                time: DateTime.now(),
+                                amount: fees,
+                              );
+                              await addNewExpenditure(exp);
+                            } else {
+                              showPopUp(context, PopUpType.error,
+                                  'Error: There was an error registering this expenditure. Try again and ensure to fill all inputs');
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -336,5 +357,24 @@ class _AddExpenditureState extends ConsumerState<AddExpenditure> {
         ),
       );
     });
+  }
+
+  Future<void> addNewExpenditure(Expenditure expenditure) async {
+    try {
+      final expense = await serviceLocator<ExpenditureRepository>()
+          .addExpenditure(expenditure);
+      _commentController.text = '';
+      _feesPaidController.text = '';
+      if (expense.id != null) {
+        showPopUp(context, PopUpType.success,
+            'Successful: Expenditure has been registered');
+
+        setState(() {});
+      }
+    } catch (e) {
+      //TODO:show error pop up
+      showPopUp(context, PopUpType.error,
+          'Error: There was an error registering this expenditure. Try again and ensure to fill all inputs');
+    }
   }
 }

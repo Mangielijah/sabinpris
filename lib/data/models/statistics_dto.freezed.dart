@@ -502,3 +502,181 @@ abstract class _FeeCollectionStatisticsDto extends FeeCollectionStatisticsDto {
   _$$_FeeCollectionStatisticsDtoCopyWith<_$_FeeCollectionStatisticsDto>
       get copyWith => throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$ExpenseStatisticsDto {
+  String get name => throw _privateConstructorUsedError;
+  String get comment => throw _privateConstructorUsedError;
+  int get amount => throw _privateConstructorUsedError;
+  int get date => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ExpenseStatisticsDtoCopyWith<ExpenseStatisticsDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ExpenseStatisticsDtoCopyWith<$Res> {
+  factory $ExpenseStatisticsDtoCopyWith(ExpenseStatisticsDto value,
+          $Res Function(ExpenseStatisticsDto) then) =
+      _$ExpenseStatisticsDtoCopyWithImpl<$Res>;
+  $Res call({String name, String comment, int amount, int date});
+}
+
+/// @nodoc
+class _$ExpenseStatisticsDtoCopyWithImpl<$Res>
+    implements $ExpenseStatisticsDtoCopyWith<$Res> {
+  _$ExpenseStatisticsDtoCopyWithImpl(this._value, this._then);
+
+  final ExpenseStatisticsDto _value;
+  // ignore: unused_field
+  final $Res Function(ExpenseStatisticsDto) _then;
+
+  @override
+  $Res call({
+    Object? name = freezed,
+    Object? comment = freezed,
+    Object? amount = freezed,
+    Object? date = freezed,
+  }) {
+    return _then(_value.copyWith(
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      comment: comment == freezed
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String,
+      amount: amount == freezed
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as int,
+      date: date == freezed
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$$_ExpenseStatisticsDtoCopyWith<$Res>
+    implements $ExpenseStatisticsDtoCopyWith<$Res> {
+  factory _$$_ExpenseStatisticsDtoCopyWith(_$_ExpenseStatisticsDto value,
+          $Res Function(_$_ExpenseStatisticsDto) then) =
+      __$$_ExpenseStatisticsDtoCopyWithImpl<$Res>;
+  @override
+  $Res call({String name, String comment, int amount, int date});
+}
+
+/// @nodoc
+class __$$_ExpenseStatisticsDtoCopyWithImpl<$Res>
+    extends _$ExpenseStatisticsDtoCopyWithImpl<$Res>
+    implements _$$_ExpenseStatisticsDtoCopyWith<$Res> {
+  __$$_ExpenseStatisticsDtoCopyWithImpl(_$_ExpenseStatisticsDto _value,
+      $Res Function(_$_ExpenseStatisticsDto) _then)
+      : super(_value, (v) => _then(v as _$_ExpenseStatisticsDto));
+
+  @override
+  _$_ExpenseStatisticsDto get _value => super._value as _$_ExpenseStatisticsDto;
+
+  @override
+  $Res call({
+    Object? name = freezed,
+    Object? comment = freezed,
+    Object? amount = freezed,
+    Object? date = freezed,
+  }) {
+    return _then(_$_ExpenseStatisticsDto(
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      comment: comment == freezed
+          ? _value.comment
+          : comment // ignore: cast_nullable_to_non_nullable
+              as String,
+      amount: amount == freezed
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as int,
+      date: date == freezed
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_ExpenseStatisticsDto extends _ExpenseStatisticsDto {
+  const _$_ExpenseStatisticsDto(
+      {required this.name,
+      required this.comment,
+      required this.amount,
+      required this.date})
+      : super._();
+
+  @override
+  final String name;
+  @override
+  final String comment;
+  @override
+  final int amount;
+  @override
+  final int date;
+
+  @override
+  String toString() {
+    return 'ExpenseStatisticsDto(name: $name, comment: $comment, amount: $amount, date: $date)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_ExpenseStatisticsDto &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.comment, comment) &&
+            const DeepCollectionEquality().equals(other.amount, amount) &&
+            const DeepCollectionEquality().equals(other.date, date));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(comment),
+      const DeepCollectionEquality().hash(amount),
+      const DeepCollectionEquality().hash(date));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_ExpenseStatisticsDtoCopyWith<_$_ExpenseStatisticsDto> get copyWith =>
+      __$$_ExpenseStatisticsDtoCopyWithImpl<_$_ExpenseStatisticsDto>(
+          this, _$identity);
+}
+
+abstract class _ExpenseStatisticsDto extends ExpenseStatisticsDto {
+  const factory _ExpenseStatisticsDto(
+      {required final String name,
+      required final String comment,
+      required final int amount,
+      required final int date}) = _$_ExpenseStatisticsDto;
+  const _ExpenseStatisticsDto._() : super._();
+
+  @override
+  String get name;
+  @override
+  String get comment;
+  @override
+  int get amount;
+  @override
+  int get date;
+  @override
+  @JsonKey(ignore: true)
+  _$$_ExpenseStatisticsDtoCopyWith<_$_ExpenseStatisticsDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}

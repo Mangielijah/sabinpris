@@ -28,3 +28,13 @@ class FeeCollectionStatistics with _$FeeCollectionStatistics {
     required int balance,
   }) = _FeeCollectionStatistics;
 }
+
+@freezed
+class ExpenseStatistics with _$ExpenseStatistics {
+  const factory ExpenseStatistics({
+    required String name,
+    required String comment,
+    required int amount,
+    required DateTime date,
+  }) = _ExpenseStatistics;
+}

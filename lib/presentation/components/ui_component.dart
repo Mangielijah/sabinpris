@@ -562,13 +562,19 @@ class ReportStudentTile extends ConsumerWidget {
   }
 }
 
-
 class ExpenditureTile extends ConsumerWidget {
   final String Detail;
-  final int Amount;
+  final String Amount;
   final DateTime Date;
+  final int index;
 
-  const ExpenditureTile({Key? key, required this.Detail, required this.Amount, required this.Date}) : super(key: key);
+  const ExpenditureTile(
+      {Key? key,
+      required this.index,
+      required this.Detail,
+      required this.Amount,
+      required this.Date})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -598,7 +604,7 @@ class ExpenditureTile extends ConsumerWidget {
                   flex: 1,
                   child: Center(
                     child: Text(
-                      '1',
+                      '$index',
                       style: TextStyle(
                           color: (!currentMode)
                               ? kTextMainColorLight
@@ -645,7 +651,7 @@ class ExpenditureTile extends ConsumerWidget {
                     children: [
                       const SizedBox(width: 16),
                       Text(
-                        Date.toString(),
+                        DateFormat.yMMMd().format(Date),
                         style: TextStyle(
                             color: (!currentMode)
                                 ? kTextMainColorLight
@@ -778,4 +784,29 @@ class FeePaymentTile extends ConsumerWidget {
       );
     });
   }
+}
+
+enum PopUpType { error, success }
+
+void showPopUp(BuildContext context, PopUpType type, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: Container(
+        decoration: BoxDecoration(
+            color: (type == PopUpType.error) ? Colors.red[400] : kBlueColor,
+            borderRadius: BorderRadius.circular(6)),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(
+            message,
+            style: const TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 14,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      )));
 }

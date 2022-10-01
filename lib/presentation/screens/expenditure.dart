@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
+import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/presentation/components/ui_component.dart';
 import 'package:sabinpris/presentation/constants.dart';
 import 'package:sabinpris/presentation/providers.dart';
 import 'package:sabinpris/presentation/screens/add_expenditure.dart';
-import 'package:sabinpris/presentation/screens/expendiruteReport.dart';
+import 'package:sabinpris/presentation/screens/expenditure_report.dart';
+import 'package:sabinpris/service_locator.dart';
+import 'package:sabinpris/domain/repositories/expenditure_repository.dart';
 
 class Expenditures extends ConsumerStatefulWidget {
   const Expenditures({Key? key}) : super(key: key);
@@ -15,6 +19,11 @@ class Expenditures extends ConsumerStatefulWidget {
 }
 
 class ExpendituresState extends ConsumerState<Expenditures> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -28,13 +37,13 @@ class ExpendituresState extends ConsumerState<Expenditures> {
         body: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 30, left: 20, right: 40),
+              padding: const EdgeInsets.only(top: 30, left: 20, right: 40),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Back(),
-                  SizedBox(width: 20),
+                  const Back(),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,15 +85,40 @@ class ExpendituresState extends ConsumerState<Expenditures> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    '1,504,250',
-                                    style: TextStyle(
-                                      color: kGreenColor,
-                                      fontSize: 30,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
+                                  StreamBuilder(
+                                      stream: serviceLocator<
+                                              ExpenditureRepository>()
+                                          .totalAmountSpentOnExpenditures(
+                                              SCHOOL_YEAR),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return Text(
+                                            NumberFormat()
+                                                .format(snapshot.data ?? 0),
+                                            style: const TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 30,
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        }
+                                        if (snapshot.hasError) {
+                                          return const Text(
+                                            'Error Loading',
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 30,
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        }
+                                        return const SpinKitPulse(
+                                          color: kBlueColor,
+                                          size: 50.0,
+                                        );
+                                      })
                                 ],
                               ),
                             ),
@@ -128,15 +162,39 @@ class ExpendituresState extends ConsumerState<Expenditures> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    '2,006,750',
-                                    style: TextStyle(
-                                      color: kGreenColor,
-                                      fontSize: 30,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
+                                  StreamBuilder(
+                                      stream: serviceLocator<
+                                              ExpenditureRepository>()
+                                          .totalAmountLeft(SCHOOL_YEAR),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return Text(
+                                            NumberFormat()
+                                                .format(snapshot.data ?? 0),
+                                            style: const TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 30,
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        }
+                                        if (snapshot.hasError) {
+                                          return const Text(
+                                            'Error Loading',
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 30,
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        }
+                                        return const SpinKitPulse(
+                                          color: kBlueColor,
+                                          size: 50.0,
+                                        );
+                                      })
                                 ],
                               ),
                             ),
@@ -150,26 +208,27 @@ class ExpendituresState extends ConsumerState<Expenditures> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.only(top: 10.0),
                 child: Row(
                   children: [
                     const SizedBox(width: 70),
                     Expanded(
                       flex: 1,
                       child: InkWell(
-                        onTap: (){
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return AddExpenditure();
-                                  }),
-                                );
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return const AddExpenditure();
+                            }),
+                          );
                         },
                         child: Container(
                           height: size.height * .7,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                              color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                              borderRadius: BorderRadius.circular(6),
+                              color: (!currentMode)
+                                  ? kTabColorLight
+                                  : kTabColorDark,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.06),
@@ -186,7 +245,8 @@ class ExpendituresState extends ConsumerState<Expenditures> {
                                     : Image.asset('assets/2D.png'),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 25, left: 25),
+                                padding:
+                                    const EdgeInsets.only(top: 25, left: 25),
                                 child: Text(
                                   'Add Expenditure',
                                   style: TextStyle(
@@ -208,19 +268,20 @@ class ExpendituresState extends ConsumerState<Expenditures> {
                     Expanded(
                       flex: 1,
                       child: InkWell(
-                        onTap: (){
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return ExpenditureReport();
-                                  }),
-                                );
-                                },
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return const ExpenditureReport();
+                            }),
+                          );
+                        },
                         child: Container(
                           height: size.height * .7,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                              color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                              borderRadius: BorderRadius.circular(6),
+                              color: (!currentMode)
+                                  ? kTabColorLight
+                                  : kTabColorDark,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.06),
@@ -237,7 +298,8 @@ class ExpendituresState extends ConsumerState<Expenditures> {
                                     : Image.asset('assets/2D.png'),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 25, left: 25),
+                                padding:
+                                    const EdgeInsets.only(top: 25, left: 25),
                                 child: Text(
                                   'Expenditure Report',
                                   style: TextStyle(
@@ -255,7 +317,7 @@ class ExpendituresState extends ConsumerState<Expenditures> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 40,
                     )
                   ],

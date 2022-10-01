@@ -46,7 +46,7 @@ class FeeStatistics extends ChangeNotifier {
       if (result.isNotEmpty) {
         totalStats = result.reduce(
           (aStats, bStats) => FeeCollectionStatistics(
-            name: 'Totat',
+            name: 'Total',
             reg: aStats.reg + bStats.reg,
             feeAmt: aStats.feeAmt + bStats.feeAmt,
             feesPaid: [...aStats.feesPaid, ...bStats.feesPaid],

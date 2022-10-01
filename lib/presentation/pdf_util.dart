@@ -10,9 +10,11 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 // import 'package:printing/printing.dart';
 import 'package:sabinpris/credentials.dart';
+import 'package:sabinpris/domain/entity/expenditure.dart';
 import 'package:sabinpris/domain/entity/statistics.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
+import 'package:sabinpris/presentation/screens/expenditure_report.dart';
 import 'package:sabinpris/presentation/util.dart';
 import 'package:sabinpris/service_locator.dart';
 
@@ -1222,6 +1224,305 @@ Future buildFeeCollectionSummary(List<FeeCollectionStatistics> feeStatistics,
   late String fileName;
   fileName =
       'class_${className.toLowerCase().replaceAll(' ', '')}_summary_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
+
+  final file = File("${output.path}/$fileName");
+  final res = await file.writeAsBytes(await pdf.save());
+  // ignore: unnecessary_null_comparison
+  if (res != null) {
+    return res;
+  } else {
+    throw Exception("FILE GENERATION FAILED");
+  }
+}
+
+//FEE COLLECTION SUMMARY
+Future buildGeneralExpenditureSummary(
+    List<ExpenseStatistics> expStatistics, ExpenditureReportTypes type) async {
+  final head = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        width: 25,
+        padding: const EdgeInsets.all(4),
+        foregroundDecoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: PdfColors.black),
+            left: BorderSide(color: PdfColors.black),
+            right: BorderSide.none,
+            bottom: BorderSide(color: PdfColors.black),
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'SN',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      Container(
+        width: 200,
+        padding: const EdgeInsets.all(4),
+        foregroundDecoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: PdfColors.black),
+            left: BorderSide(color: PdfColors.black),
+            right: BorderSide.none,
+            bottom: BorderSide(color: PdfColors.black),
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'Details',
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      Container(
+        width: 300,
+        padding: const EdgeInsets.all(4),
+        foregroundDecoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: PdfColors.black),
+            left: BorderSide(color: PdfColors.black),
+            right: BorderSide.none,
+            bottom: BorderSide(color: PdfColors.black),
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'COMMENTS',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      Container(
+        width: 85,
+        padding: const EdgeInsets.all(4),
+        foregroundDecoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: PdfColors.black),
+            left: BorderSide(color: PdfColors.black),
+            right: BorderSide.none,
+            bottom: BorderSide(color: PdfColors.black),
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'AMOUNT',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      Container(
+        width: 85,
+        padding: const EdgeInsets.all(4),
+        foregroundDecoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: PdfColors.black),
+            left: BorderSide(color: PdfColors.black),
+            right: BorderSide(color: PdfColors.black),
+            bottom: BorderSide(color: PdfColors.black),
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'DATE',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+  _buildRow(ExpenseStatistics statistics, int index) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 25,
+            padding: const EdgeInsets.all(4),
+            foregroundDecoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide.none,
+                left: BorderSide(color: PdfColors.black),
+                right: BorderSide.none,
+                bottom: BorderSide(color: PdfColors.black),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                '$index',
+                style: const TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 200,
+            padding: const EdgeInsets.all(4),
+            foregroundDecoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide.none,
+                left: BorderSide(color: PdfColors.black),
+                right: BorderSide.none,
+                bottom: BorderSide(color: PdfColors.black),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                statistics.name,
+                maxLines: 1,
+                style: const TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 300,
+            padding: const EdgeInsets.all(4),
+            foregroundDecoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide.none,
+                left: BorderSide(color: PdfColors.black),
+                right: BorderSide.none,
+                bottom: BorderSide(color: PdfColors.black),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                statistics.comment,
+                style: const TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 85,
+            padding: const EdgeInsets.all(4),
+            foregroundDecoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide.none,
+                left: BorderSide(color: PdfColors.black),
+                right: BorderSide.none,
+                bottom: BorderSide(color: PdfColors.black),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                NumberFormat().format(statistics.amount),
+                style: const TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 85,
+            padding: const EdgeInsets.all(4),
+            foregroundDecoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide.none,
+                left: BorderSide(color: PdfColors.black),
+                right: BorderSide(color: PdfColors.black),
+                bottom: BorderSide(color: PdfColors.black),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                DateFormat.yMMMd().format(statistics.date),
+                style: const TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+  int statCount = 0;
+  final body = expStatistics.map((statistic) {
+    statCount++;
+    return _buildRow(statistic, statCount);
+  }).toList();
+  String reportTitle = type.name;
+  if (type == ExpenditureReportTypes.General_Report) {
+    reportTitle = 'NURSERY & PRIMARY';
+  } else if (type == ExpenditureReportTypes.Salary_Report) {
+    reportTitle = 'SALARY';
+  } else if (type == ExpenditureReportTypes.Others) {
+    reportTitle = 'OTHER';
+  }
+  final finalWidget = Container(
+    width: double.infinity,
+    color: PdfColors.white,
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 50),
+          Text(
+            'SABINPRIS SCHOOL - MOTOWOH LIMBE',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'SUMMARY OF $reportTitle EXPENDITURES FOR THE ACADEMIC YEAR $SCHOOL_YEAR',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Expanded(
+              child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              head,
+              ...body,
+            ],
+          )),
+        ],
+      ),
+    ),
+  );
+  final pdf = Document();
+
+  pdf.addPage(
+    Page(
+      pageFormat: PdfPageFormat.a4,
+      orientation: PageOrientation.landscape,
+      margin: EdgeInsets.zero,
+      build: (Context context) {
+        return finalWidget; // Center
+      },
+    ),
+  );
+  final output = await getApplicationDocumentsDirectory();
+  late String fileName;
+  final fileTitle =
+      reportTitle.replaceAll(' ', '').replaceAll('&', '').toLowerCase();
+  fileName = 'general_${fileTitle}_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
 
   final file = File("${output.path}/$fileName");
   final res = await file.writeAsBytes(await pdf.save());

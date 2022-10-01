@@ -5,7 +5,7 @@ import 'package:sabinpris/domain/entity/statistics.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 
-@LazySingleton(as: StudentRecordRepository)
+@Singleton(as: StudentRecordRepository)
 class StudentRecordRepositoryImpl extends StudentRecordRepository {
   StudentRecordDataSource dataSource;
   StudentRecordRepositoryImpl(this.dataSource);

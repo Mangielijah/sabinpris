@@ -1,44 +1,21 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sabinpris/credentials.dart';
+import 'package:sabinpris/data/datasource/base_framework.dart';
 import 'package:sabinpris/data/models/statistics_dto.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
 import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/fee.dart';
 
 @Singleton()
-class StudentRecordDataSource {
-  StudentRecordDataSource() {
-    _initIsar();
-  }
-
-  Isar? _isar;
-  late IsarCollection<StudentRecordDto> _studentRecord;
-  late Stream<List<StudentRecordDto>> _recordStream;
-
-  Future<void> _initIsar() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-    _isar ??= await Isar.open(
-      [StudentRecordDtoSchema],
-      directory: appDocPath,
-    );
-    _studentRecord = _isar!.studentRecordDtos;
-    _recordStream = _studentRecord
-        .filter()
-        .academicYearEqualTo(SCHOOL_YEAR)
-        .watch(fireImmediately: true)
-        .asBroadcastStream();
-  }
+class StudentRecordDataSource extends BaseFramework {
+  StudentRecordDataSource();
 
   Future<StudentRecordDto> registerStudent(StudentRecordDto record) async {
     try {
-      return await _isar!.writeTxn<StudentRecordDto>(() async {
-        record.recordId = await _studentRecord.put(record);
+      return await isar!.writeTxn<StudentRecordDto>(() async {
+        record.recordId = await studentRecord.put(record);
         return record;
       });
     } catch (e) {
@@ -56,7 +33,7 @@ class StudentRecordDataSource {
     try {
       late QueryBuilder<StudentRecordDto, StudentRecordDto,
               QAfterFilterCondition> studentSearchQuery =
-          _studentRecord
+          studentRecord
               .filter()
               .academicYearEqualTo(year)
               .sectorEqualTo(sector)
@@ -77,7 +54,7 @@ class StudentRecordDataSource {
 
   Stream<int> totalNumberOfStudents(String year) async* {
     try {
-      yield* (_recordStream.map((r) => r.length));
+      yield* (recordStream.map((r) => r.length));
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -86,11 +63,11 @@ class StudentRecordDataSource {
 
   Future<StudentRecordDto> updateFees(int recordId, int fees) async {
     try {
-      return await _isar!.writeTxn<StudentRecordDto>(() async {
-        final record = await _studentRecord.get(recordId);
+      return await isar!.writeTxn<StudentRecordDto>(() async {
+        final record = await studentRecord.get(recordId);
         final cFees = [...record!.feesPaid];
         record.feesPaid = [...cFees, fees];
-        await _studentRecord.put(record); // perform update operations
+        await studentRecord.put(record); // perform update operations
         return record;
       });
     } catch (e) {
@@ -101,7 +78,7 @@ class StudentRecordDataSource {
 
   Stream<int> totalCollectedFees(String year) async* {
     try {
-      yield* (_recordStream.map(
+      yield* (recordStream.map(
         (recordList) => (recordList
             .map((record) => record.feesPaid.reduce((a, b) => a + b))
             .toList()
@@ -115,7 +92,7 @@ class StudentRecordDataSource {
 
   Stream<int> numStudentWithCompleteFees(String year) async* {
     try {
-      yield* _recordStream.map((recordList) {
+      yield* recordStream.map((recordList) {
         int count = 0;
 
         for (StudentRecordDto record in recordList) {
@@ -194,7 +171,7 @@ class StudentRecordDataSource {
 
   Stream<int> numStudentWithInCompleteFees(String year) async* {
     try {
-      yield* _recordStream.map((recordList) {
+      yield* recordStream.map((recordList) {
         int count = 0;
         for (StudentRecordDto record in recordList) {
           //pre nursery
@@ -276,7 +253,7 @@ class StudentRecordDataSource {
       //ENGLISH SECTION
 
       //NURSERY
-      final nurseryList = await _studentRecord
+      final nurseryList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(LanguageSector.english.index)
@@ -317,7 +294,7 @@ class StudentRecordDataSource {
         balance: (feesPaid - feesDue).abs(),
       ));
       //PRIMARY
-      final primaryList = await _studentRecord
+      final primaryList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(LanguageSector.english.index)
@@ -360,7 +337,7 @@ class StudentRecordDataSource {
 
       //FRENCH SECTION
       //NURSERY
-      final fnurseryList = await _studentRecord
+      final fnurseryList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(LanguageSector.french.index)
@@ -401,7 +378,7 @@ class StudentRecordDataSource {
       ));
 
       //PRIMARY
-      final fprimaryList = await _studentRecord
+      final fprimaryList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(LanguageSector.french.index)
@@ -473,7 +450,7 @@ class StudentRecordDataSource {
       int feesDuePn = 0;
       int balancePn = 0;
 
-      final nurseryList = await _studentRecord
+      final nurseryList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -514,7 +491,7 @@ class StudentRecordDataSource {
       int feesDueN1 = 0;
       int balanceN1 = 0;
 
-      final nurseryOneList = await _studentRecord
+      final nurseryOneList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -554,7 +531,7 @@ class StudentRecordDataSource {
       int feesDueN2 = 0;
       int balanceN2 = 0;
 
-      final nurserytwoList = await _studentRecord
+      final nurserytwoList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -594,7 +571,7 @@ class StudentRecordDataSource {
       int feesDueC1 = 0;
       int balanceC1 = 0;
 
-      final classOneList = await _studentRecord
+      final classOneList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -634,7 +611,7 @@ class StudentRecordDataSource {
       int feesDueC2 = 0;
       int balanceC2 = 0;
 
-      final classTwoList = await _studentRecord
+      final classTwoList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -675,7 +652,7 @@ class StudentRecordDataSource {
       int feesDueC3 = 0;
       int balanceC3 = 0;
 
-      final classThreeList = await _studentRecord
+      final classThreeList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -715,7 +692,7 @@ class StudentRecordDataSource {
       int feesDueC4 = 0;
       int balanceC4 = 0;
 
-      final classFourList = await _studentRecord
+      final classFourList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -756,7 +733,7 @@ class StudentRecordDataSource {
       int feesDueC5 = 0;
       int balanceC5 = 0;
 
-      final classFiveList = await _studentRecord
+      final classFiveList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -796,7 +773,7 @@ class StudentRecordDataSource {
       int feesDueC6 = 0;
       int balanceC6 = 0;
 
-      final classSixList = await _studentRecord
+      final classSixList = await studentRecord
           .filter()
           .academicYearEqualTo(year)
           .sectorEqualTo(sector)
@@ -897,7 +874,7 @@ class StudentRecordDataSource {
   Future<List<FeeCollectionStatisticsDto>> generateFeeCollectionStatistics(
       int sector, int sclass) async {
     try {
-      final classList = await _studentRecord
+      final classList = await studentRecord
           .filter()
           .academicYearEqualTo(SCHOOL_YEAR)
           .sectorEqualTo(sector)
@@ -922,7 +899,7 @@ class StudentRecordDataSource {
   }
 
   Stream<StudentRecordDto> watchRecord(int recordId) async* {
-    yield* _studentRecord
+    yield* studentRecord
         .filter()
         .academicYearEqualTo(SCHOOL_YEAR)
         .recordIdEqualTo(recordId)

@@ -52,3 +52,23 @@ class FeeCollectionStatisticsDto with _$FeeCollectionStatisticsDto {
     );
   }
 }
+
+@freezed
+class ExpenseStatisticsDto with _$ExpenseStatisticsDto {
+  const ExpenseStatisticsDto._();
+  const factory ExpenseStatisticsDto({
+    required String name,
+    required String comment,
+    required int amount,
+    required int date,
+  }) = _ExpenseStatisticsDto;
+
+  ExpenseStatistics toDomain() {
+    return ExpenseStatistics(
+      name: name,
+      comment: comment,
+      amount: amount,
+      date: DateTime.fromMillisecondsSinceEpoch(date),
+    );
+  }
+}
