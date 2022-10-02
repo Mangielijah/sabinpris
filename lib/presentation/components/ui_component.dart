@@ -651,7 +651,7 @@ class ExpenditureTile extends ConsumerWidget {
                     children: [
                       const SizedBox(width: 16),
                       Text(
-                        DateFormat.yMMMd().format(Date),
+                        DateFormat.yMMMd().add_jm().format(Date),
                         style: TextStyle(
                             color: (!currentMode)
                                 ? kTextMainColorLight

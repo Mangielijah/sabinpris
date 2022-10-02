@@ -1308,12 +1308,14 @@ Future buildGeneralExpenditureSummary(
       Container(
         width: 85,
         padding: const EdgeInsets.all(4),
-        foregroundDecoration: const BoxDecoration(
+        foregroundDecoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: PdfColors.black),
-            left: BorderSide(color: PdfColors.black),
-            right: BorderSide.none,
-            bottom: BorderSide(color: PdfColors.black),
+            top: const BorderSide(color: PdfColors.black),
+            left: const BorderSide(color: PdfColors.black),
+            right: (type != ExpenditureReportTypes.General_Report)
+                ? BorderSide.none
+                : const BorderSide(color: PdfColors.black),
+            bottom: const BorderSide(color: PdfColors.black),
           ),
         ),
         child: Center(
@@ -1326,27 +1328,29 @@ Future buildGeneralExpenditureSummary(
           ),
         ),
       ),
-      Container(
-        width: 85,
-        padding: const EdgeInsets.all(4),
-        foregroundDecoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(color: PdfColors.black),
-            left: BorderSide(color: PdfColors.black),
-            right: BorderSide(color: PdfColors.black),
-            bottom: BorderSide(color: PdfColors.black),
-          ),
-        ),
-        child: Center(
-          child: Text(
-            'DATE',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      (type != ExpenditureReportTypes.General_Report)
+          ? Container(
+              width: 120,
+              padding: const EdgeInsets.all(4),
+              foregroundDecoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: PdfColors.black),
+                  left: BorderSide(color: PdfColors.black),
+                  right: BorderSide(color: PdfColors.black),
+                  bottom: BorderSide(color: PdfColors.black),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'DATE',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
+          : Container(),
     ],
   );
   _buildRow(ExpenseStatistics statistics, int index) => Row(
@@ -1416,12 +1420,14 @@ Future buildGeneralExpenditureSummary(
           Container(
             width: 85,
             padding: const EdgeInsets.all(4),
-            foregroundDecoration: const BoxDecoration(
+            foregroundDecoration: BoxDecoration(
               border: Border(
                 top: BorderSide.none,
-                left: BorderSide(color: PdfColors.black),
-                right: BorderSide.none,
-                bottom: BorderSide(color: PdfColors.black),
+                left: const BorderSide(color: PdfColors.black),
+                right: (type != ExpenditureReportTypes.General_Report)
+                    ? BorderSide.none
+                    : const BorderSide(color: PdfColors.black),
+                bottom: const BorderSide(color: PdfColors.black),
               ),
             ),
             child: Center(
@@ -1433,26 +1439,28 @@ Future buildGeneralExpenditureSummary(
               ),
             ),
           ),
-          Container(
-            width: 85,
-            padding: const EdgeInsets.all(4),
-            foregroundDecoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide.none,
-                left: BorderSide(color: PdfColors.black),
-                right: BorderSide(color: PdfColors.black),
-                bottom: BorderSide(color: PdfColors.black),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                DateFormat.yMMMd().format(statistics.date),
-                style: const TextStyle(
-                  fontSize: 10,
-                ),
-              ),
-            ),
-          ),
+          (type != ExpenditureReportTypes.General_Report)
+              ? Container(
+                  width: 120,
+                  padding: const EdgeInsets.all(4),
+                  foregroundDecoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide.none,
+                      left: BorderSide(color: PdfColors.black),
+                      right: BorderSide(color: PdfColors.black),
+                      bottom: BorderSide(color: PdfColors.black),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      DateFormat.yMMMd().add_jm().format(statistics.date),
+                      style: const TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
         ],
       );
   int statCount = 0;
