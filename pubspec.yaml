@@ -33,6 +33,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   desktop_window: 0.4.0
   dropdown_below: ^1.0.3
+  file_picker: ^5.2.3
+  file_saver: ^0.1.1
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.0.0-dev.9

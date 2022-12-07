@@ -23,6 +23,7 @@ abstract class BaseFramework {
     isar ??= await Isar.open(
       [StudentRecordDtoSchema, ExpenditureDtoSchema],
       directory: appDocPath,
+      name: databaseName,
     );
     studentRecord = isar!.studentRecordDtos;
     expenditureRecord = isar!.expenditureDtos;

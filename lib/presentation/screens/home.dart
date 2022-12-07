@@ -8,6 +8,7 @@ import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/providers.dart';
 import 'package:sabinpris/presentation/screens/expenditure.dart';
+import 'package:sabinpris/presentation/screens/export_import_dialog.dart';
 import 'package:sabinpris/presentation/screens/login.dart';
 // import 'package:sabinpris/components/user_shared_preference.dart';
 import 'package:sabinpris/presentation/screens/new_student.dart';
@@ -45,8 +46,15 @@ class _HomeState extends ConsumerState<Home> {
             children: [
               const SizedBox(height: 40),
               InkWell(
-                onTap: () {
+                onTap: () async {
                   _scaffoldkey.currentState?.closeEndDrawer();
+                  await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext dialogContext) {
+                      return const ExportDialog();
+                    },
+                  );
                 },
                 child: Container(
                   width: size.width * .2,
@@ -71,7 +79,58 @@ class _HomeState extends ConsumerState<Home> {
                           width: 10,
                         ),
                         Text(
-                          'Backup & Restore',
+                          'Export Data',
+                          style: TextStyle(
+                            color: (!currentMode)
+                                ? const Color(0xff4D4D4D)
+                                : Colors.white,
+                            fontSize: 14,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              InkWell(
+                onTap: () async {
+                  _scaffoldkey.currentState?.closeEndDrawer();
+                  await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext dialogContext) {
+                      return const ImportDialog();
+                    },
+                  );
+                  setState(() {});
+                },
+                child: Container(
+                  width: size.width * .2,
+                  height: size.height * .09,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        )
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // SvgPicture.asset('assets/Settings.png'),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Import Data',
                           style: TextStyle(
                             color: (!currentMode)
                                 ? const Color(0xff4D4D4D)
@@ -706,7 +765,8 @@ class _HomeState extends ConsumerState<Home> {
                             child: InkWell(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (BuildContext context) {
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) {
                                     return const Report();
                                   }),
                                 );
@@ -733,8 +793,8 @@ class _HomeState extends ConsumerState<Home> {
                                           : Image.asset('assets/3D.png'),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(top: 25, left: 25),
+                                      padding: const EdgeInsets.only(
+                                          top: 25, left: 25),
                                       child: Text(
                                         'Financial Report',
                                         style: TextStyle(
@@ -752,15 +812,16 @@ class _HomeState extends ConsumerState<Home> {
                               ),
                             ),
                           ),
-                  SizedBox(
-                    height: size.width * .02,
-                  ),
-                        Expanded(
-                          flex: 1,
-                          child: InkWell(
+                          SizedBox(
+                            height: size.width * .02,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: InkWell(
                               onTap: () {
                                 Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (BuildContext context) {
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) {
                                     return const Expenditures();
                                   }),
                                 );
@@ -787,8 +848,8 @@ class _HomeState extends ConsumerState<Home> {
                                           : Image.asset('assets/4D.png'),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(top: 25, left: 25),
+                                      padding: const EdgeInsets.only(
+                                          top: 25, left: 25),
                                       child: Text(
                                         'Expenditures',
                                         style: TextStyle(
@@ -805,7 +866,7 @@ class _HomeState extends ConsumerState<Home> {
                                 ),
                               ),
                             ),
-                        ),
+                          ),
                         ],
                       ),
                     ),

@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/data/datasource/base_framework.dart';
 import 'package:sabinpris/data/models/expenditure_dto.dart';
@@ -13,6 +17,21 @@ import 'package:sabinpris/fee.dart';
 @Singleton()
 class ExpenditureDataSource extends BaseFramework {
   ExpenditureDataSource();
+
+  Future<File?> exportExpenditure() async {
+    try {
+      List<Map<String, dynamic>> json =
+          await isar!.expenditureDtos.buildQuery().exportJson();
+      String fileContent = jsonEncode(json);
+      Directory downloadDir = (await getDownloadsDirectory())!;
+      String filename =
+          'sabinpris-${DateTime.now().millisecondsSinceEpoch}.json';
+      File exportFile = File('$downloadDir/$filename');
+      return await exportFile.writeAsString(fileContent);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future<ExpenditureDto> addNewExpenditure(ExpenditureDto exp) async {
     try {
