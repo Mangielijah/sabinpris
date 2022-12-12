@@ -7,4 +7,6 @@ abstract class ExpenditureRepository {
   Stream<int> totalAmountLeft(String year);
   Future<List<ExpenseStatistics>> getExpenseStatistics(
       ExpenditureReportTypes reportType);
+  Future<String> exportExpenditures();
+  Future<String> importExpenditureRecord(List<Map<String, dynamic>> data);
 }

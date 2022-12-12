@@ -1,12 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:sabinpris/domain/repositories/expenditure_repository.dart';
 import 'package:sabinpris/presentation/constants.dart';
-import 'package:sabinpris/presentation/util.dart';
+import 'package:sabinpris/service_locator.dart';
+import 'package:sabinpris/domain/repositories/student_record_repository.dart';
+
+enum ExportImportType {
+  studentRecord,
+  expenditureRecord,
+}
 
 class ExportDialog extends StatefulWidget {
-  const ExportDialog({super.key});
+  const ExportDialog({super.key, required this.type});
+
+  final ExportImportType type;
 
   @override
   State<ExportDialog> createState() => _ExportDialogState();
@@ -32,12 +42,16 @@ class _ExportDialogState extends State<ExportDialog> {
               height: 50,
             ),
             FutureBuilder<String>(
-              future: exportDatabase(),
+              future: widget.type == ExportImportType.studentRecord
+                  ? serviceLocator<StudentRecordRepository>()
+                      .exportStudentRecord()
+                  : serviceLocator<ExpenditureRepository>()
+                      .exportExpenditures(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
                     children: [
-                      const Text('Database has been Exported'),
+                      const Text('Data has been Exported'),
                       const SizedBox(
                         height: 50,
                       ),
@@ -150,8 +164,9 @@ class _ExportDialogState extends State<ExportDialog> {
 }
 
 class ImportDialog extends StatefulWidget {
-  const ImportDialog({super.key});
+  const ImportDialog({super.key, required this.type});
 
+  final ExportImportType type;
   @override
   State<ImportDialog> createState() => _ImportDialogState();
 }
@@ -175,7 +190,16 @@ class _ImportDialogState extends State<ImportDialog> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Import Database'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Import Database'),
+                IconButton(
+                  onPressed: isImporting ? () {} : () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                )
+              ],
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -186,7 +210,7 @@ class _ImportDialogState extends State<ImportDialog> {
                     FilePickerResult? result =
                         await FilePicker.platform.pickFiles(
                       type: FileType.custom,
-                      allowedExtensions: ['isar'],
+                      allowedExtensions: ['json'],
                     );
 
                     if (result != null) {
@@ -248,7 +272,22 @@ class _ImportDialogState extends State<ImportDialog> {
                       ? () async {
                           isImporting == true;
                           setState(() {});
-                          final result = await importDatabase(file!);
+                          String fileContent = await file!.readAsString();
+                          List data = jsonDecode(fileContent);
+
+                          if (widget.type == ExportImportType.studentRecord) {
+                            final result =
+                                await serviceLocator<StudentRecordRepository>()
+                                    .importStudentRecord(data
+                                        .map((e) => e as Map<String, dynamic>)
+                                        .toList());
+                          } else {
+                            final result =
+                                await serviceLocator<ExpenditureRepository>()
+                                    .importExpenditureRecord(data
+                                        .map((e) => e as Map<String, dynamic>)
+                                        .toList());
+                          }
                           isImporting = false;
                           isCompleted = true;
                           setState(() {});

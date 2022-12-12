@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+
+import 'package:file_saver/file_saver.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:sabinpris/credentials.dart';
@@ -11,6 +14,38 @@ import 'package:sabinpris/fee.dart';
 @Singleton()
 class StudentRecordDataSource extends BaseFramework {
   StudentRecordDataSource();
+
+  Future<String> exportStudentRecord() async {
+    try {
+      List<Map<String, dynamic>> json =
+          await isar!.studentRecordDtos.buildQuery().exportJson();
+      Uint8List fileContent = Uint8List.fromList(jsonEncode(json).codeUnits);
+      String filename =
+          'sabinpris-studentRecord${DateTime.now().millisecondsSinceEpoch}';
+      return FileSaver.instance.saveFile(filename, fileContent, 'json');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> importStudentRecord(List<Map<String, dynamic>> data) async {
+    try {
+      await isar!.writeTxn(() async => isar!.studentRecordDtos.clear());
+      await isar!
+          .writeTxn(() async => isar!.studentRecordDtos.importJson(data));
+      if (data.isNotEmpty) {
+        if (await isar!.studentRecordDtos.count() > 0) {
+          return 'completed';
+        } else {
+          return 'failed';
+        }
+      } else {
+        return 'completed';
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future<StudentRecordDto> registerStudent(StudentRecordDto record) async {
     try {
@@ -79,10 +114,12 @@ class StudentRecordDataSource extends BaseFramework {
   Stream<int> totalCollectedFees(String year) async* {
     try {
       yield* (recordStream.map(
-        (recordList) => (recordList
-            .map((record) => record.feesPaid.reduce((a, b) => a + b))
-            .toList()
-            .reduce((c, d) => c + d)),
+        (recordList) => (recordList.isEmpty
+            ? 0
+            : recordList
+                .map((record) => record.feesPaid.reduce((a, b) => a + b))
+                .toList()
+                .reduce((c, d) => c + d)),
       ));
     } catch (e) {
       debugPrint(e.toString());

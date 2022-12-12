@@ -20,4 +20,6 @@ abstract class StudentRecordRepository {
   Future<List<FeeCollectionStatistics>> getFeeCollectionStatistics(
       LanguageSector sector, StudentClass sclass);
   Stream<StudentRecord> watchRecord(int recordId);
+  Future<String> exportStudentRecord();
+  Future<String> importStudentRecord(List<Map<String, dynamic>> data);
 }

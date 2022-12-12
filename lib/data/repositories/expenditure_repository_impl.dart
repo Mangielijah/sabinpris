@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/data/datasource/expenditure_datasource.dart';
@@ -61,6 +62,39 @@ class ExpenditureRepositoryImpl extends ExpenditureRepository {
       yield* totSpent;
     } catch (e) {
       throw Exception('Could Not Register Student');
+    }
+  }
+
+  @override
+  Future<String> exportExpenditures() async {
+    try {
+      final r = await expenditureDataSource.exportExpenditure();
+
+      if (r != null) {
+        return 'completed';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> importExpenditureRecord(
+      List<Map<String, dynamic>> data) async {
+    try {
+      final r = (await expenditureDataSource.importExpenditures(data));
+
+      if (r != null) {
+        return 'completed';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return 'failed';
     }
   }
 }

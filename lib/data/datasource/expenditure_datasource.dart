@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/data/datasource/base_framework.dart';
 import 'package:sabinpris/data/models/expenditure_dto.dart';
@@ -18,16 +16,32 @@ import 'package:sabinpris/fee.dart';
 class ExpenditureDataSource extends BaseFramework {
   ExpenditureDataSource();
 
-  Future<File?> exportExpenditure() async {
+  Future<String> exportExpenditure() async {
     try {
       List<Map<String, dynamic>> json =
           await isar!.expenditureDtos.buildQuery().exportJson();
-      String fileContent = jsonEncode(json);
-      Directory downloadDir = (await getDownloadsDirectory())!;
+      Uint8List fileContent = Uint8List.fromList(jsonEncode(json).codeUnits);
       String filename =
-          'sabinpris-${DateTime.now().millisecondsSinceEpoch}.json';
-      File exportFile = File('$downloadDir/$filename');
-      return await exportFile.writeAsString(fileContent);
+          'sabinpris-expenditure${DateTime.now().millisecondsSinceEpoch}';
+      return FileSaver.instance.saveFile(filename, fileContent, 'json');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> importExpenditures(List<Map<String, dynamic>> data) async {
+    try {
+      await isar!.expenditureDtos.clear();
+      await isar!.expenditureDtos.importJson(data);
+      if (data.isNotEmpty) {
+        if (await isar!.expenditureDtos.count() > 0) {
+          return 'completed';
+        } else {
+          return 'failed';
+        }
+      } else {
+        return 'completed';
+      }
     } catch (e) {
       rethrow;
     }

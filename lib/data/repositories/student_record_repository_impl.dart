@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sabinpris/data/datasource/std_record_datasource.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
@@ -140,6 +141,38 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
       yield* r.map((e) => e.toDomain());
     } catch (e) {
       throw Exception('Could Not Watch Record');
+    }
+  }
+
+  @override
+  Future<String> exportStudentRecord() async {
+    try {
+      final r = (await dataSource.exportStudentRecord());
+
+      if (r != null) {
+        return 'completed';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return 'failed';
+    }
+  }
+
+  @override
+  Future<String> importStudentRecord(List<Map<String, dynamic>> data) async {
+    try {
+      final r = (await dataSource.importStudentRecord(data));
+
+      if (r != null) {
+        return 'completed';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return 'failed';
     }
   }
 }

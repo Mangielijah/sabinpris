@@ -52,7 +52,9 @@ class _HomeState extends ConsumerState<Home> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext dialogContext) {
-                      return const ExportDialog();
+                      return const ExportDialog(
+                        type: ExportImportType.studentRecord,
+                      );
                     },
                   );
                 },
@@ -79,12 +81,12 @@ class _HomeState extends ConsumerState<Home> {
                           width: 10,
                         ),
                         Text(
-                          'Export Data',
+                          'Export Student Record',
                           style: TextStyle(
                             color: (!currentMode)
                                 ? const Color(0xff4D4D4D)
                                 : Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                             fontFamily: 'Montserrat',
                             fontWeight: FontWeight.w600,
                           ),
@@ -102,7 +104,61 @@ class _HomeState extends ConsumerState<Home> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext dialogContext) {
-                      return const ImportDialog();
+                      return const ExportDialog(
+                        type: ExportImportType.expenditureRecord,
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  width: size.width * .2,
+                  height: size.height * .09,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        )
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // SvgPicture.asset('assets/Settings.png'),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Export Expenditure Record',
+                          style: TextStyle(
+                            color: (!currentMode)
+                                ? const Color(0xff4D4D4D)
+                                : Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              InkWell(
+                onTap: () async {
+                  _scaffoldkey.currentState?.closeEndDrawer();
+                  await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext dialogContext) {
+                      return const ImportDialog(
+                        type: ExportImportType.studentRecord,
+                      );
                     },
                   );
                   setState(() {});
@@ -130,7 +186,60 @@ class _HomeState extends ConsumerState<Home> {
                           width: 10,
                         ),
                         Text(
-                          'Import Data',
+                          'Import Student Record',
+                          style: TextStyle(
+                            color: (!currentMode)
+                                ? const Color(0xff4D4D4D)
+                                : Colors.white,
+                            fontSize: 14,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              InkWell(
+                onTap: () async {
+                  _scaffoldkey.currentState?.closeEndDrawer();
+                  await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext dialogContext) {
+                      return const ImportDialog(
+                        type: ExportImportType.expenditureRecord,
+                      );
+                    },
+                  );
+                  setState(() {});
+                },
+                child: Container(
+                  width: size.width * .2,
+                  height: size.height * .09,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: (!currentMode) ? kTabColorLight : kTabColorDark,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                        )
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // SvgPicture.asset('assets/Settings.png'),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Import Expenditures',
                           style: TextStyle(
                             color: (!currentMode)
                                 ? const Color(0xff4D4D4D)
