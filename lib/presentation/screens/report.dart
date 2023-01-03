@@ -208,12 +208,12 @@ class _ReportState extends ConsumerState<Report> {
                                       ? Colors.black
                                       : Colors.white,
                                 ),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
                                   'General Summary',
                                   style: TextStyle(
                                     color: (!currentMode)
-                                        ? Color(0xff4D4D4D)
+                                        ? const Color(0xff4D4D4D)
                                         : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
@@ -304,12 +304,12 @@ class _ReportState extends ConsumerState<Report> {
                                       ? Colors.black
                                       : Colors.white,
                                 ),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
                                   'English section summary',
                                   style: TextStyle(
                                     color: (!currentMode)
-                                        ? Color(0xff4D4D4D)
+                                        ? const Color(0xff4D4D4D)
                                         : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
@@ -325,7 +325,7 @@ class _ReportState extends ConsumerState<Report> {
                             try {
                               final File file = await buildSectionSummary(
                                   LanguageSector.french);
-                                  ScaffoldMessenger.of(context)
+                              ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       backgroundColor: Colors.transparent,
                                       elevation: 0,
@@ -400,12 +400,12 @@ class _ReportState extends ConsumerState<Report> {
                                       ? Colors.black
                                       : Colors.white,
                                 ),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
                                   'French section summary',
                                   style: TextStyle(
                                     color: (!currentMode)
-                                        ? Color(0xff4D4D4D)
+                                        ? const Color(0xff4D4D4D)
                                         : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
@@ -615,7 +615,7 @@ class _ReportState extends ConsumerState<Report> {
                             try {
                               final file =
                                   await ref.read(feeStatsProvider).download();
-                                  ScaffoldMessenger.of(context)
+                              ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       backgroundColor: Colors.transparent,
                                       elevation: 0,
@@ -690,12 +690,12 @@ class _ReportState extends ConsumerState<Report> {
                                       ? Colors.black
                                       : Colors.white,
                                 ),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
                                   'Download',
                                   style: TextStyle(
                                     color: (!currentMode)
-                                        ? Color(0xff4D4D4D)
+                                        ? const Color(0xff4D4D4D)
                                         : Colors.white,
                                     fontSize: 10,
                                     fontFamily: 'Montserrat',
