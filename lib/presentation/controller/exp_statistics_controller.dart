@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sabinpris/domain/entity/expenditure.dart';
@@ -6,6 +6,7 @@ import 'package:sabinpris/domain/entity/statistics.dart';
 import 'package:sabinpris/domain/repositories/expenditure_repository.dart';
 import 'package:sabinpris/presentation/pdf_util.dart';
 import 'package:sabinpris/service_locator.dart';
+import 'package:cross_file/cross_file.dart';
 
 class ExpStatistics extends ChangeNotifier {
   ExpStatistics() {
@@ -29,7 +30,7 @@ class ExpStatistics extends ChangeNotifier {
     _search();
   }
 
-  Future<File> download() async {
+  Future<XFile> download() async {
     // if (_reportType == ExpenditureReportTypes.General_Report) {
     //   return await buildGeneralExpenditureSummary(
     //     expenditureStats,
