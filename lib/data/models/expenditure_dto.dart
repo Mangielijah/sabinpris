@@ -1,4 +1,4 @@
-import 'package:isar/isar.dart';
+// import 'package:isar/isar.dart';
 import 'package:sabinpris/domain/entity/expenditure.dart';
 import 'package:hive/hive.dart';
 
@@ -7,7 +7,7 @@ part 'expenditure_dto.g.dart';
 @HiveType(typeId: 100)
 class ExpenditureDto {
   @HiveField(10)
-  Id? id;
+  int? id;
 
   @HiveField(11)
   late String academicYear;

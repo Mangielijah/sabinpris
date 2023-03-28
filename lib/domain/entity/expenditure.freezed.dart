@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'expenditure.dart';
 
@@ -32,7 +32,8 @@ mixin _$Expenditure {
 abstract class $ExpenditureCopyWith<$Res> {
   factory $ExpenditureCopyWith(
           Expenditure value, $Res Function(Expenditure) then) =
-      _$ExpenditureCopyWithImpl<$Res>;
+      _$ExpenditureCopyWithImpl<$Res, Expenditure>;
+  @useResult
   $Res call(
       {int? id,
       String academicYear,
@@ -43,48 +44,51 @@ abstract class $ExpenditureCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ExpenditureCopyWithImpl<$Res> implements $ExpenditureCopyWith<$Res> {
+class _$ExpenditureCopyWithImpl<$Res, $Val extends Expenditure>
+    implements $ExpenditureCopyWith<$Res> {
   _$ExpenditureCopyWithImpl(this._value, this._then);
 
-  final Expenditure _value;
   // ignore: unused_field
-  final $Res Function(Expenditure) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
-    Object? academicYear = freezed,
-    Object? expenseType = freezed,
-    Object? amount = freezed,
-    Object? comment = freezed,
-    Object? time = freezed,
+    Object? academicYear = null,
+    Object? expenseType = null,
+    Object? amount = null,
+    Object? comment = null,
+    Object? time = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      academicYear: academicYear == freezed
+      academicYear: null == academicYear
           ? _value.academicYear
           : academicYear // ignore: cast_nullable_to_non_nullable
               as String,
-      expenseType: expenseType == freezed
+      expenseType: null == expenseType
           ? _value.expenseType
           : expenseType // ignore: cast_nullable_to_non_nullable
               as ExpenditureType,
-      amount: amount == freezed
+      amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      comment: comment == freezed
+      comment: null == comment
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      time: time == freezed
+      time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
-    ));
+    ) as $Val);
   }
 }
 
@@ -95,6 +99,7 @@ abstract class _$$_ExpenditureCopyWith<$Res>
           _$_Expenditure value, $Res Function(_$_Expenditure) then) =
       __$$_ExpenditureCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {int? id,
       String academicYear,
@@ -105,46 +110,45 @@ abstract class _$$_ExpenditureCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ExpenditureCopyWithImpl<$Res> extends _$ExpenditureCopyWithImpl<$Res>
+class __$$_ExpenditureCopyWithImpl<$Res>
+    extends _$ExpenditureCopyWithImpl<$Res, _$_Expenditure>
     implements _$$_ExpenditureCopyWith<$Res> {
   __$$_ExpenditureCopyWithImpl(
       _$_Expenditure _value, $Res Function(_$_Expenditure) _then)
-      : super(_value, (v) => _then(v as _$_Expenditure));
+      : super(_value, _then);
 
-  @override
-  _$_Expenditure get _value => super._value as _$_Expenditure;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
-    Object? academicYear = freezed,
-    Object? expenseType = freezed,
-    Object? amount = freezed,
-    Object? comment = freezed,
-    Object? time = freezed,
+    Object? academicYear = null,
+    Object? expenseType = null,
+    Object? amount = null,
+    Object? comment = null,
+    Object? time = null,
   }) {
     return _then(_$_Expenditure(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      academicYear: academicYear == freezed
+      academicYear: null == academicYear
           ? _value.academicYear
           : academicYear // ignore: cast_nullable_to_non_nullable
               as String,
-      expenseType: expenseType == freezed
+      expenseType: null == expenseType
           ? _value.expenseType
           : expenseType // ignore: cast_nullable_to_non_nullable
               as ExpenditureType,
-      amount: amount == freezed
+      amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      comment: comment == freezed
+      comment: null == comment
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      time: time == freezed
+      time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
@@ -186,28 +190,23 @@ class _$_Expenditure implements _Expenditure {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Expenditure &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality()
-                .equals(other.academicYear, academicYear) &&
-            const DeepCollectionEquality()
-                .equals(other.expenseType, expenseType) &&
-            const DeepCollectionEquality().equals(other.amount, amount) &&
-            const DeepCollectionEquality().equals(other.comment, comment) &&
-            const DeepCollectionEquality().equals(other.time, time));
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.academicYear, academicYear) ||
+                other.academicYear == academicYear) &&
+            (identical(other.expenseType, expenseType) ||
+                other.expenseType == expenseType) &&
+            (identical(other.amount, amount) || other.amount == amount) &&
+            (identical(other.comment, comment) || other.comment == comment) &&
+            (identical(other.time, time) || other.time == time));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(academicYear),
-      const DeepCollectionEquality().hash(expenseType),
-      const DeepCollectionEquality().hash(amount),
-      const DeepCollectionEquality().hash(comment),
-      const DeepCollectionEquality().hash(time));
+      runtimeType, id, academicYear, expenseType, amount, comment, time);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ExpenditureCopyWith<_$_Expenditure> get copyWith =>
       __$$_ExpenditureCopyWithImpl<_$_Expenditure>(this, _$identity);
 }

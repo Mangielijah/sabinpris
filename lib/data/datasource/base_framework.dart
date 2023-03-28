@@ -1,6 +1,6 @@
 // import 'dart:io';
 
-import 'package:isar/isar.dart';
+// import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sabinpris/credentials.dart';
@@ -24,7 +24,7 @@ class BaseFramework {
   // static BaseFramework get instance =>
   //     _instance == null ? BaseFramework() : _instance!;
 
-  Isar? isar;
+  // Isar? isar;
 
   List<StudentRecordDto> get studentRecord =>
       Hive.box<StudentRecordDto>(studentRecordBoxName).values.toList();
@@ -105,7 +105,7 @@ extension BoxExtensions on Box {
       //     put(key, obj);
       //   }
       // });
-    } on Exception catch (e) {
+    } on Exception {
       rethrow;
     }
   }
@@ -141,7 +141,7 @@ extension BoxExtensions2 on Box {
       //     put(key, obj);
       //   }
       // });
-    } on Exception catch (e) {
+    } on Exception {
       rethrow;
     }
   }

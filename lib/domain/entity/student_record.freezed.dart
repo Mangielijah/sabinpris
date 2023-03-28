@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'student_record.dart';
 
@@ -36,7 +36,8 @@ mixin _$StudentRecord {
 abstract class $StudentRecordCopyWith<$Res> {
   factory $StudentRecordCopyWith(
           StudentRecord value, $Res Function(StudentRecord) then) =
-      _$StudentRecordCopyWithImpl<$Res>;
+      _$StudentRecordCopyWithImpl<$Res, StudentRecord>;
+  @useResult
   $Res call(
       {int? recordId,
       String academicYear,
@@ -51,69 +52,71 @@ abstract class $StudentRecordCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$StudentRecordCopyWithImpl<$Res>
+class _$StudentRecordCopyWithImpl<$Res, $Val extends StudentRecord>
     implements $StudentRecordCopyWith<$Res> {
   _$StudentRecordCopyWithImpl(this._value, this._then);
 
-  final StudentRecord _value;
   // ignore: unused_field
-  final $Res Function(StudentRecord) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? recordId = freezed,
-    Object? academicYear = freezed,
-    Object? fullName = freezed,
-    Object? gender = freezed,
-    Object? paidRegistration = freezed,
-    Object? sector = freezed,
-    Object? studentClass = freezed,
-    Object? guardianName = freezed,
-    Object? guardianContact = freezed,
-    Object? feesPaid = freezed,
+    Object? academicYear = null,
+    Object? fullName = null,
+    Object? gender = null,
+    Object? paidRegistration = null,
+    Object? sector = null,
+    Object? studentClass = null,
+    Object? guardianName = null,
+    Object? guardianContact = null,
+    Object? feesPaid = null,
   }) {
     return _then(_value.copyWith(
-      recordId: recordId == freezed
+      recordId: freezed == recordId
           ? _value.recordId
           : recordId // ignore: cast_nullable_to_non_nullable
               as int?,
-      academicYear: academicYear == freezed
+      academicYear: null == academicYear
           ? _value.academicYear
           : academicYear // ignore: cast_nullable_to_non_nullable
               as String,
-      fullName: fullName == freezed
+      fullName: null == fullName
           ? _value.fullName
           : fullName // ignore: cast_nullable_to_non_nullable
               as String,
-      gender: gender == freezed
+      gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as Gender,
-      paidRegistration: paidRegistration == freezed
+      paidRegistration: null == paidRegistration
           ? _value.paidRegistration
           : paidRegistration // ignore: cast_nullable_to_non_nullable
               as bool,
-      sector: sector == freezed
+      sector: null == sector
           ? _value.sector
           : sector // ignore: cast_nullable_to_non_nullable
               as LanguageSector,
-      studentClass: studentClass == freezed
+      studentClass: null == studentClass
           ? _value.studentClass
           : studentClass // ignore: cast_nullable_to_non_nullable
               as StudentClass,
-      guardianName: guardianName == freezed
+      guardianName: null == guardianName
           ? _value.guardianName
           : guardianName // ignore: cast_nullable_to_non_nullable
               as String,
-      guardianContact: guardianContact == freezed
+      guardianContact: null == guardianContact
           ? _value.guardianContact
           : guardianContact // ignore: cast_nullable_to_non_nullable
               as String,
-      feesPaid: feesPaid == freezed
+      feesPaid: null == feesPaid
           ? _value.feesPaid
           : feesPaid // ignore: cast_nullable_to_non_nullable
               as List<int>,
-    ));
+    ) as $Val);
   }
 }
 
@@ -124,6 +127,7 @@ abstract class _$$_StudentRecordCopyWith<$Res>
           _$_StudentRecord value, $Res Function(_$_StudentRecord) then) =
       __$$_StudentRecordCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {int? recordId,
       String academicYear,
@@ -139,66 +143,64 @@ abstract class _$$_StudentRecordCopyWith<$Res>
 
 /// @nodoc
 class __$$_StudentRecordCopyWithImpl<$Res>
-    extends _$StudentRecordCopyWithImpl<$Res>
+    extends _$StudentRecordCopyWithImpl<$Res, _$_StudentRecord>
     implements _$$_StudentRecordCopyWith<$Res> {
   __$$_StudentRecordCopyWithImpl(
       _$_StudentRecord _value, $Res Function(_$_StudentRecord) _then)
-      : super(_value, (v) => _then(v as _$_StudentRecord));
+      : super(_value, _then);
 
-  @override
-  _$_StudentRecord get _value => super._value as _$_StudentRecord;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? recordId = freezed,
-    Object? academicYear = freezed,
-    Object? fullName = freezed,
-    Object? gender = freezed,
-    Object? paidRegistration = freezed,
-    Object? sector = freezed,
-    Object? studentClass = freezed,
-    Object? guardianName = freezed,
-    Object? guardianContact = freezed,
-    Object? feesPaid = freezed,
+    Object? academicYear = null,
+    Object? fullName = null,
+    Object? gender = null,
+    Object? paidRegistration = null,
+    Object? sector = null,
+    Object? studentClass = null,
+    Object? guardianName = null,
+    Object? guardianContact = null,
+    Object? feesPaid = null,
   }) {
     return _then(_$_StudentRecord(
-      recordId: recordId == freezed
+      recordId: freezed == recordId
           ? _value.recordId
           : recordId // ignore: cast_nullable_to_non_nullable
               as int?,
-      academicYear: academicYear == freezed
+      academicYear: null == academicYear
           ? _value.academicYear
           : academicYear // ignore: cast_nullable_to_non_nullable
               as String,
-      fullName: fullName == freezed
+      fullName: null == fullName
           ? _value.fullName
           : fullName // ignore: cast_nullable_to_non_nullable
               as String,
-      gender: gender == freezed
+      gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as Gender,
-      paidRegistration: paidRegistration == freezed
+      paidRegistration: null == paidRegistration
           ? _value.paidRegistration
           : paidRegistration // ignore: cast_nullable_to_non_nullable
               as bool,
-      sector: sector == freezed
+      sector: null == sector
           ? _value.sector
           : sector // ignore: cast_nullable_to_non_nullable
               as LanguageSector,
-      studentClass: studentClass == freezed
+      studentClass: null == studentClass
           ? _value.studentClass
           : studentClass // ignore: cast_nullable_to_non_nullable
               as StudentClass,
-      guardianName: guardianName == freezed
+      guardianName: null == guardianName
           ? _value.guardianName
           : guardianName // ignore: cast_nullable_to_non_nullable
               as String,
-      guardianContact: guardianContact == freezed
+      guardianContact: null == guardianContact
           ? _value.guardianContact
           : guardianContact // ignore: cast_nullable_to_non_nullable
               as String,
-      feesPaid: feesPaid == freezed
+      feesPaid: null == feesPaid
           ? _value._feesPaid
           : feesPaid // ignore: cast_nullable_to_non_nullable
               as List<int>,
@@ -244,6 +246,7 @@ class _$_StudentRecord extends _StudentRecord {
   final List<int> _feesPaid;
   @override
   List<int> get feesPaid {
+    if (_feesPaid is EqualUnmodifiableListView) return _feesPaid;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_feesPaid);
   }
@@ -258,39 +261,42 @@ class _$_StudentRecord extends _StudentRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_StudentRecord &&
-            const DeepCollectionEquality().equals(other.recordId, recordId) &&
-            const DeepCollectionEquality()
-                .equals(other.academicYear, academicYear) &&
-            const DeepCollectionEquality().equals(other.fullName, fullName) &&
-            const DeepCollectionEquality().equals(other.gender, gender) &&
-            const DeepCollectionEquality()
-                .equals(other.paidRegistration, paidRegistration) &&
-            const DeepCollectionEquality().equals(other.sector, sector) &&
-            const DeepCollectionEquality()
-                .equals(other.studentClass, studentClass) &&
-            const DeepCollectionEquality()
-                .equals(other.guardianName, guardianName) &&
-            const DeepCollectionEquality()
-                .equals(other.guardianContact, guardianContact) &&
+            (identical(other.recordId, recordId) ||
+                other.recordId == recordId) &&
+            (identical(other.academicYear, academicYear) ||
+                other.academicYear == academicYear) &&
+            (identical(other.fullName, fullName) ||
+                other.fullName == fullName) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.paidRegistration, paidRegistration) ||
+                other.paidRegistration == paidRegistration) &&
+            (identical(other.sector, sector) || other.sector == sector) &&
+            (identical(other.studentClass, studentClass) ||
+                other.studentClass == studentClass) &&
+            (identical(other.guardianName, guardianName) ||
+                other.guardianName == guardianName) &&
+            (identical(other.guardianContact, guardianContact) ||
+                other.guardianContact == guardianContact) &&
             const DeepCollectionEquality().equals(other._feesPaid, _feesPaid));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(recordId),
-      const DeepCollectionEquality().hash(academicYear),
-      const DeepCollectionEquality().hash(fullName),
-      const DeepCollectionEquality().hash(gender),
-      const DeepCollectionEquality().hash(paidRegistration),
-      const DeepCollectionEquality().hash(sector),
-      const DeepCollectionEquality().hash(studentClass),
-      const DeepCollectionEquality().hash(guardianName),
-      const DeepCollectionEquality().hash(guardianContact),
+      recordId,
+      academicYear,
+      fullName,
+      gender,
+      paidRegistration,
+      sector,
+      studentClass,
+      guardianName,
+      guardianContact,
       const DeepCollectionEquality().hash(_feesPaid));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_StudentRecordCopyWith<_$_StudentRecord> get copyWith =>
       __$$_StudentRecordCopyWithImpl<_$_StudentRecord>(this, _$identity);
 }

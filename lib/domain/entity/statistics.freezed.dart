@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'statistics.dart';
 
@@ -33,7 +33,8 @@ mixin _$GeneralStatistics {
 abstract class $GeneralStatisticsCopyWith<$Res> {
   factory $GeneralStatisticsCopyWith(
           GeneralStatistics value, $Res Function(GeneralStatistics) then) =
-      _$GeneralStatisticsCopyWithImpl<$Res>;
+      _$GeneralStatisticsCopyWithImpl<$Res, GeneralStatistics>;
+  @useResult
   $Res call(
       {String description,
       int roll,
@@ -45,54 +46,56 @@ abstract class $GeneralStatisticsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GeneralStatisticsCopyWithImpl<$Res>
+class _$GeneralStatisticsCopyWithImpl<$Res, $Val extends GeneralStatistics>
     implements $GeneralStatisticsCopyWith<$Res> {
   _$GeneralStatisticsCopyWithImpl(this._value, this._then);
 
-  final GeneralStatistics _value;
   // ignore: unused_field
-  final $Res Function(GeneralStatistics) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? description = freezed,
-    Object? roll = freezed,
-    Object? feesDue = freezed,
-    Object? registration = freezed,
-    Object? feesPaid = freezed,
-    Object? totalIncome = freezed,
-    Object? balance = freezed,
+    Object? description = null,
+    Object? roll = null,
+    Object? feesDue = null,
+    Object? registration = null,
+    Object? feesPaid = null,
+    Object? totalIncome = null,
+    Object? balance = null,
   }) {
     return _then(_value.copyWith(
-      description: description == freezed
+      description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      roll: roll == freezed
+      roll: null == roll
           ? _value.roll
           : roll // ignore: cast_nullable_to_non_nullable
               as int,
-      feesDue: feesDue == freezed
+      feesDue: null == feesDue
           ? _value.feesDue
           : feesDue // ignore: cast_nullable_to_non_nullable
               as int,
-      registration: registration == freezed
+      registration: null == registration
           ? _value.registration
           : registration // ignore: cast_nullable_to_non_nullable
               as int,
-      feesPaid: feesPaid == freezed
+      feesPaid: null == feesPaid
           ? _value.feesPaid
           : feesPaid // ignore: cast_nullable_to_non_nullable
               as int,
-      totalIncome: totalIncome == freezed
+      totalIncome: null == totalIncome
           ? _value.totalIncome
           : totalIncome // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: balance == freezed
+      balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 }
 
@@ -103,6 +106,7 @@ abstract class _$$_GeneralStatisticsCopyWith<$Res>
           $Res Function(_$_GeneralStatistics) then) =
       __$$_GeneralStatisticsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String description,
       int roll,
@@ -115,51 +119,49 @@ abstract class _$$_GeneralStatisticsCopyWith<$Res>
 
 /// @nodoc
 class __$$_GeneralStatisticsCopyWithImpl<$Res>
-    extends _$GeneralStatisticsCopyWithImpl<$Res>
+    extends _$GeneralStatisticsCopyWithImpl<$Res, _$_GeneralStatistics>
     implements _$$_GeneralStatisticsCopyWith<$Res> {
   __$$_GeneralStatisticsCopyWithImpl(
       _$_GeneralStatistics _value, $Res Function(_$_GeneralStatistics) _then)
-      : super(_value, (v) => _then(v as _$_GeneralStatistics));
+      : super(_value, _then);
 
-  @override
-  _$_GeneralStatistics get _value => super._value as _$_GeneralStatistics;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? description = freezed,
-    Object? roll = freezed,
-    Object? feesDue = freezed,
-    Object? registration = freezed,
-    Object? feesPaid = freezed,
-    Object? totalIncome = freezed,
-    Object? balance = freezed,
+    Object? description = null,
+    Object? roll = null,
+    Object? feesDue = null,
+    Object? registration = null,
+    Object? feesPaid = null,
+    Object? totalIncome = null,
+    Object? balance = null,
   }) {
     return _then(_$_GeneralStatistics(
-      description: description == freezed
+      description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      roll: roll == freezed
+      roll: null == roll
           ? _value.roll
           : roll // ignore: cast_nullable_to_non_nullable
               as int,
-      feesDue: feesDue == freezed
+      feesDue: null == feesDue
           ? _value.feesDue
           : feesDue // ignore: cast_nullable_to_non_nullable
               as int,
-      registration: registration == freezed
+      registration: null == registration
           ? _value.registration
           : registration // ignore: cast_nullable_to_non_nullable
               as int,
-      feesPaid: feesPaid == freezed
+      feesPaid: null == feesPaid
           ? _value.feesPaid
           : feesPaid // ignore: cast_nullable_to_non_nullable
               as int,
-      totalIncome: totalIncome == freezed
+      totalIncome: null == totalIncome
           ? _value.totalIncome
           : totalIncome // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: balance == freezed
+      balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
               as int,
@@ -205,31 +207,26 @@ class _$_GeneralStatistics extends _GeneralStatistics {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GeneralStatistics &&
-            const DeepCollectionEquality()
-                .equals(other.description, description) &&
-            const DeepCollectionEquality().equals(other.roll, roll) &&
-            const DeepCollectionEquality().equals(other.feesDue, feesDue) &&
-            const DeepCollectionEquality()
-                .equals(other.registration, registration) &&
-            const DeepCollectionEquality().equals(other.feesPaid, feesPaid) &&
-            const DeepCollectionEquality()
-                .equals(other.totalIncome, totalIncome) &&
-            const DeepCollectionEquality().equals(other.balance, balance));
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.roll, roll) || other.roll == roll) &&
+            (identical(other.feesDue, feesDue) || other.feesDue == feesDue) &&
+            (identical(other.registration, registration) ||
+                other.registration == registration) &&
+            (identical(other.feesPaid, feesPaid) ||
+                other.feesPaid == feesPaid) &&
+            (identical(other.totalIncome, totalIncome) ||
+                other.totalIncome == totalIncome) &&
+            (identical(other.balance, balance) || other.balance == balance));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(description),
-      const DeepCollectionEquality().hash(roll),
-      const DeepCollectionEquality().hash(feesDue),
-      const DeepCollectionEquality().hash(registration),
-      const DeepCollectionEquality().hash(feesPaid),
-      const DeepCollectionEquality().hash(totalIncome),
-      const DeepCollectionEquality().hash(balance));
+  int get hashCode => Object.hash(runtimeType, description, roll, feesDue,
+      registration, feesPaid, totalIncome, balance);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GeneralStatisticsCopyWith<_$_GeneralStatistics> get copyWith =>
       __$$_GeneralStatisticsCopyWithImpl<_$_GeneralStatistics>(
           this, _$identity);
@@ -284,7 +281,8 @@ mixin _$FeeCollectionStatistics {
 abstract class $FeeCollectionStatisticsCopyWith<$Res> {
   factory $FeeCollectionStatisticsCopyWith(FeeCollectionStatistics value,
           $Res Function(FeeCollectionStatistics) then) =
-      _$FeeCollectionStatisticsCopyWithImpl<$Res>;
+      _$FeeCollectionStatisticsCopyWithImpl<$Res, FeeCollectionStatistics>;
+  @useResult
   $Res call(
       {String name,
       int reg,
@@ -295,49 +293,52 @@ abstract class $FeeCollectionStatisticsCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$FeeCollectionStatisticsCopyWithImpl<$Res>
+class _$FeeCollectionStatisticsCopyWithImpl<$Res,
+        $Val extends FeeCollectionStatistics>
     implements $FeeCollectionStatisticsCopyWith<$Res> {
   _$FeeCollectionStatisticsCopyWithImpl(this._value, this._then);
 
-  final FeeCollectionStatistics _value;
   // ignore: unused_field
-  final $Res Function(FeeCollectionStatistics) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = freezed,
-    Object? reg = freezed,
-    Object? feeAmt = freezed,
-    Object? feesPaid = freezed,
-    Object? totalPaid = freezed,
-    Object? balance = freezed,
+    Object? name = null,
+    Object? reg = null,
+    Object? feeAmt = null,
+    Object? feesPaid = null,
+    Object? totalPaid = null,
+    Object? balance = null,
   }) {
     return _then(_value.copyWith(
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      reg: reg == freezed
+      reg: null == reg
           ? _value.reg
           : reg // ignore: cast_nullable_to_non_nullable
               as int,
-      feeAmt: feeAmt == freezed
+      feeAmt: null == feeAmt
           ? _value.feeAmt
           : feeAmt // ignore: cast_nullable_to_non_nullable
               as int,
-      feesPaid: feesPaid == freezed
+      feesPaid: null == feesPaid
           ? _value.feesPaid
           : feesPaid // ignore: cast_nullable_to_non_nullable
               as List<int>,
-      totalPaid: totalPaid == freezed
+      totalPaid: null == totalPaid
           ? _value.totalPaid
           : totalPaid // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: balance == freezed
+      balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 }
 
@@ -348,6 +349,7 @@ abstract class _$$_FeeCollectionStatisticsCopyWith<$Res>
           $Res Function(_$_FeeCollectionStatistics) then) =
       __$$_FeeCollectionStatisticsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String name,
       int reg,
@@ -359,47 +361,45 @@ abstract class _$$_FeeCollectionStatisticsCopyWith<$Res>
 
 /// @nodoc
 class __$$_FeeCollectionStatisticsCopyWithImpl<$Res>
-    extends _$FeeCollectionStatisticsCopyWithImpl<$Res>
+    extends _$FeeCollectionStatisticsCopyWithImpl<$Res,
+        _$_FeeCollectionStatistics>
     implements _$$_FeeCollectionStatisticsCopyWith<$Res> {
   __$$_FeeCollectionStatisticsCopyWithImpl(_$_FeeCollectionStatistics _value,
       $Res Function(_$_FeeCollectionStatistics) _then)
-      : super(_value, (v) => _then(v as _$_FeeCollectionStatistics));
+      : super(_value, _then);
 
-  @override
-  _$_FeeCollectionStatistics get _value =>
-      super._value as _$_FeeCollectionStatistics;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = freezed,
-    Object? reg = freezed,
-    Object? feeAmt = freezed,
-    Object? feesPaid = freezed,
-    Object? totalPaid = freezed,
-    Object? balance = freezed,
+    Object? name = null,
+    Object? reg = null,
+    Object? feeAmt = null,
+    Object? feesPaid = null,
+    Object? totalPaid = null,
+    Object? balance = null,
   }) {
     return _then(_$_FeeCollectionStatistics(
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      reg: reg == freezed
+      reg: null == reg
           ? _value.reg
           : reg // ignore: cast_nullable_to_non_nullable
               as int,
-      feeAmt: feeAmt == freezed
+      feeAmt: null == feeAmt
           ? _value.feeAmt
           : feeAmt // ignore: cast_nullable_to_non_nullable
               as int,
-      feesPaid: feesPaid == freezed
+      feesPaid: null == feesPaid
           ? _value._feesPaid
           : feesPaid // ignore: cast_nullable_to_non_nullable
               as List<int>,
-      totalPaid: totalPaid == freezed
+      totalPaid: null == totalPaid
           ? _value.totalPaid
           : totalPaid // ignore: cast_nullable_to_non_nullable
               as int,
-      balance: balance == freezed
+      balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
               as int,
@@ -429,6 +429,7 @@ class _$_FeeCollectionStatistics extends _FeeCollectionStatistics {
   final List<int> _feesPaid;
   @override
   List<int> get feesPaid {
+    if (_feesPaid is EqualUnmodifiableListView) return _feesPaid;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_feesPaid);
   }
@@ -448,26 +449,22 @@ class _$_FeeCollectionStatistics extends _FeeCollectionStatistics {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_FeeCollectionStatistics &&
-            const DeepCollectionEquality().equals(other.name, name) &&
-            const DeepCollectionEquality().equals(other.reg, reg) &&
-            const DeepCollectionEquality().equals(other.feeAmt, feeAmt) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.reg, reg) || other.reg == reg) &&
+            (identical(other.feeAmt, feeAmt) || other.feeAmt == feeAmt) &&
             const DeepCollectionEquality().equals(other._feesPaid, _feesPaid) &&
-            const DeepCollectionEquality().equals(other.totalPaid, totalPaid) &&
-            const DeepCollectionEquality().equals(other.balance, balance));
+            (identical(other.totalPaid, totalPaid) ||
+                other.totalPaid == totalPaid) &&
+            (identical(other.balance, balance) || other.balance == balance));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(name),
-      const DeepCollectionEquality().hash(reg),
-      const DeepCollectionEquality().hash(feeAmt),
-      const DeepCollectionEquality().hash(_feesPaid),
-      const DeepCollectionEquality().hash(totalPaid),
-      const DeepCollectionEquality().hash(balance));
+  int get hashCode => Object.hash(runtimeType, name, reg, feeAmt,
+      const DeepCollectionEquality().hash(_feesPaid), totalPaid, balance);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_FeeCollectionStatisticsCopyWith<_$_FeeCollectionStatistics>
       get copyWith =>
           __$$_FeeCollectionStatisticsCopyWithImpl<_$_FeeCollectionStatistics>(
@@ -518,44 +515,47 @@ mixin _$ExpenseStatistics {
 abstract class $ExpenseStatisticsCopyWith<$Res> {
   factory $ExpenseStatisticsCopyWith(
           ExpenseStatistics value, $Res Function(ExpenseStatistics) then) =
-      _$ExpenseStatisticsCopyWithImpl<$Res>;
+      _$ExpenseStatisticsCopyWithImpl<$Res, ExpenseStatistics>;
+  @useResult
   $Res call({String name, String comment, int amount, DateTime date});
 }
 
 /// @nodoc
-class _$ExpenseStatisticsCopyWithImpl<$Res>
+class _$ExpenseStatisticsCopyWithImpl<$Res, $Val extends ExpenseStatistics>
     implements $ExpenseStatisticsCopyWith<$Res> {
   _$ExpenseStatisticsCopyWithImpl(this._value, this._then);
 
-  final ExpenseStatistics _value;
   // ignore: unused_field
-  final $Res Function(ExpenseStatistics) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = freezed,
-    Object? comment = freezed,
-    Object? amount = freezed,
-    Object? date = freezed,
+    Object? name = null,
+    Object? comment = null,
+    Object? amount = null,
+    Object? date = null,
   }) {
     return _then(_value.copyWith(
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      comment: comment == freezed
+      comment: null == comment
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      amount: amount == freezed
+      amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-    ));
+    ) as $Val);
   }
 }
 
@@ -566,41 +566,40 @@ abstract class _$$_ExpenseStatisticsCopyWith<$Res>
           $Res Function(_$_ExpenseStatistics) then) =
       __$$_ExpenseStatisticsCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({String name, String comment, int amount, DateTime date});
 }
 
 /// @nodoc
 class __$$_ExpenseStatisticsCopyWithImpl<$Res>
-    extends _$ExpenseStatisticsCopyWithImpl<$Res>
+    extends _$ExpenseStatisticsCopyWithImpl<$Res, _$_ExpenseStatistics>
     implements _$$_ExpenseStatisticsCopyWith<$Res> {
   __$$_ExpenseStatisticsCopyWithImpl(
       _$_ExpenseStatistics _value, $Res Function(_$_ExpenseStatistics) _then)
-      : super(_value, (v) => _then(v as _$_ExpenseStatistics));
+      : super(_value, _then);
 
-  @override
-  _$_ExpenseStatistics get _value => super._value as _$_ExpenseStatistics;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = freezed,
-    Object? comment = freezed,
-    Object? amount = freezed,
-    Object? date = freezed,
+    Object? name = null,
+    Object? comment = null,
+    Object? amount = null,
+    Object? date = null,
   }) {
     return _then(_$_ExpenseStatistics(
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      comment: comment == freezed
+      comment: null == comment
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
               as String,
-      amount: amount == freezed
+      amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      date: date == freezed
+      date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
@@ -636,22 +635,18 @@ class _$_ExpenseStatistics implements _ExpenseStatistics {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ExpenseStatistics &&
-            const DeepCollectionEquality().equals(other.name, name) &&
-            const DeepCollectionEquality().equals(other.comment, comment) &&
-            const DeepCollectionEquality().equals(other.amount, amount) &&
-            const DeepCollectionEquality().equals(other.date, date));
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.comment, comment) || other.comment == comment) &&
+            (identical(other.amount, amount) || other.amount == amount) &&
+            (identical(other.date, date) || other.date == date));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(name),
-      const DeepCollectionEquality().hash(comment),
-      const DeepCollectionEquality().hash(amount),
-      const DeepCollectionEquality().hash(date));
+  int get hashCode => Object.hash(runtimeType, name, comment, amount, date);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ExpenseStatisticsCopyWith<_$_ExpenseStatistics> get copyWith =>
       __$$_ExpenseStatisticsCopyWithImpl<_$_ExpenseStatistics>(
           this, _$identity);

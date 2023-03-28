@@ -4,12 +4,10 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
-import 'package:sabinpris/credentials.dart';
+// import 'package:isar/isar.dart';
 import 'package:sabinpris/data/datasource/base_framework.dart';
 import 'package:sabinpris/data/models/expenditure_dto.dart';
 import 'package:sabinpris/data/models/statistics_dto.dart';
-import 'package:sabinpris/data/models/student_record_dto.dart';
 import 'package:sabinpris/domain/entity/expenditure.dart';
 import 'package:sabinpris/fee.dart';
 
@@ -72,6 +70,7 @@ class ExpenditureDataSource extends BaseFramework {
 
       // Hive.box<StudentRecordDto>('').putAll(
       //     data.map((e) => {e['recordId']: StudentRecordDto.fromJson(e)}));
+      // ignore: avoid_function_literals_in_foreach_calls
       data.forEach((e) async {
         await Hive.box<ExpenditureDto>(expenditureBoxName)
             .put(e['id'], ExpenditureDto.fromJson(e));
