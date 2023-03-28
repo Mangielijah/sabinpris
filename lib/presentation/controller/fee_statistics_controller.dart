@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sabinpris/domain/entity/statistics.dart';
@@ -8,6 +8,7 @@ import 'package:sabinpris/domain/entity/student_record.dart';
 import 'package:sabinpris/presentation/pdf_util.dart';
 import 'package:sabinpris/service_locator.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
+import 'package:cross_file/cross_file.dart';
 
 class FeeStatistics extends ChangeNotifier {
   FeeStatistics() {
@@ -29,7 +30,7 @@ class FeeStatistics extends ChangeNotifier {
     _search();
   }
 
-  Future<File> download() async {
+  Future<XFile> download() async {
     return await buildFeeCollectionSummary(studentsFeeStats, _sector, _class);
   }
 

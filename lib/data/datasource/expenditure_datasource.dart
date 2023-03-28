@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:sabinpris/credentials.dart';
@@ -16,25 +17,68 @@ import 'package:sabinpris/fee.dart';
 class ExpenditureDataSource extends BaseFramework {
   ExpenditureDataSource();
 
+  // Future<String> exportExpenditure() async {
+  //   try {
+  //     List<Map<String, dynamic>> json =
+  //         await isar!.expenditureDtos.buildQuery().exportJson();
+  //     Uint8List fileContent = Uint8List.fromList(jsonEncode(json).codeUnits);
+  //     String filename =
+  //         'sabinpris-expenditure${DateTime.now().millisecondsSinceEpoch}';
+  //     return FileSaver.instance.saveFile(filename, fileContent, 'json');
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
+  // AB
   Future<String> exportExpenditure() async {
     try {
-      List<Map<String, dynamic>> json =
-          await isar!.expenditureDtos.buildQuery().exportJson();
+      List<Map<String, dynamic>> json = expenditureRecord.map((record) {
+        Map<String, dynamic> json = record.toJson();
+
+        return json;
+      }).toList();
       Uint8List fileContent = Uint8List.fromList(jsonEncode(json).codeUnits);
       String filename =
-          'sabinpris-expenditure${DateTime.now().millisecondsSinceEpoch}';
+          'sabinpris-expenditureRecord${DateTime.now().millisecondsSinceEpoch}.json';
       return FileSaver.instance.saveFile(filename, fileContent, 'json');
     } catch (e) {
       rethrow;
     }
   }
 
+  // Future<String> importExpenditures(List<Map<String, dynamic>> data) async {
+  //   try {
+  //     await isar!.expenditureDtos.clear();
+  //     await isar!.expenditureDtos.importJson(data);
+  //     if (data.isNotEmpty) {
+  //       if (await isar!.expenditureDtos.count() > 0) {
+  //         return 'completed';
+  //       } else {
+  //         return 'failed';
+  //       }
+  //     } else {
+  //       return 'completed';
+  //     }
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
+  // AB
   Future<String> importExpenditures(List<Map<String, dynamic>> data) async {
     try {
-      await isar!.expenditureDtos.clear();
-      await isar!.expenditureDtos.importJson(data);
+      await Hive.box<ExpenditureDto>(expenditureBoxName).clear();
+
+      // Hive.box<StudentRecordDto>('').putAll(
+      //     data.map((e) => {e['recordId']: StudentRecordDto.fromJson(e)}));
+      data.forEach((e) async {
+        await Hive.box<ExpenditureDto>(expenditureBoxName)
+            .put(e['id'], ExpenditureDto.fromJson(e));
+      });
+
       if (data.isNotEmpty) {
-        if (await isar!.expenditureDtos.count() > 0) {
+        if (Hive.box<ExpenditureDto>(expenditureBoxName).values.isNotEmpty) {
           return 'completed';
         } else {
           return 'failed';
@@ -48,11 +92,19 @@ class ExpenditureDataSource extends BaseFramework {
   }
 
   Future<ExpenditureDto> addNewExpenditure(ExpenditureDto exp) async {
+    // try {
+    //   return await isar!.writeTxn<ExpenditureDto>(() async {
+    //     exp.id = await expenditureRecord.put(exp);
+    //     return exp;
+    //   });
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    //   rethrow;
+    // }
     try {
-      return await isar!.writeTxn<ExpenditureDto>(() async {
-        exp.id = await expenditureRecord.put(exp);
-        return exp;
-      });
+      final expenditure = Hive.box<ExpenditureDto>(expenditureBoxName);
+      exp.id = DateTime.now().millisecond;
+      return await expenditure.put(exp.id!, exp).then((value) => exp);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -61,20 +113,31 @@ class ExpenditureDataSource extends BaseFramework {
 
   Future<List<ExpenseStatisticsDto>> getGeneralExpenseReport(
       String year) async {
-    final totalIncome =
-        (await studentRecord.filter().academicYearEqualTo(year).findAll())
-            .map((e) => (e.paidRegistration)
-                ? Fee.regFee + e.feesPaid.reduce((a, b) => a + b)
-                : e.feesPaid.reduce((a, b) => a + b))
-            .toList()
-            .reduce((c, d) => c + d);
+    // final totalIncome =
+    //     (await studentRecord.academicYearEqualTo(year).findAll())
+    //         .map((e) => (e.paidRegistration)
+    //             ? Fee.regFee + e.feesPaid.reduce((a, b) => a + b)
+    //             : e.feesPaid.reduce((a, b) => a + b))
+    //         .toList()
+    //         .reduce((c, d) => c + d);
+    final totalIncome = studentRecord
+        .where((record) => record.academicYear == year)
+        .toList()
+        .map((e) => (e.paidRegistration)
+            ? Fee.regFee + e.feesPaid.reduce((a, b) => a + b)
+            : e.feesPaid.reduce((a, b) => a + b))
+        .toList()
+        .reduce((c, d) => c + d);
     List<ExpenseStatisticsDto> stats = [];
     //SALARY
-    final salaryList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.Salaries.index)
-        .findAll();
+    // final salaryList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.Salaries.index)
+    //     .findAll();
+    final salaryList = expenditureRecord.where((ex) =>
+        ex.academicYear == year &&
+        ex.expenseType == ExpenditureType.Salaries.index);
     int totalSalary = 0;
     if (salaryList.isNotEmpty) {
       totalSalary = salaryList.map((e) => e.amount).reduce((a, b) => a + b);
@@ -87,11 +150,15 @@ class ExpenditureDataSource extends BaseFramework {
     ));
 
     //REPAIR AND MAINTENANCE
-    final repairsList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.Repairs_and_Maintenance.index)
-        .findAll();
+    // final repairsList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.Repairs_and_Maintenance.index)
+    //     .findAll();
+    final repairsList = expenditureRecord.where((ex) =>
+        ex.academicYear == year &&
+        ex.expenseType == ExpenditureType.Repairs_and_Maintenance.index);
+
     int totalRepairs = 0;
     if (repairsList.isNotEmpty) {
       totalRepairs = repairsList.map((e) => e.amount).reduce((a, b) => a + b);
@@ -104,11 +171,15 @@ class ExpenditureDataSource extends BaseFramework {
     ));
 
     //CNPS and TAXES
-    final taxesList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.CNPs_and_Taxes.index)
-        .findAll();
+    // final taxesList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.CNPs_and_Taxes.index)
+    //     .findAll();
+    final taxesList = expenditureRecord.where((ex) =>
+        ex.academicYear == year &&
+        ex.expenseType == ExpenditureType.CNPs_and_Taxes.index);
+
     int totalTaxes = 0;
     if (taxesList.isNotEmpty) {
       totalTaxes = taxesList.map((e) => e.amount).reduce((a, b) => a + b);
@@ -121,11 +192,15 @@ class ExpenditureDataSource extends BaseFramework {
     ));
 
     //PUBLIC RELATIONS
-    final prList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.Public_Relations.index)
-        .findAll();
+    // final prList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.Public_Relations.index)
+    //     .findAll();
+    final prList = expenditureRecord.where((ex) =>
+        ex.academicYear == year &&
+        ex.expenseType == ExpenditureType.Public_Relations.index);
+
     int totalPR = 0;
     if (prList.isNotEmpty) {
       totalPR = prList.map((e) => e.amount).reduce((a, b) => a + b);
@@ -138,11 +213,15 @@ class ExpenditureDataSource extends BaseFramework {
     ));
 
     //Nursery Feeding
-    final feedingList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.Nursery_Feeding.index)
-        .findAll();
+    // final feedingList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.Nursery_Feeding.index)
+    //     .findAll();
+    final feedingList = expenditureRecord.where((ex) =>
+        ex.academicYear == year &&
+        ex.expenseType == ExpenditureType.Nursery_Feeding.index);
+
     int totalFeeding = 0;
     if (feedingList.isNotEmpty) {
       totalFeeding = feedingList.map((e) => e.amount).reduce((a, b) => a + b);
@@ -155,11 +234,15 @@ class ExpenditureDataSource extends BaseFramework {
     ));
 
     //Dues and Registration
-    final duesRegList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.Dues_and_Registration.index)
-        .findAll();
+    // final duesRegList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.Dues_and_Registration.index)
+    //     .findAll();
+    final duesRegList = expenditureRecord.where((ex) =>
+        ex.academicYear == year &&
+        ex.expenseType == ExpenditureType.Dues_and_Registration.index);
+
     int totalDR = 0;
     if (duesRegList.isNotEmpty) {
       totalDR = duesRegList.map((e) => e.amount).reduce((a, b) => a + b);
@@ -172,11 +255,15 @@ class ExpenditureDataSource extends BaseFramework {
     ));
 
     //Dues and Registration
-    final othersList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.Other.index)
-        .findAll();
+    // final othersList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.Other.index)
+    //     .findAll();
+    final othersList = expenditureRecord.where((ex) =>
+        ex.academicYear == year &&
+        ex.expenseType == ExpenditureType.Other.index);
+
     int totalOthers = 0;
     if (othersList.isNotEmpty) {
       totalOthers = othersList.map((e) => e.amount).reduce((a, b) => a + b);
@@ -221,61 +308,116 @@ class ExpenditureDataSource extends BaseFramework {
   Future<List<ExpenseStatisticsDto>> getSalaryExpenseReport(String year) async {
     List<ExpenseStatisticsDto> stats = [];
     //SALARY
-    final salaryList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeEqualTo(ExpenditureType.Salaries.index)
-        .findAll();
+    // final salaryList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeEqualTo(ExpenditureType.Salaries.index)
+    //     .findAll();
+    // if (salaryList.isNotEmpty) {
+    //   final sl = salaryList
+    //       .map((e) => ExpenseStatisticsDto(
+    //             name: 'Paid salary',
+    //             comment: e.comment ?? '',
+    //             amount: e.amount,
+    //             date: e.time,
+    //           ))
+    //       .toList();
+    //   stats.addAll(sl);
+    // }
+
+    final List<ExpenditureDto> salaryList = expenditureRecord
+        .where((ex) =>
+            ex.academicYear == year &&
+            ex.expenseType == ExpenditureType.Salaries.index)
+        .toList();
     if (salaryList.isNotEmpty) {
       final sl = salaryList
           .map((e) => ExpenseStatisticsDto(
-                name: 'Paid salary',
-                comment: e.comment ?? '',
-                amount: e.amount,
-                date: e.time,
-              ))
+              name: 'Paid Salary',
+              comment: e.comment ?? '',
+              amount: e.amount,
+              date: e.time))
           .toList();
       stats.addAll(sl);
     }
+
     return stats;
   }
 
   Future<List<ExpenseStatisticsDto>> getOtherExpenseReport(String year) async {
     List<ExpenseStatisticsDto> stats = [];
     //SALARY
-    final expenseList = await expenditureRecord
-        .filter()
-        .academicYearEqualTo(year)
-        .expenseTypeGreaterThan(ExpenditureType.Salaries.index)
-        .findAll();
+    // final expenseList = await expenditureRecord
+    //     .filter()
+    //     .academicYearEqualTo(year)
+    //     .expenseTypeGreaterThan(ExpenditureType.Salaries.index)
+    //     .findAll();
+    // if (expenseList.isNotEmpty) {
+    //   final el = expenseList.map((e) {
+    //     String name = ExpenditureType.values[e.expenseType].name;
+    //     return ExpenseStatisticsDto(
+    //       name: name,
+    //       comment: e.comment ?? '',
+    //       amount: e.amount,
+    //       date: e.time,
+    //     );
+    //   }).toList();
+    //   stats.addAll(el);
+    // }
+
+    final List<ExpenditureDto> expenseList = expenditureRecord
+        .where((ex) =>
+            ex.academicYear == year &&
+            ex.expenseType == ExpenditureType.Salaries.index)
+        .toList();
     if (expenseList.isNotEmpty) {
       final el = expenseList.map((e) {
         String name = ExpenditureType.values[e.expenseType].name;
         return ExpenseStatisticsDto(
-          name: name,
-          comment: e.comment ?? '',
-          amount: e.amount,
-          date: e.time,
-        );
+            name: name,
+            comment: e.comment ?? '',
+            amount: e.amount,
+            date: e.time);
       }).toList();
       stats.addAll(el);
     }
+
     return stats;
   }
 
   Stream<int> totalAmountSpentOnExpenditures(String year) async* {
+    // try {
+    //   yield* (expenditureRecord
+    //       .filter()
+    //       .academicYearEqualTo(SCHOOL_YEAR)
+    //       .watch(fireImmediately: true)
+    //       .asBroadcastStream()
+    //       .map(
+    //         (expRecordList) => (expRecordList
+    //             .map((expenditure) => expenditure.amount)
+    //             .toList()
+    //             .reduce((c, d) => c + d)),
+    //       ));
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    //   rethrow;
+    // }
+
     try {
-      yield* (expenditureRecord
-          .filter()
-          .academicYearEqualTo(SCHOOL_YEAR)
-          .watch(fireImmediately: true)
-          .asBroadcastStream()
-          .map(
-            (expRecordList) => (expRecordList
-                .map((expenditure) => expenditure.amount)
-                .toList()
-                .reduce((c, d) => c + d)),
-          ));
+      int total = 0;
+      yield* (Hive.box<ExpenditureDto>(expenditureBoxName)
+              .watchExWithInitial()
+              .map((exList) => (exList.isEmpty
+                  ? total
+                  : () {
+                      total = total +
+                          exList
+                              .map((ex) => (ex.amount))
+                              .toList()
+                              .reduce((a, b) => a + b);
+                      return total;
+                    }())) // here
+          );
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -284,26 +426,50 @@ class ExpenditureDataSource extends BaseFramework {
 
   Stream<int> totalAmountLeft(String year) async* {
     try {
-      final totalIncome =
-          (await studentRecord.filter().academicYearEqualTo(year).findAll())
+      // final totalIncome =
+      //     (await studentRecord.filter().academicYearEqualTo(year).findAll())
+      //         .map((e) => (e.paidRegistration)
+      //             ? Fee.regFee + e.feesPaid.reduce((a, b) => a + b)
+      //             : e.feesPaid.reduce((a, b) => a + b))
+      //         .toList()
+      //         .reduce((c, d) => c + d);
+      int totalIncome = studentRecord.isEmpty
+          ? 0
+          : studentRecord
+              .where((record) => record.academicYear == year)
+              .toList()
               .map((e) => (e.paidRegistration)
                   ? Fee.regFee + e.feesPaid.reduce((a, b) => a + b)
                   : e.feesPaid.reduce((a, b) => a + b))
               .toList()
               .reduce((c, d) => c + d);
-      yield* (expenditureRecord
-          .filter()
-          .academicYearEqualTo(SCHOOL_YEAR)
-          .watch(fireImmediately: true)
-          .asBroadcastStream()
-          .map(
-            (expRecordList) =>
-                totalIncome -
-                (expRecordList
-                    .map((expenditure) => expenditure.amount)
-                    .toList()
-                    .reduce((c, d) => c + d)),
-          ));
+      // yield* (expenditureRecord
+      //     .filter()
+      //     .academicYearEqualTo(SCHOOL_YEAR)
+      //     .watch(fireImmediately: true)
+      //     .asBroadcastStream()
+      //     .map(
+      //       (expRecordList) =>
+      //           totalIncome -
+      //           (expRecordList
+      //               .map((expenditure) => expenditure.amount)
+      //               .toList()
+      //               .reduce((c, d) => c + d)),
+      //     ));
+
+      yield* (Hive.box<ExpenditureDto>(expenditureBoxName)
+              .watchExWithInitial()
+              .map((exList) => (exList.isEmpty
+                  ? totalIncome
+                  : () {
+                      totalIncome = totalIncome -
+                          exList
+                              .map((ex) => (ex.amount))
+                              .toList()
+                              .reduce((a, b) => a + b);
+                      return totalIncome;
+                    }())) // here
+          );
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

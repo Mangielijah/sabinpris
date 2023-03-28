@@ -1,11 +1,12 @@
 // ignore_for_file: depend_on_referenced_packages, unused_import
 
-import 'dart:io';
+// import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 // import 'package:printing/printing.dart';
@@ -17,6 +18,7 @@ import 'package:sabinpris/domain/repositories/student_record_repository.dart';
 import 'package:sabinpris/presentation/screens/expenditure_report.dart';
 import 'package:sabinpris/presentation/util.dart';
 import 'package:sabinpris/service_locator.dart';
+import 'package:cross_file/cross_file.dart';
 
 Future buildSummary() async {
   final head = Row(
@@ -419,11 +421,15 @@ Future buildSummary() async {
   );
 
   // On Flutter, use the [path_provider](https://pub.dev/packages/path_provider) library:
-  final output = await getApplicationDocumentsDirectory();
+  // final output = await getApplicationDocumentsDirectory();
   final fileName = 'general_summary_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
-  final file = File("${output.path}/$fileName");
-  final res = await file.writeAsBytes(await pdf.save());
+  // final file = XFile("${output.path}/$fileName");
+  final fileContent = await pdf.save();
+
+  // final res = await file.writeAsBytes(await pdf.save());
+  final res = XFile.fromData(fileContent, name: fileName);
   if (res != null) {
+    await FileSaver.instance.saveFile(fileName, fileContent, 'pdf');
     return res;
   } else {
     throw Exception("FILE GENERATION FAILED");
@@ -830,7 +836,7 @@ Future buildSectionSummary(LanguageSector sector) async {
       },
     ),
   );
-  final output = await getApplicationDocumentsDirectory();
+  // final output = await getApplicationDocumentsDirectory();
   late String fileName;
   if (sector == LanguageSector.english) {
     fileName =
@@ -838,10 +844,13 @@ Future buildSectionSummary(LanguageSector sector) async {
   } else {
     fileName = 'french_section_summary_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
   }
-  final file = File("${output.path}/$fileName");
-  final res = await file.writeAsBytes(await pdf.save());
+  // final file = File("${output.path}/$fileName");
+  final fileContent = await pdf.save();
+  // final res = await file.writeAsBytes(await pdf.save());
+  final res = XFile.fromData(fileContent, name: fileName);
   // ignore: unnecessary_null_comparison
   if (res != null) {
+    await FileSaver.instance.saveFile(fileName, fileContent, 'pdf');
     return res;
   } else {
     throw Exception("FILE GENERATION FAILED");
@@ -1220,15 +1229,18 @@ Future buildFeeCollectionSummary(List<FeeCollectionStatistics> feeStatistics,
       },
     ),
   );
-  final output = await getApplicationDocumentsDirectory();
+  // final output = await getApplicationDocumentsDirectory();
   late String fileName;
   fileName =
       'class_${className.toLowerCase().replaceAll(' ', '')}_summary_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
 
-  final file = File("${output.path}/$fileName");
-  final res = await file.writeAsBytes(await pdf.save());
+  // final file = File("${output.path}/$fileName");
+  final fileContent = await pdf.save();
+  // final res = await file.writeAsBytes(await pdf.save());
+  final res = XFile.fromData(fileContent, name: fileName);
   // ignore: unnecessary_null_comparison
   if (res != null) {
+    await FileSaver.instance.saveFile(fileName, fileContent, 'pdf');
     return res;
   } else {
     throw Exception("FILE GENERATION FAILED");
@@ -1526,16 +1538,19 @@ Future buildGeneralExpenditureSummary(
       },
     ),
   );
-  final output = await getApplicationDocumentsDirectory();
+  // final output = await getApplicationDocumentsDirectory();
   late String fileName;
   final fileTitle =
       reportTitle.replaceAll(' ', '').replaceAll('&', '').toLowerCase();
   fileName = 'general_${fileTitle}_${SCHOOL_YEAR.replaceAll('/', '-')}.pdf';
 
-  final file = File("${output.path}/$fileName");
-  final res = await file.writeAsBytes(await pdf.save());
+  // final file = File("${output.path}/$fileName");
+  final fileContent = await pdf.save();
+  // final res = await file.writeAsBytes(await pdf.save());
+  final res = XFile.fromData(fileContent, name: fileName);
   // ignore: unnecessary_null_comparison
   if (res != null) {
+    await FileSaver.instance.saveFile(fileName, fileContent, 'pdf');
     return res;
   } else {
     throw Exception("FILE GENERATION FAILED");

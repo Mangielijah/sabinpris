@@ -1,4 +1,4 @@
-import 'package:better_open_file/better_open_file.dart';
+// import 'package:better_open_file/better_open_file.dart';
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -233,7 +233,7 @@ class _ExpenditureReportState extends ConsumerState<ExpenditureReport> {
                                           ),
                                         ),
                                       )));
-                              await OpenFile.open(file.path);
+                              // await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
                               ScaffoldMessenger.of(context)
