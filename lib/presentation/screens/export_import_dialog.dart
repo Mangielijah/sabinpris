@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:sabinpris/domain/repositories/expenditure_repository.dart';
 import 'package:sabinpris/presentation/constants.dart';
 import 'package:sabinpris/service_locator.dart';
 import 'package:sabinpris/domain/repositories/student_record_repository.dart';
+import 'package:cross_file/cross_file.dart';
 
 enum ExportImportType {
   studentRecord,
@@ -172,7 +173,7 @@ class ImportDialog extends StatefulWidget {
 }
 
 class _ImportDialogState extends State<ImportDialog> {
-  File? file;
+  XFile? file;
   bool isImporting = false;
   bool isCompleted = false;
   @override
@@ -214,7 +215,8 @@ class _ImportDialogState extends State<ImportDialog> {
                     );
 
                     if (result != null) {
-                      file = File(result.files.single.path!);
+                      file = XFile.fromData(result.files.single.bytes!,
+                          name: result.files.single.name);
                       setState(() {});
                     } else {
                       // User canceled the picker

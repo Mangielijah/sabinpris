@@ -44,7 +44,8 @@ class StudentRecordRepositoryImpl extends StudentRecordRepository {
   @override
   Stream<int> totalNumberOfRegisteredStudent(String year) async* {
     try {
-      final regStudents = dataSource.totalNumberOfStudents(year);
+      final regStudents =
+          dataSource.totalNumberOfStudents(year).asBroadcastStream();
       yield* regStudents;
     } catch (e) {
       throw Exception('Could Not Register Student');

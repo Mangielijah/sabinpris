@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:isar/isar.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/data/datasource/base_framework.dart';
 import 'package:sabinpris/data/models/statistics_dto.dart';
@@ -15,26 +16,71 @@ import 'package:sabinpris/fee.dart';
 class StudentRecordDataSource extends BaseFramework {
   StudentRecordDataSource();
 
+  // Future<String> exportStudentRecord() async {
+  //   try {
+  //     List<Map<String, dynamic>> json =
+  //         await isar!.studentRecordDtos.buildQuery().exportJson();
+  //     Uint8List fileContent = Uint8List.fromList(jsonEncode(json).codeUnits);
+  //     String filename =
+  //         'sabinpris-studentRecord${DateTime.now().millisecondsSinceEpoch}';
+  //     return FileSaver.instance.saveFile(filename, fileContent, 'json');
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
+// AB
   Future<String> exportStudentRecord() async {
     try {
-      List<Map<String, dynamic>> json =
-          await isar!.studentRecordDtos.buildQuery().exportJson();
+      List<Map<String, dynamic>> json = studentRecord.map((record) {
+        Map<String, dynamic> json = record.toJson();
+
+        return json;
+      }).toList();
       Uint8List fileContent = Uint8List.fromList(jsonEncode(json).codeUnits);
       String filename =
-          'sabinpris-studentRecord${DateTime.now().millisecondsSinceEpoch}';
+          'sabinpris-studentRecord${DateTime.now().millisecondsSinceEpoch}.json';
       return FileSaver.instance.saveFile(filename, fileContent, 'json');
     } catch (e) {
       rethrow;
     }
   }
 
+  // Future<String> importStudentRecord(List<Map<String, dynamic>> data) async {
+  //   try {
+  //     await isar!.writeTxn(() async => isar!.studentRecordDtos.clear());
+  //     await isar!
+  //         .writeTxn(() async => isar!.studentRecordDtos.importJson(data));
+  //     if (data.isNotEmpty) {
+  //       if (await isar!.studentRecordDtos.count() > 0) {
+  //         return 'completed';
+  //       } else {
+  //         return 'failed';
+  //       }
+  //     } else {
+  //       return 'completed';
+  //     }
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
+  // AB
   Future<String> importStudentRecord(List<Map<String, dynamic>> data) async {
     try {
-      await isar!.writeTxn(() async => isar!.studentRecordDtos.clear());
-      await isar!
-          .writeTxn(() async => isar!.studentRecordDtos.importJson(data));
+      await Hive.box<StudentRecordDto>(studentRecordBoxName).clear();
+
+      // Hive.box<StudentRecordDto>('').putAll(
+      //     data.map((e) => {e['recordId']: StudentRecordDto.fromJson(e)}));
+      data.forEach((e) async {
+        await Hive.box<StudentRecordDto>(studentRecordBoxName)
+            .put(e['recordId'], StudentRecordDto.fromJson(e));
+      });
+
       if (data.isNotEmpty) {
-        if (await isar!.studentRecordDtos.count() > 0) {
+        if (Hive.box<StudentRecordDto>(studentRecordBoxName)
+            .values
+            .isNotEmpty) {
           return 'completed';
         } else {
           return 'failed';
@@ -45,18 +91,45 @@ class StudentRecordDataSource extends BaseFramework {
     } catch (e) {
       rethrow;
     }
+    // try {
+    //   // await isar!.writeTxn(() async => isar!.studentRecordDtos.clear());
+    //   await isar!
+    //       .writeTxn(() async => isar!.studentRecordDtos.importJson(data));
+    //   if (data.isNotEmpty) {
+    //     if (await isar!.studentRecordDtos.count() > 0) {
+    //       return 'completed';
+    //     } else {
+    //       return 'failed';
+    //     }
+    //   } else {
+    //     return 'completed';
+    //   }
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   Future<StudentRecordDto> registerStudent(StudentRecordDto record) async {
+    // AB
     try {
-      return await isar!.writeTxn<StudentRecordDto>(() async {
-        record.recordId = await studentRecord.put(record);
-        return record;
-      });
+      final studentRecords = Hive.box<StudentRecordDto>(studentRecordBoxName);
+      record.recordId = DateTime.now().millisecond;
+      return await studentRecords
+          .put(record.recordId!, record)
+          .then((value) => record);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
+    // try {
+    //   return await isar!.writeTxn<StudentRecordDto>(() async {
+    //     record.recordId = await studentRecord.put(record);
+    //     return record;
+    //   });
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    //   rethrow;
+    // }
   }
 
   Future<List<StudentRecordDto>> searchStudents({
@@ -66,61 +139,132 @@ class StudentRecordDataSource extends BaseFramework {
     required int studentClass,
   }) async {
     try {
-      late QueryBuilder<StudentRecordDto, StudentRecordDto,
-              QAfterFilterCondition> studentSearchQuery =
-          studentRecord
-              .filter()
-              .academicYearEqualTo(year)
-              .sectorEqualTo(sector)
-              .studentClassEqualTo(studentClass);
-
-      if (fullName.trim().isNotEmpty) {
-        studentSearchQuery = studentSearchQuery.fullNameContains(
-          fullName,
-          caseSensitive: false,
-        );
+      List<StudentRecordDto> students = [];
+      final searchedStudents = studentRecord.where((record) {
+        return record.academicYear == year &&
+            record.sector == sector &&
+            record.studentClass == studentClass;
+      }).toList();
+      if (fullName.toLowerCase().trim().isNotEmpty) {
+        students = searchedStudents
+            .where(
+                (student) => student.fullName.toLowerCase().contains(fullName))
+            .toList();
+        return students;
       }
-      return await studentSearchQuery.findAll();
+      return searchedStudents;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
+
+    // try {
+    //   late QueryBuilder<StudentRecordDto, StudentRecordDto,
+    //           QAfterFilterCondition> studentSearchQuery =
+    //       studentRecord
+    //           .filter()
+    //           .academicYearEqualTo(year)
+    //           .sectorEqualTo(sector)
+    //           .studentClassEqualTo(studentClass);
+
+    //   if (fullName.trim().isNotEmpty) {
+    //     studentSearchQuery = studentSearchQuery.fullNameContains(
+    //       fullName,
+    //       caseSensitive: false,
+    //     );
+    //   }
+    //   return await studentSearchQuery.findAll();
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    //   rethrow;
+    // }
   }
 
-  Stream<int> totalNumberOfStudents(String year) async* {
+  Stream<int> totalNumberOfStudents(String year) {
     try {
-      yield* (recordStream.map((r) => r.length));
+      int length = 0;
+
+      return Hive.box<StudentRecordDto>(studentRecordBoxName)
+          .watchWithInitial()
+          .map((event) {
+        length = Hive.box<StudentRecordDto>(studentRecordBoxName).values.length;
+        // length++;
+        return length;
+      }).asBroadcastStream();
+      // yield length;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
+    // try {
+    //   yield* (recordStream.map((r) => r.length));
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    //   rethrow;
+    // }
   }
 
   Future<StudentRecordDto> updateFees(int recordId, int fees) async {
     try {
-      return await isar!.writeTxn<StudentRecordDto>(() async {
-        final record = await studentRecord.get(recordId);
-        final cFees = [...record!.feesPaid];
-        record.feesPaid = [...cFees, fees];
-        await studentRecord.put(record); // perform update operations
-        return record;
-      });
+      final hivedb = Hive.box<StudentRecordDto>(studentRecordBoxName);
+      StudentRecordDto singleStudentRecord = hivedb.get(recordId)!;
+      singleStudentRecord.feesPaid = [...singleStudentRecord.feesPaid, fees];
+      // return await hivedb.add(singleStudentRecord);
+      await hivedb.put(recordId, singleStudentRecord);
+      return singleStudentRecord;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
     }
   }
+  //   try {
+  //     return await isar!.writeTxn<StudentRecordDto>(() async {
+  //       final record = await studentRecord.get(recordId);
+  //       final cFees = [...record!.feesPaid];
+  //       record.feesPaid = [...cFees, fees];
+  //       await studentRecord.put(record); // perform update operations
+  //       return record;
+  //     });
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     rethrow;
+  //   }
+  // }
 
   Stream<int> totalCollectedFees(String year) async* {
+    // try {
+    //   int total = 0;
+
+    //   Hive.box<StudentRecordDto>(studentRecordBoxName)
+    //       .watchWithInitial()
+    //       .map((records) {
+    //     for (int record in records) {
+    //       total += fee;
+    //     }
+    //     return total;
+    //   });
+    //   yield total;
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    //   rethrow;
+    // }
     try {
-      yield* (recordStream.map(
-        (recordList) => (recordList.isEmpty
-            ? 0
-            : recordList
-                .map((record) => record.feesPaid.reduce((a, b) => a + b))
-                .toList()
-                .reduce((c, d) => c + d)),
-      ));
+      int total = 0;
+      yield* (Hive.box<StudentRecordDto>(studentRecordBoxName)
+          .watchWithInitial()
+          .map(
+            (recordList) => (recordList.isEmpty
+                ? total
+                : () {
+                    total = total +
+                        recordList
+                            .map((record) =>
+                                record.feesPaid.reduce((a, b) => a + b))
+                            .toList()
+                            .reduce((c, d) => c + d);
+                    return total;
+                  }()),
+          ));
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -129,77 +273,85 @@ class StudentRecordDataSource extends BaseFramework {
 
   Stream<int> numStudentWithCompleteFees(String year) async* {
     try {
-      yield* recordStream.map((recordList) {
-        int count = 0;
-
-        for (StudentRecordDto record in recordList) {
-          //pre nursery
-          if (record.studentClass == StudentClass.preNusery.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.preNusery) {
-              count++;
-            }
-          }
-          //nursery one
-          if (record.studentClass == StudentClass.nuseryOne.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.nurseryOne) {
-              count++;
-            }
-          }
-          //nursery two
-          if (record.studentClass == StudentClass.nuseryTwo.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.nurseryTwo) {
-              count++;
-            }
-          }
-          //class one
-          if (record.studentClass == StudentClass.classOne.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.classOne) {
-              count++;
-            }
-          }
-          //class two
-          if (record.studentClass == StudentClass.classTwo.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.classTwo) {
-              count++;
-            }
-          }
-          //class three
-          if (record.studentClass == StudentClass.classThree.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.classThree) {
-              count++;
-            }
-          }
-          //class four
-          if (record.studentClass == StudentClass.classFour.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.classFour) {
-              count++;
-            }
-          }
-          //class Five
-          if (record.studentClass == StudentClass.classFive.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.classFive) {
-              count++;
-            }
-          }
-          //class six
-          if (record.studentClass == StudentClass.classSix.index) {
-            int paidFees = record.feesPaid.reduce((a, b) => a + b);
-            if (paidFees >= Fee.classSix) {
-              count++;
-            }
-          }
-        }
-
-        return count;
-      });
+      int count = 0;
+      yield* Hive.box<StudentRecordDto>(studentRecordBoxName)
+          .watchWithInitial()
+          .map(
+            (recordList) => recordList.isEmpty
+                ? count
+                : () {
+                    recordList.forEach((record) {
+                      //pre nursery
+                      if (record.studentClass == StudentClass.preNusery.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.preNusery) {
+                          count++;
+                        }
+                      }
+                      //nursery one
+                      if (record.studentClass == StudentClass.nuseryOne.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.nurseryOne) {
+                          count++;
+                        }
+                      }
+                      //nursery two
+                      if (record.studentClass == StudentClass.nuseryTwo.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.nurseryTwo) {
+                          count++;
+                        }
+                      }
+                      //class one
+                      if (record.studentClass == StudentClass.classOne.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.classOne) {
+                          count++;
+                        }
+                      }
+                      //class two
+                      if (record.studentClass == StudentClass.classTwo.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.classTwo) {
+                          count++;
+                        }
+                      }
+                      //class three
+                      if (record.studentClass ==
+                          StudentClass.classThree.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.classThree) {
+                          count++;
+                        }
+                      }
+                      //class four
+                      if (record.studentClass == StudentClass.classFour.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.classFour) {
+                          count++;
+                        }
+                      }
+                      //class Five
+                      if (record.studentClass == StudentClass.classFive.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.classFive) {
+                          count++;
+                        }
+                      }
+                      //class six
+                      if (record.studentClass == StudentClass.classSix.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees >= Fee.classSix) {
+                          count++;
+                        }
+                      }
+                      // return count;
+                    });
+                    return count;
+                  }(),
+          )
+          .asBroadcastStream();
+      // yield count;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -208,10 +360,94 @@ class StudentRecordDataSource extends BaseFramework {
 
   Stream<int> numStudentWithInCompleteFees(String year) async* {
     try {
-      yield* recordStream.map((recordList) {
-        int count = 0;
-        for (StudentRecordDto record in recordList) {
-          //pre nursery
+      int count = 0;
+      yield* Hive.box<StudentRecordDto>(studentRecordBoxName)
+          .watchWithInitial()
+          .map(
+            (recordList) => recordList.isEmpty
+                ? count
+                : () {
+                    recordList.forEach((record) {
+                      //pre nursery
+                      if (record.studentClass == StudentClass.preNusery.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.preNusery) {
+                          count++;
+                        }
+                      }
+                      //nursery one
+                      if (record.studentClass == StudentClass.nuseryOne.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.nurseryOne) {
+                          count++;
+                        }
+                      }
+                      //nursery two
+                      if (record.studentClass == StudentClass.nuseryTwo.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.nurseryTwo) {
+                          count++;
+                        }
+                      }
+                      //class one
+                      if (record.studentClass == StudentClass.classOne.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.classOne) {
+                          count++;
+                        }
+                      }
+                      //class two
+                      if (record.studentClass == StudentClass.classTwo.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.classTwo) {
+                          count++;
+                        }
+                      }
+                      //class three
+                      if (record.studentClass ==
+                          StudentClass.classThree.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.classThree) {
+                          count++;
+                        }
+                      }
+                      //class four
+                      if (record.studentClass == StudentClass.classFour.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.classFour) {
+                          count++;
+                        }
+                      }
+                      //class Five
+                      if (record.studentClass == StudentClass.classFive.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.classFive) {
+                          count++;
+                        }
+                      }
+                      //class six
+                      if (record.studentClass == StudentClass.classSix.index) {
+                        int paidFees = record.feesPaid.reduce((a, b) => a + b);
+                        if (paidFees < Fee.classSix) {
+                          count++;
+                        }
+                      }
+                      // return count;
+                    });
+                    return count;
+                  }(),
+          )
+          .asBroadcastStream();
+      // yield count;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  /*
+  
+  //pre nursery
           if (record.studentClass == StudentClass.preNusery.index) {
             int paidFees = record.feesPaid.reduce((a, b) => a + b);
             if (paidFees < Fee.preNusery) {
@@ -274,14 +510,9 @@ class StudentRecordDataSource extends BaseFramework {
               count++;
             }
           }
-        }
-        return count;
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-      rethrow;
-    }
-  }
+  
+  
+   */
 
   Future<List<GeneralStatisticsDto>> generateGeneralStatistics(
       String year) async {
@@ -290,13 +521,19 @@ class StudentRecordDataSource extends BaseFramework {
       //ENGLISH SECTION
 
       //NURSERY
-      final nurseryList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(LanguageSector.english.index)
-          .studentClassBetween(
-              StudentClass.preNusery.index, StudentClass.nuseryTwo.index)
-          .findAll();
+      // final nurseryList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(LanguageSector.english.index)
+      //     .studentClassBetween(
+      //         StudentClass.preNusery.index, StudentClass.nuseryTwo.index)
+      //     .findAll();
+      final nurseryList = studentRecord
+          .where((record) =>
+              record.sector == LanguageSector.english.index &&
+              ((StudentClass.preNusery.index <= record.studentClass) &&
+                  (record.studentClass <= StudentClass.nuseryTwo.index)))
+          .toList();
       int totalEnroll = 0;
       int registration = 0;
       int feesPaid = 0;
@@ -331,13 +568,20 @@ class StudentRecordDataSource extends BaseFramework {
         balance: (feesPaid - feesDue).abs(),
       ));
       //PRIMARY
-      final primaryList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(LanguageSector.english.index)
-          .studentClassBetween(
-              StudentClass.classOne.index, StudentClass.classSix.index)
-          .findAll();
+      // final primaryList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(LanguageSector.english.index)
+      //     .studentClassBetween(
+      //         StudentClass.classOne.index, StudentClass.classSix.index)
+      //     .findAll();
+      final primaryList = studentRecord
+          .where((record) =>
+              record.sector == LanguageSector.english.index &&
+              ((StudentClass.classOne.index <= record.studentClass) &&
+                  (record.studentClass <= StudentClass.classSix.index)))
+          .toList();
+
       if (primaryList.isNotEmpty) {
         ptotalEnroll = primaryList.length;
         pregistration = primaryList
@@ -374,13 +618,20 @@ class StudentRecordDataSource extends BaseFramework {
 
       //FRENCH SECTION
       //NURSERY
-      final fnurseryList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(LanguageSector.french.index)
-          .studentClassBetween(
-              StudentClass.preNusery.index, StudentClass.nuseryTwo.index)
-          .findAll();
+      // final fnurseryList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(LanguageSector.french.index)
+      //     .studentClassBetween(
+      //         StudentClass.preNusery.index, StudentClass.nuseryTwo.index)
+      //     .findAll();
+      final fnurseryList = studentRecord
+          .where((record) =>
+              record.sector == LanguageSector.french.index &&
+              ((StudentClass.preNusery.index <= record.studentClass) &&
+                  (record.studentClass <= StudentClass.nuseryTwo.index)))
+          .toList();
+
       int ftotalEnroll = 0;
       int fregistration = 0;
       int ffeesPaid = 0;
@@ -415,13 +666,20 @@ class StudentRecordDataSource extends BaseFramework {
       ));
 
       //PRIMARY
-      final fprimaryList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(LanguageSector.french.index)
-          .studentClassBetween(
-              StudentClass.classOne.index, StudentClass.classSix.index)
-          .findAll();
+      // final fprimaryList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(LanguageSector.french.index)
+      //     .studentClassBetween(
+      //         StudentClass.classOne.index, StudentClass.classSix.index)
+      //     .findAll();
+      final fprimaryList = studentRecord
+          .where((record) =>
+              record.sector == LanguageSector.french.index &&
+              ((StudentClass.classOne.index <= record.studentClass) &&
+                  (record.studentClass <= StudentClass.classSix.index)))
+          .toList();
+
       if (fprimaryList.isNotEmpty) {
         fptotalEnroll = fprimaryList.length;
 
@@ -487,12 +745,17 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDuePn = 0;
       int balancePn = 0;
 
-      final nurseryList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.preNusery.index)
-          .findAll();
+      // final nurseryList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.preNusery.index)
+      //     .findAll();
+      final nurseryList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.preNusery.index)
+          .toList();
 
       if (nurseryList.isNotEmpty) {
         totalEnrollPn = nurseryList.length;
@@ -528,12 +791,18 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueN1 = 0;
       int balanceN1 = 0;
 
-      final nurseryOneList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.nuseryOne.index)
-          .findAll();
+      // final nurseryOneList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.nuseryOne.index)
+      //     .findAll();
+
+      final nurseryOneList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.nuseryOne.index)
+          .toList();
 
       if (nurseryOneList.isNotEmpty) {
         totalEnrollN1 = nurseryOneList.length;
@@ -568,12 +837,18 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueN2 = 0;
       int balanceN2 = 0;
 
-      final nurserytwoList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.nuseryTwo.index)
-          .findAll();
+      // final nurserytwoList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.nuseryTwo.index)
+      //     .findAll();
+
+      final nurserytwoList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.nuseryTwo.index)
+          .toList();
 
       if (nurserytwoList.isNotEmpty) {
         totalEnrollN2 = nurserytwoList.length;
@@ -608,12 +883,18 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueC1 = 0;
       int balanceC1 = 0;
 
-      final classOneList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.classOne.index)
-          .findAll();
+      // final classOneList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.classOne.index)
+      //     .findAll();
+
+      final classOneList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.classOne.index)
+          .toList();
 
       if (classOneList.isNotEmpty) {
         totalEnrollC1 = classOneList.length;
@@ -648,13 +929,17 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueC2 = 0;
       int balanceC2 = 0;
 
-      final classTwoList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.classTwo.index)
-          .findAll();
-
+      // final classTwoList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.classTwo.index)
+      //     .findAll();
+      final classTwoList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.classTwo.index)
+          .toList();
       if (classTwoList.isNotEmpty) {
         totalEnrollC2 = classTwoList.length;
         registrationC2 = classTwoList
@@ -689,12 +974,18 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueC3 = 0;
       int balanceC3 = 0;
 
-      final classThreeList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.classThree.index)
-          .findAll();
+      // final classThreeList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.classThree.index)
+      //     .findAll();
+
+      final classThreeList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.classThree.index)
+          .toList();
 
       if (classThreeList.isNotEmpty) {
         totalEnrollC3 = classThreeList.length;
@@ -729,12 +1020,18 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueC4 = 0;
       int balanceC4 = 0;
 
-      final classFourList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.classFour.index)
-          .findAll();
+      // final classFourList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.classFour.index)
+      //     .findAll();
+
+      final classFourList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.classFour.index)
+          .toList();
 
       if (classFourList.isNotEmpty) {
         totalEnrollC4 = classFourList.length;
@@ -770,12 +1067,18 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueC5 = 0;
       int balanceC5 = 0;
 
-      final classFiveList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.classFive.index)
-          .findAll();
+      // final classFiveList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.classFive.index)
+      //     .findAll();
+
+      final classFiveList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.classFive.index)
+          .toList();
 
       if (classFiveList.isNotEmpty) {
         totalEnrollC5 = classFiveList.length;
@@ -810,12 +1113,18 @@ class StudentRecordDataSource extends BaseFramework {
       int feesDueC6 = 0;
       int balanceC6 = 0;
 
-      final classSixList = await studentRecord
-          .filter()
-          .academicYearEqualTo(year)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(StudentClass.classSix.index)
-          .findAll();
+      // final classSixList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(year)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(StudentClass.classSix.index)
+      //     .findAll();
+
+      final classSixList = studentRecord
+          .where((record) =>
+              record.sector == sector &&
+              record.studentClass == StudentClass.classSix.index)
+          .toList();
 
       if (classSixList.isNotEmpty) {
         totalEnrollC6 = classSixList.length;
@@ -911,12 +1220,18 @@ class StudentRecordDataSource extends BaseFramework {
   Future<List<FeeCollectionStatisticsDto>> generateFeeCollectionStatistics(
       int sector, int sclass) async {
     try {
-      final classList = await studentRecord
-          .filter()
-          .academicYearEqualTo(SCHOOL_YEAR)
-          .sectorEqualTo(sector)
-          .studentClassEqualTo(sclass)
-          .findAll();
+      // final classList = await studentRecord
+      //     .filter()
+      //     .academicYearEqualTo(SCHOOL_YEAR)
+      //     .sectorEqualTo(sector)
+      //     .studentClassEqualTo(sclass)
+      //     .findAll();
+      final classList = studentRecord
+          .where((record) =>
+              record.academicYear == SCHOOL_YEAR &&
+              record.sector == sector &&
+              record.studentClass == sclass)
+          .toList();
       final int feeAmt = getClassFee(StudentClass.values[sclass]);
       return classList.map((stud) {
         int totalPaid = stud.feesPaid.reduce((a, b) => a + b);
@@ -936,13 +1251,20 @@ class StudentRecordDataSource extends BaseFramework {
   }
 
   Stream<StudentRecordDto> watchRecord(int recordId) async* {
-    yield* studentRecord
-        .filter()
-        .academicYearEqualTo(SCHOOL_YEAR)
-        .recordIdEqualTo(recordId)
-        .watch(fireImmediately: true)
-        .map((record) => record[0])
+    // int length = Hive.box<StudentRecordDto>(studentRecordBoxName).values.length;
+    yield* Hive.box<StudentRecordDto>(studentRecordBoxName)
+        .watchWithInitial(key: recordId)
+        // .where((event) => event.value.academicYear == SCHOOL_YEAR)
+        .map((event) => event.first as StudentRecordDto)
         .asBroadcastStream();
+
+    // yield* studentRecord
+    //     .filter()
+    //     .academicYearEqualTo(SCHOOL_YEAR)
+    //     .recordIdEqualTo(recordId)
+    //     .watch(fireImmediately: true)
+    //     .map((record) => record[0])
+    //     .asBroadcastStream();
   }
 
   getClassFee(StudentClass sclass) {

@@ -1,6 +1,6 @@
-import 'dart:io';
+// import 'dart:io';
 
-import 'package:better_open_file/better_open_file.dart';
+// import 'package:better_open_file/better_open_file.dart';
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +13,7 @@ import 'package:sabinpris/presentation/constants.dart';
 import 'package:sabinpris/presentation/pdf_util.dart';
 import 'package:sabinpris/presentation/providers.dart';
 import 'package:sabinpris/presentation/util.dart';
+import 'package:cross_file/cross_file.dart';
 
 class Report extends ConsumerStatefulWidget {
   const Report({Key? key}) : super(key: key);
@@ -132,7 +133,7 @@ class _ReportState extends ConsumerState<Report> {
                         InkWell(
                           onTap: () async {
                             try {
-                              final File file = await buildSummary();
+                              final XFile file = await buildSummary();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                       backgroundColor: Colors.transparent,
@@ -155,7 +156,7 @@ class _ReportState extends ConsumerState<Report> {
                                           ),
                                         ),
                                       )));
-                              await OpenFile.open(file.path);
+                              //await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
                               ScaffoldMessenger.of(context)
@@ -227,7 +228,7 @@ class _ReportState extends ConsumerState<Report> {
                         InkWell(
                           onTap: () async {
                             try {
-                              final File file = await buildSectionSummary(
+                              final XFile file = await buildSectionSummary(
                                   LanguageSector.english);
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
@@ -251,7 +252,7 @@ class _ReportState extends ConsumerState<Report> {
                                           ),
                                         ),
                                       )));
-                              await OpenFile.open(file.path);
+                              //await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
                               ScaffoldMessenger.of(context)
@@ -323,7 +324,7 @@ class _ReportState extends ConsumerState<Report> {
                         InkWell(
                           onTap: () async {
                             try {
-                              final File file = await buildSectionSummary(
+                              final XFile file = await buildSectionSummary(
                                   LanguageSector.french);
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
@@ -347,7 +348,7 @@ class _ReportState extends ConsumerState<Report> {
                                           ),
                                         ),
                                       )));
-                              await OpenFile.open(file.path);
+                              //await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
                               ScaffoldMessenger.of(context)
@@ -637,7 +638,7 @@ class _ReportState extends ConsumerState<Report> {
                                           ),
                                         ),
                                       )));
-                              await OpenFile.open(file.path);
+                              //await OpenFile.open(file.path);
                             } catch (e) {
                               debugPrint("error");
                               ScaffoldMessenger.of(context)
