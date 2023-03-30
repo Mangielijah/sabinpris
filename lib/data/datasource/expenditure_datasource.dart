@@ -120,8 +120,6 @@ class ExpenditureDataSource extends BaseFramework {
     //         .toList()
     //         .reduce((c, d) => c + d);
     final totalIncome = studentRecord
-        .where((record) => record.academicYear == year)
-        .toList()
         .map((e) => (e.paidRegistration)
             ? Fee.regFee + e.feesPaid.reduce((a, b) => a + b)
             : e.feesPaid.reduce((a, b) => a + b))
@@ -134,9 +132,8 @@ class ExpenditureDataSource extends BaseFramework {
     //     .academicYearEqualTo(year)
     //     .expenseTypeEqualTo(ExpenditureType.Salaries.index)
     //     .findAll();
-    final salaryList = expenditureRecord.where((ex) =>
-        ex.academicYear == year &&
-        ex.expenseType == ExpenditureType.Salaries.index);
+    final salaryList = expenditureRecord
+        .where((ex) => ex.expenseType == ExpenditureType.Salaries.index);
     int totalSalary = 0;
     if (salaryList.isNotEmpty) {
       totalSalary = salaryList.map((e) => e.amount).reduce((a, b) => a + b);

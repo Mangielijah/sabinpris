@@ -1,14 +1,12 @@
 // import 'dart:io';
 
 // import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sabinpris/credentials.dart';
 import 'package:sabinpris/data/models/expenditure_dto.dart';
 import 'package:sabinpris/data/models/student_record_dto.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sabinpris/domain/entity/student_record.dart';
 
 bool boxIsOpen = false;
 
@@ -26,14 +24,14 @@ class BaseFramework {
 
   // Isar? isar;
 
-  List<StudentRecordDto> get studentRecord =>
-      Hive.box<StudentRecordDto>(studentRecordBoxName).values.toList();
+  List<StudentRecordDto> get studentRecord => (() =>
+      Hive.box<StudentRecordDto>(studentRecordBoxName).values.toList())();
   // late IsarCollection<ExpenditureDto> expenditureRecord;
   Stream<List<StudentRecordDto>> get recordStream =>
       Hive.box<StudentRecordDto>(studentRecordBoxName).watchWithInitial();
 
   List<ExpenditureDto> get expenditureRecord =>
-      Hive.box<ExpenditureDto>(expenditureBoxName).values.toList();
+      (() => Hive.box<ExpenditureDto>(expenditureBoxName).values.toList())();
 
   // Future<void> _initIsar() async {
   //   Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -73,7 +71,7 @@ class BaseFramework {
 }
 
 final String studentRecordBoxName = 'studentRecord-$SCHOOL_YEAR';
-const String expenditureBoxName = 'expenditureDB';
+final String expenditureBoxName = 'expenditureDB-$SCHOOL_YEAR';
 
 extension BoxExtensions on Box {
   Stream<List<StudentRecordDto>> watchWithInitial({int? key}) async* {

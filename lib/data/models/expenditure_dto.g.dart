@@ -18,17 +18,29 @@ class ExpenditureDtoAdapter extends TypeAdapter<ExpenditureDto> {
     };
     return ExpenditureDto()
       ..id = fields[10] as int?
-      ..academicYear = fields[11] as String;
+      ..academicYear = fields[11] as String
+      ..expenseType = fields[12] as int
+      ..amount = fields[13] as int
+      ..comment = fields[14] as String?
+      ..time = fields[15] as int;
   }
 
   @override
   void write(BinaryWriter writer, ExpenditureDto obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(6)
       ..writeByte(10)
       ..write(obj.id)
       ..writeByte(11)
-      ..write(obj.academicYear);
+      ..write(obj.academicYear)
+      ..writeByte(12)
+      ..write(obj.expenseType)
+      ..writeByte(13)
+      ..write(obj.amount)
+      ..writeByte(14)
+      ..write(obj.comment)
+      ..writeByte(15)
+      ..write(obj.time);
   }
 
   @override

@@ -12,16 +12,16 @@ class ExpenditureDto {
   @HiveField(11)
   late String academicYear;
 
-  @HiveType(typeId: 12)
+  @HiveField(12)
   late int expenseType;
 
-  @HiveType(typeId: 13)
+  @HiveField(13)
   late int amount;
 
-  @HiveType(typeId: 14)
+  @HiveField(14)
   late String? comment;
 
-  @HiveType(typeId: 15)
+  @HiveField(15)
   late int time;
 
   Expenditure toDomain() {
