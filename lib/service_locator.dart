@@ -12,7 +12,7 @@ final serviceLocator = GetIt.instance;
   preferRelativeImports: false, // default
   // asExtension: false, // default
 )
-void setupDependencies() async {
+Future<void> setupDependencies() async {
   await Hive.initFlutter();
   Hive.registerAdapter(StudentRecordDtoAdapter());
   Hive.registerAdapter(ExpenditureDtoAdapter());

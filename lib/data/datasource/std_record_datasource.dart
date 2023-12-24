@@ -72,10 +72,10 @@ class StudentRecordDataSource extends BaseFramework {
 
       // Hive.box<StudentRecordDto>('').putAll(
       //     data.map((e) => {e['recordId']: StudentRecordDto.fromJson(e)}));
-      data.forEach((e) async {
+      for (var e in data) {
         await Hive.box<StudentRecordDto>(studentRecordBoxName)
             .put(e['recordId'], StudentRecordDto.fromJson(e));
-      });
+      }
 
       if (data.isNotEmpty) {
         if (Hive.box<StudentRecordDto>(studentRecordBoxName)
@@ -256,7 +256,8 @@ class StudentRecordDataSource extends BaseFramework {
             (recordList) => (recordList.isEmpty
                 ? total
                 : () {
-                    total = total +
+                    total = /*total +
+                        */
                         recordList
                             .map((record) =>
                                 record.feesPaid.reduce((a, b) => a + b))
@@ -280,7 +281,8 @@ class StudentRecordDataSource extends BaseFramework {
             (recordList) => recordList.isEmpty
                 ? count
                 : () {
-                    recordList.forEach((record) {
+                    count = 0;
+                    for (var record in recordList) {
                       //pre nursery
                       if (record.studentClass == StudentClass.preNusery.index) {
                         int paidFees = record.feesPaid.reduce((a, b) => a + b);
@@ -346,7 +348,7 @@ class StudentRecordDataSource extends BaseFramework {
                         }
                       }
                       // return count;
-                    });
+                    }
                     return count;
                   }(),
           )
@@ -367,7 +369,8 @@ class StudentRecordDataSource extends BaseFramework {
             (recordList) => recordList.isEmpty
                 ? count
                 : () {
-                    recordList.forEach((record) {
+                    count = 0;
+                    for (var record in recordList) {
                       //pre nursery
                       if (record.studentClass == StudentClass.preNusery.index) {
                         int paidFees = record.feesPaid.reduce((a, b) => a + b);
@@ -433,7 +436,7 @@ class StudentRecordDataSource extends BaseFramework {
                         }
                       }
                       // return count;
-                    });
+                    }
                     return count;
                   }(),
           )
@@ -565,7 +568,7 @@ class StudentRecordDataSource extends BaseFramework {
         registration: registration,
         feesPaid: feesPaid,
         totalIncome: totalIncome,
-        balance: (feesPaid - feesDue).abs(),
+        balance: feesDue, //(feesPaid - feesDue).abs(),
       ));
       //PRIMARY
       // final primaryList = await studentRecord
@@ -604,7 +607,7 @@ class StudentRecordDataSource extends BaseFramework {
         registration: pregistration,
         feesPaid: pfeesPaid,
         totalIncome: ptotalIncome,
-        balance: (pfeesPaid - pfeesDue).abs(),
+        balance: pfeesDue, //(pfeesPaid - pfeesDue).abs(),
       ));
       stats.add(GeneralStatisticsDto(
         description: 'TOTAL',
@@ -613,7 +616,8 @@ class StudentRecordDataSource extends BaseFramework {
         registration: registration + pregistration,
         feesPaid: feesPaid + pfeesPaid,
         totalIncome: totalIncome + ptotalIncome,
-        balance: ((feesPaid + pfeesPaid) - (feesDue + pfeesDue)).abs(),
+        balance: (feesDue +
+            pfeesDue), //((feesPaid + pfeesPaid) - (feesDue + pfeesDue)).abs(),
       ));
 
       //FRENCH SECTION
@@ -662,7 +666,7 @@ class StudentRecordDataSource extends BaseFramework {
         registration: fregistration,
         feesPaid: ffeesPaid,
         totalIncome: ftotalIncome,
-        balance: (ffeesPaid - ffeesDue).abs(),
+        balance: ffeesDue, //(ffeesPaid - ffeesDue).abs(),
       ));
 
       //PRIMARY
@@ -703,7 +707,7 @@ class StudentRecordDataSource extends BaseFramework {
         registration: fpregistration,
         feesPaid: fpfeesPaid,
         totalIncome: fptotalIncome,
-        balance: (fpfeesPaid - fpfeesDue).abs(),
+        balance: fpfeesDue, //(fpfeesPaid - fpfeesDue).abs(),
       ));
       stats.add(GeneralStatisticsDto(
         description: 'TOTAL',
@@ -712,7 +716,8 @@ class StudentRecordDataSource extends BaseFramework {
         registration: fregistration + fpregistration,
         feesPaid: ffeesPaid + fpfeesPaid,
         totalIncome: ftotalIncome + fptotalIncome,
-        balance: ((ffeesPaid + fpfeesPaid) - (ffeesDue + fpfeesDue)).abs(),
+        balance: (ffeesDue +
+            fpfeesDue), //((ffeesPaid + fpfeesPaid) - (ffeesDue + fpfeesDue)).abs(),
       ));
       stats.add(GeneralStatisticsDto(
         description: 'GRAND TOTAL',
@@ -722,9 +727,12 @@ class StudentRecordDataSource extends BaseFramework {
             registration + pregistration + fregistration + fpregistration,
         feesPaid: feesPaid + pfeesPaid + ffeesPaid + fpfeesPaid,
         totalIncome: totalIncome + ptotalIncome + ftotalIncome + fptotalIncome,
-        balance: ((feesPaid + pfeesPaid + ffeesPaid + fpfeesPaid) -
-                (feesDue + pfeesDue + ffeesDue + fpfeesDue))
-            .abs(),
+        balance: (feesDue +
+            pfeesDue +
+            ffeesDue +
+            fpfeesDue), // ((feesPaid + pfeesPaid + ffeesPaid + fpfeesPaid) -
+        // (feesDue + pfeesDue + ffeesDue + fpfeesDue))
+        //.abs(),
       ));
       return stats;
     } catch (e) {
@@ -770,7 +778,7 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balancePn = (feesPaidPn - feesDuePn).abs();
+        balancePn = feesDuePn; //(feesPaidPn - feesDuePn).abs();
       }
 
       final totalIncome = feesPaidPn + registrationPn;
@@ -817,7 +825,8 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceN1 = (feesPaidN1 - feesDueN1).abs();
+        balanceN1 = feesDueN1;
+        //(feesPaidN1 - feesDueN1).abs();
       }
 
       final totalIncomeN1 = feesPaidN1 + registrationN1;
@@ -863,7 +872,7 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceN2 = (feesPaidN2 - feesDueN2).abs();
+        balanceN2 = feesDueN2; //(feesPaidN2 - feesDueN2).abs();
       }
 
       final totalIncomeN2 = feesPaidN2 + registrationN2;
@@ -909,7 +918,7 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceC1 = (feesPaidC1 - feesDueC1).abs();
+        balanceC1 = feesDueC1; // (feesPaidC1 - feesDueC1).abs();
       }
 
       final totalIncomeC1 = feesPaidC1 + registrationC1;
@@ -953,7 +962,8 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceC2 = (feesPaidC2 - feesDueC2).abs();
+        balanceC2 = feesDueC2;
+        //(feesPaidC2 - feesDueC2).abs();
       }
 
       final totalIncomeC2 = feesPaidC2 + registrationC2;
@@ -1000,7 +1010,8 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceC3 = (feesPaidC3 - feesDueC3).abs();
+        balanceC3 = feesDueC3;
+        // (feesPaidC3 - feesDueC3).abs();
       }
 
       final totalIncomeC3 = feesPaidC3 + registrationC3;
@@ -1046,7 +1057,8 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceC4 = (feesPaidC4 - feesDueC4).abs();
+        balanceC4 = feesDueC4;
+        // (feesPaidC4 - feesDueC4).abs();
       }
 
       final totalIncomeC4 = feesPaidC4 + registrationC4;
@@ -1093,7 +1105,8 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceC5 = (feesPaidC5 - feesDueC5).abs();
+        balanceC5 = feesDueC5;
+        // (feesPaidC5 - feesDueC5).abs();
       }
 
       final totalIncomeC5 = feesPaidC5 + registrationC5;
@@ -1139,7 +1152,8 @@ class StudentRecordDataSource extends BaseFramework {
                 getClassFee(StudentClass.values[e.studentClass]) -
                 e.feesPaid.reduce((c, d) => c + d))
             .reduce((a, b) => a + b);
-        balanceC6 = (feesPaidC6 - feesDueC6).abs();
+        balanceC6 = feesDueC6;
+        // (feesPaidC6 - feesDueC6).abs();
       }
 
       final totalIncomeC6 = feesPaidC6 + registrationC6;
@@ -1255,7 +1269,7 @@ class StudentRecordDataSource extends BaseFramework {
     yield* Hive.box<StudentRecordDto>(studentRecordBoxName)
         .watchWithInitial(key: recordId)
         // .where((event) => event.value.academicYear == SCHOOL_YEAR)
-        .map((event) => event.first as StudentRecordDto)
+        .map((event) => event.first)
         .asBroadcastStream();
 
     // yield* studentRecord

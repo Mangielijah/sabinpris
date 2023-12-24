@@ -79,7 +79,8 @@ extension BoxExtensions on Box {
       if (isOpen) {
         if (key == null) {
           yield* watch()
-              .map(((event) => [event.value as StudentRecordDto]))
+              .map(((event) => values.toList() as List<
+                  StudentRecordDto> /*[event.value as StudentRecordDto]*/))
               .startWith(values.toList() as List<StudentRecordDto>)
               .asBroadcastStream();
         } else {
@@ -115,7 +116,8 @@ extension BoxExtensions2 on Box {
       if (isOpen) {
         if (key == null) {
           yield* watch()
-              .map(((event) => [event.value as ExpenditureDto]))
+              .map(((event) => values.toList()
+                  as List<ExpenditureDto> /*[event.value as ExpenditureDto]*/))
               .startWith(values.toList() as List<ExpenditureDto>)
               .asBroadcastStream();
         } else {
